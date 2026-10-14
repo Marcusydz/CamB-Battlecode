@@ -47,6 +47,14 @@ MONOLITH = False       # full-team monolith assault (tested: loses on monolith m
 GATHER_MAX = 12        # give up waiting for helpers after this many turns
 JOIN_BONUS = 1.5       # score boost for joining a joint target an ally already claimed
 SEED = 0               # >0 adds small deterministic noise to camp choice (testing only)
+HEAL_MIN_USE = 0.6     # heal only if at least this fraction of the heal lands (or the ally is below half HP)
+PRISM_GEM_CAP = 60     # Prism gains focus per gem carried (measured: +0.2 focus per gem, so only
+PRISM_EARLY_BANK = 0   # +12 at 60 gems); 100/50 means it banks later than the others
+MAX_WAIT = 0           # head for a respawning camp if it is back within this many rounds of arrival
+                       # (0 = v14 behaviour; tested 25: champions stood beside respawning camps, lost)
+SPELL_DPS = True       # count damage spells when judging whether a champion can clear a camp alone
+PAIR_UP = True         # weak champions join an ally's joint target instead of starting their own
+ACT_LOG_EVERY = 200    # print how many turns each champion spent on each activity (0 disables)
 
 
 def chebyshev(a, b):
@@ -96,7 +104,7 @@ def camp_health(c):
 
 class GroupInfo:
     __slots__ = ("idx", "handle", "group", "mask", "tiles", "gems", "gold", "health", "center", "contested",
-                 "strength", "count", "monolith", "altar_dist", "available_at", "state")
+                 "strength", "count", "monolith", "altar_dist", "available_at", "state", "avoid_until")
 
     def __init__(self, idx, group):
         self.idx = idx
@@ -121,6 +129,7 @@ class GroupInfo:
         self.contested = False
         self.altar_dist = 0
         self.available_at = 0   # round from which we believe it is alive
+        self.avoid_until = 0    # our own "gave up on it" marker; update_groups never resets it
         self.state = 0          # 0 unknown/alive, 1 alive (seen), 2 reward available, 3 respawning
 
 
@@ -130,6 +139,8 @@ class Bot:
         self.max_fuel = 0
         self.turns = 0
         self.overruns = 0
+        self.acts = {}
+        self.waited_on_spawn = False
 
     # ------------------------------------------------------------------ setup
     def setup(self):
@@ -206,6 +217,7 @@ class Bot:
         self.target = None
         self.need = 1
         self.gather_turns = 0
+        self.no_joint_until = 0
         self.stuck = 0
         self.next_plan = 0
         self.target_dist = UNREACHED
@@ -454,6 +466,51 @@ class Bot:
                 break
         return dmg
 
+    def try_heal(self, me):
+        """Cast the heal on the ally (or self) it helps most. Returns True if cast."""
+        if self.heal_slot is None or not me.can_cast():
+            return False
+        ability = me.abilities()[self.heal_slot]
+        if ability.is_on_cooldown():
+            return False
+        try:
+            full = ability.heal_amount()
+        except cambc.Error:
+            return False
+        if full <= 0:
+            return False
+        info = ability.info()
+        reach = float(getattr(info, "range", 0) or 0)
+        pos = me.position()
+        candidates = []
+        if ability.can_target_self():
+            candidates.append(me)
+        if ability.can_target_allies():
+            candidates += [a for a in cambc.vision.champions(Team.ALLY)
+                           if a != me and a.is_alive() and a.is_visible()]
+        best, best_value = None, 0.0
+        for a in candidates:
+            apos = a.position()
+            if chebyshev(apos, pos) > reach or self.spawn.is_set(apos):
+                continue  # out of range, or on spawn (which heals anyway)
+            missing = a.max_health() - a.health()
+            if missing <= 0:
+                continue
+            low = a.health() < 0.5 * a.max_health()
+            if min(missing, full) < HEAL_MIN_USE * full and not low:
+                continue
+            value = min(missing, full) * (2.0 if low else 1.0)
+            if value > best_value:
+                best, best_value = a, value
+        if best is None:
+            return False
+        try:
+            if ability.can_target_ground() and not (ability.can_target_allies() or ability.can_target_self()):
+                return bool(ability.use(best.position()))
+            return bool(ability.use(best))
+        except cambc.Error:
+            return False
+
     def self_buff(self, me):
         if self.shield_slot is not None and me.can_cast():
             ability = me.abilities()[self.shield_slot]
@@ -546,6 +603,16 @@ class Bot:
                         return True
         return False
 
+    def hit_in_range(self, me):
+        """Spell and attack the weakest enemy already in attack range, without moving."""
+        tiles = me.attack_tiles()
+        targets = [e for e in visible_enemies() if e.is_alive() and tiles.is_set(e.position())]
+        if not targets:
+            return False
+        target = min(targets, key=lambda e: e.health())
+        self.try_spell(target)
+        return self.try_attack(target)
+
     def threats(self, now):
         """Recently seen enemy positions (vision is per champion, so remember a few rounds)."""
         return [p for p, r in self.seen.values() if now - r <= 3]
@@ -606,6 +673,30 @@ class Bot:
                 return n
         return 0
 
+    def camp_dps(self, me):
+        """Rough damage per turn against camps: basic attack, attack reset and damage spells
+        (each spell every 8-turn cooldown). Never below the old flat estimate."""
+        s = me.strength()
+        dps = s + (s / 8.0 if self.reset_slot is not None else 0.0)
+        if SPELL_DPS:
+            dps += sum(mod for mod, _, _, _ in self.nukes) * me.focus() / 8.0
+        return max(dps, max(s, 20.0) + 15.0)
+
+    def joint_claim_elsewhere(self, g, dps, health):
+        """A higher-priority ally (lower memory slot) has claimed a different camp that also
+        needs helpers for us: go there instead of starting our own joint target. Without this,
+        two weak champions each wait at their own camp for the other (seen: 50 turns)."""
+        if not PAIR_UP:
+            return False
+        claims = self.claims()
+        for i in range(self.mem_slot):
+            c = claims[i]
+            if c and c - 1 != (-1 if g is None else g.idx) and c - 1 < len(self.groups):
+                other = self.groups[c - 1]
+                if not other.monolith and self.helpers_needed(other, dps, health) > 1:
+                    return True
+        return False
+
     def choose_group(self, now, my_field):
         me = cambc.me()
         claims = self.claims()
@@ -613,15 +704,19 @@ class Bot:
         for i in range(8):
             if i != self.mem_slot and claims[i]:
                 claim_count[claims[i] - 1] = claim_count.get(claims[i] - 1, 0) + 1
-        dps = max(me.strength(), 20.0) + 15.0
+        dps = self.camp_dps(me)
         health = me.max_health()
+        no_new_joint = now < self.no_joint_until or self.joint_claim_elsewhere(None, dps, health)
         best, best_score, best_need = None, 0.0, 1
         for g in self.groups:
             dist = min((my_field.get(t) for t in g.tiles), default=UNREACHED)
             if dist >= UNREACHED:
                 continue
             eta = dist
-            if g.available_at > now + eta:
+            if now < g.avoid_until:
+                continue
+            wait = max(0, g.available_at - now - eta)
+            if wait > MAX_WAIT:
                 continue
             others = claim_count.get(g.idx, 0)
             if g.state == 2:
@@ -635,9 +730,11 @@ class Bot:
                 need = self.helpers_needed(g, dps * (min(g.count, 2) if self.kind == CT.VARG else 1), health)
                 if need == 0:
                     continue
+                if need > 1 and others == 0 and no_new_joint:
+                    continue  # join the ally already waiting for help, or recently gave up waiting
                 clear = g.health / (dps * max(need, others + 1))
             value = (g.gems + 0.15 * g.gold) / max(need, others + 1)
-            cost = eta + clear + CAPTURE_TIME + 0.5 * g.altar_dist + 1
+            cost = eta + wait + clear + CAPTURE_TIME + 0.5 * g.altar_dist + 1
             if need > 1:
                 cost += 4 * (need - 1 - min(others, need - 1))  # time to gather helpers
                 if others > 0:
@@ -677,7 +774,12 @@ class Bot:
         if used > 2400000 and self.turns > 1 and LOG_EVERY:
             print("heavy turn r%d used=%d act=%s" % (cambc.round_number(), used, self.act), flush=True)
         self.turns += 1
+        self.acts[self.act] = self.acts.get(self.act, 0) + 1
         now = cambc.round_number()
+        if ACT_LOG_EVERY and now % ACT_LOG_EVERY == 0:
+            tally = sorted(self.acts.items(), key=lambda kv: -kv[1])
+            print("acts r%d %s: %s" % (now, CT.to_string(self.kind) if hasattr(CT, "to_string") else self.kind,
+                                       " ".join("%s=%d" % kv for kv in tally)), flush=True)
         if LOG_EVERY and now % LOG_EVERY == 0:
             me = cambc.me()
             t = self.target
@@ -692,6 +794,8 @@ class Bot:
         if not self.ready:
             self.setup()
         now = cambc.round_number()
+        waited_on_spawn = self.waited_on_spawn
+        self.waited_on_spawn = False
 
         if not me.is_alive():
             self.claim(None)
@@ -708,15 +812,22 @@ class Bot:
             self.shop()
         self.update_groups(now, pos)
 
+        if self.heal_slot is not None:
+            self.try_heal(me)
         gems = me.gem_count()
         hp_frac = me.health() / me.max_health()
 
-        # On spawn and hurt: stay put. Spawn heals at the END of the turn, so leaving in the
-        # same turn (e.g. right after a recall lands) wastes the whole recall.
-        if at_spawn and hp_frac < SPAWN_HEAL_TO:
+        # On spawn and hurt: stay put for one turn. Spawn heals fully at the END of the turn, so
+        # leaving in the same turn (e.g. right after a recall lands) wastes the whole recall.
+        # Only one turn: still hurt after that means an enemy outside the spawn is hitting us
+        # every round, and standing there just lets it (seen: 46 turns stuck on elkring).
+        if at_spawn and hp_frac < SPAWN_HEAL_TO and not waited_on_spawn:
+            self.waited_on_spawn = True
             self.claim(None)
             if gems > 0 and self.altar_field.get(pos) <= 1:
                 self.tribute()
+            else:
+                self.hit_in_range(me)
             self.act = "heal"
             return
 
@@ -780,8 +891,12 @@ class Bot:
             return
 
         target = self.target
-        valid = (target is not None and target.available_at <= now + 2
-                 and (target.state != 3 or chebyshev(pos, target.center) > 9))
+        if MAX_WAIT:
+            valid = (target is not None and now >= target.avoid_until
+                     and target.available_at <= now + min(self.target_dist, PLAN_RADIUS) + MAX_WAIT)
+        else:
+            valid = (target is not None and now >= target.avoid_until and target.available_at <= now + 2
+                     and (target.state != 3 or chebyshev(pos, target.center) > 9))
         engaged = valid and target.state in (1, 2) and chebyshev(pos, target.center) <= 6
         low_fuel = cambc.fuel_remaining() < FUEL_RESERVE + 900000
         if (not valid and not (low_fuel and target is not None)) or (now >= self.next_plan and not engaged and not low_fuel):
@@ -790,6 +905,11 @@ class Bot:
             roots.set(pos)
             my_field.compute(self.static_block, roots, cambc.Bitboard(), PLAN_RADIUS)
             target = self.choose_group(now, my_field)
+            if target is None and not low_fuel:
+                # Nothing within PLAN_RADIUS: search the whole map rather than idle.
+                my_field = cambc.DistanceField()
+                my_field.compute(self.static_block, roots, cambc.Bitboard())
+                target = self.choose_group(now, my_field)
             self.target = target
             self.next_plan = now + REPLAN_EVERY
             self.target_dist = UNREACHED if target is None else min(my_field.get(t) for t in target.tiles)
@@ -799,7 +919,10 @@ class Bot:
         if gems > 0:
             altar_dist = self.altar_field.get(pos)
             target_dist = self.target_dist
-            if target is None or gems >= GEM_CAP or altar_dist <= target_dist:
+            prism = self.kind == CT.PRISM
+            cap = PRISM_GEM_CAP if prism else GEM_CAP
+            on_the_way = altar_dist <= target_dist and (not prism or gems >= PRISM_EARLY_BANK)
+            if target is None or gems >= cap or on_the_way:
                 self.claim(None)
                 self.tribute()
                 self.act = "tribute"
@@ -811,6 +934,8 @@ class Bot:
             # Nothing worth doing: go home to heal and shop if useful, else wait near an altar.
             if not at_spawn and (hp_frac < 0.8 or me.gold_count() >= 60):
                 self.retreat_and_recall()
+            elif self.step_towards(self.altar_approach):
+                self.act = "idle-altar"   # guard an altar: lock it, catch enemies tributing
             return
 
         self.claim(target)
@@ -820,12 +945,21 @@ class Bot:
                 # Untouched joint target: wait just outside camp range until helpers arrive.
                 near = sum(1 for a in cambc.vision.champions(Team.ALLY)
                            if a.is_alive() and a != me and chebyshev(a.position(), pos) <= 4)
+                if near < self.need - 1 and gems > 0:
+                    # Bank while helpers make their way here, instead of standing with gems.
+                    self.tribute()
+                    self.act = "gather-bank"
+                    return
                 self.gather_turns += 1
-                if self.gather_turns > GATHER_MAX:
-                    target.available_at = now + 50
+                switch = near < self.need - 1 and self.joint_claim_elsewhere(target, self.camp_dps(me), me.max_health())
+                if self.gather_turns > GATHER_MAX or switch:
+                    if not switch:
+                        target.avoid_until = now + 50
+                        self.no_joint_until = now + 40   # stop starting joint targets for a while
                     self.target = None
+                    self.next_plan = 0
                     self.gather_turns = 0
-                    self.act = "gather-giveup"
+                    self.act = "gather-switch" if switch else "gather-giveup"
                     return
                 if near < self.need - 1:
                     ring = cambc.Bitboard()
@@ -861,6 +995,14 @@ class Bot:
             self.step_towards(approach)
             self.act = "unblock"
             return
+        if MAX_WAIT and target.state == 3 and target.available_at > now:
+            # Respawning soon (chosen because nothing better was in reach): wait beside it.
+            if not self.step_towards(approach):
+                self.act = "wait-respawn"
+            else:
+                self.act = "approach"
+            self.stuck = 0
+            return
         if self.step_towards(approach):
             self.stuck = 0
             self.act = "approach"
@@ -869,6 +1011,6 @@ class Bot:
         self.act = "approach-wait"
         if self.stuck > 6:
             # Give up on it for a while (unreachable, hidden, or contested).
-            target.available_at = now + 40
+            target.avoid_until = now + 40
             self.stuck = 0
 

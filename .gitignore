@@ -2,6 +2,12 @@
 replays/
 logs/
 matches-*.txt
-bots/_s*/
+bots/_*/
 bots/*/.cambc/
 __pycache__/
+.cambc/
+matches/
+bots/*/build/
+bots/*/target/
+sdk/
+cmake/

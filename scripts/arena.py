@@ -54,20 +54,25 @@ def main():
     ap.add_argument("--jobs", type=int, default=2)
     ap.add_argument("--quiet", action="store_true")
     ap.add_argument("--seeds", type=int, default=0, help="also play N seeded copies of each bot")
+    ap.add_argument("--out", default="", help="keep replays and statistics in this directory")
+    ap.add_argument("--one-side", action="store_true", help="play each map once, alternating sides")
     o = ap.parse_args()
     maps = sorted(f for f in os.listdir(os.path.join(ROOT, "maps")) if f.endswith(".map26a"))
     if o.maps:
         want = set(o.maps.split(","))
         maps = [m for m in maps if m.split(".")[0] in want]
-    tmp = tempfile.mkdtemp(prefix="arena-")
+    tmp = os.path.abspath(o.out) if o.out else tempfile.mkdtemp(prefix="arena-")
+    os.makedirs(tmp, exist_ok=True)
     pairs = [(o.A, o.B)]
     for k in range(1, o.seeds + 1):
         pairs.append((make_seeded(o.A, k), make_seeded(o.B, 100 + k)))
     jobs = []
     for a, b in pairs:
-        for m in maps:
-            jobs.append((a, b, "maps/" + m, tmp))
-            jobs.append((b, a, "maps/" + m, tmp))
+        for i, m in enumerate(maps):
+            if not o.one_side or i % 2 == 0:
+                jobs.append((a, b, "maps/" + m, tmp))
+            if not o.one_side or i % 2 == 1:
+                jobs.append((b, a, "maps/" + m, tmp))
     t0 = time.time()
     with ThreadPoolExecutor(o.jobs) as ex:
         results = list(ex.map(lambda j: run(*j), jobs))
