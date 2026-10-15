@@ -3,18 +3,19 @@ import cambc
 
 D = cambc.ChampionDraft
 
-# Ordered by testing (see README). Cassi & Issac last: their linked death is costly in fights.
+# Ordered by testing (see README and results/): 888-game slot test, 288-game ordering test and a
+# round robin of the top four orders. Maps draft 3-5 champions, so the first five matter.
 PREFERENCE = [
-    D.VENDETTA,
+    D.REN,
     D.TAVI,
     D.RYTH,
-    D.VARG,
-    D.MARCELLA,
-    D.CASSI_AND_ISSAC,
     D.STELLAR,
-    D.PRISM,
+    D.MARCELLA,
+    D.VARG,
+    D.VENDETTA,
     D.VESPER_VALE,
-    D.REN,
+    D.PRISM,
+    D.CASSI_AND_ISSAC,
     D.WILLOW,
 ]
 
