@@ -1,0 +1,9 @@
+variant                                   wins  win%  margin   ±se
+order: Ren,Tav,Ste,Ryt,Mar              21/36    58%    +232    76
+order: Ste,Tav,Ryt,Ren,Mar              25/36    69%    +222    77
+order: Tav,Ste,Ren,Ryt,Mar              22/36    61%    +201    78
+order: Ste,Ren,Tav,Ryt,Mar              20/36    56%    +198    78
+order: Ren,Tav,Ryt,Ste,Mar              26/36    72%    +192    73
+order: Tav,Ren,Ste,Ryt,Mar              24/36    67%    +156    75
+order: Ren,Ste,Tav,Ryt,Mar              18/36    50%     +97    82
+order: Ste,Tav,Ren,Ryt,Mar              15/36    42%     +14    71
