@@ -55,9 +55,9 @@ MAX_WAIT = 0           # head for a respawning camp if it is back within this ma
 SPELL_DPS = False      # count damage spells when judging whether a champion can clear a camp alone
 FIGHT_FIX = True       # step before casting when out of range; ranged attack after stepping; Varg shields vs camps
 CAPTURE_FIX = True     # one champion per reward; forget rewards not seen for a while; shop-recall only when it costs little
-LOWHP_FIGHT = False    # low-HP champion already being hit: finish/hit what is in range before running
+LOWHP_FIGHT = True     # low-HP champion already being hit: finish/hit what is in range before running
 FAIL_MEMORY = False    # retreating or dying on the way to a far camp: skip that camp for 100 rounds
-SOLO_CAMP_FULL = False # single-camp groups deal full damage (no 60% "dies progressively" discount)
+SOLO_CAMP_FULL = True  # single-camp groups deal full damage (no 60% "dies progressively" discount)
 PAIR_UP = True         # weak champions join an ally's joint target instead of starting their own
 ACT_LOG_EVERY = 200    # print how many turns each champion spent on each activity (0 disables)
 
