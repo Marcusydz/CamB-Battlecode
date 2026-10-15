@@ -54,9 +54,18 @@ def build(name, lineup, base, seed=0):
 def play(job, tmp):
     a, b, mp = job["a"], job["b"], job["map"]
     stats = os.path.join(tmp, f"{a}-{b}-{mp}.json")
-    subprocess.run(["cambc", "run", a, b, "--map", f"maps/{mp}.map26a", "--statistics", stats,
-                    "-o", os.path.join(tmp, f"{a}-{b}-{mp}")],
-                   cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=1800)
+    for attempt in range(2):  # an occasional run dies without writing statistics; retry once
+        try:
+            subprocess.run(["cambc", "run", a, b, "--map", f"maps/{mp}.map26a", "--statistics", stats,
+                            "-o", os.path.join(tmp, f"{a}-{b}-{mp}")],
+                           cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=1800)
+        except subprocess.TimeoutExpired:
+            pass
+        if os.path.exists(stats):
+            break
+    else:
+        print(f"  match failed twice, skipped: {a} vs {b} on {mp}", flush=True)
+        return None
     d = json.load(open(stats))
     gems = [t["submittedGems"] for t in d["teams"]]
     var_is_a = job["variant_side"] == "A"
@@ -80,7 +89,8 @@ def run_jobs(jobs, out, n_jobs):
     t0 = time.time()
     with ThreadPoolExecutor(n_jobs) as ex, open(path, "a") as f:
         for i, r in enumerate(ex.map(lambda j: play(j, tmp), todo)):
-            f.write(json.dumps(r) + "\n"); f.flush()
+            if r is not None:
+                f.write(json.dumps(r) + "\n"); f.flush()
             if (i + 1) % 10 == 0:
                 el = time.time() - t0
                 print(f"  {i + 1}/{len(todo)} games, {el / 60:.0f} min, ~{el / (i + 1) * (len(todo) - i - 1) / 60:.0f} min left", flush=True)
