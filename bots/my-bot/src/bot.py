@@ -53,6 +53,11 @@ PRISM_EARLY_BANK = 0   # +12 at 60 gems); 100/50 means it banks later than the o
 MAX_WAIT = 0           # head for a respawning camp if it is back within this many rounds of arrival
                        # (0 = v14 behaviour; tested 25: champions stood beside respawning camps, lost)
 SPELL_DPS = True       # count damage spells when judging whether a champion can clear a camp alone
+FIGHT_FIX = True       # step before casting when out of range; ranged attack after stepping; Varg shields vs camps
+CAPTURE_FIX = True     # one champion per reward; forget rewards not seen for a while; shop-recall only when it costs little
+LOWHP_FIGHT = False    # low-HP champion already being hit: finish/hit what is in range before running
+FAIL_MEMORY = False    # retreating or dying on the way to a far camp: skip that camp for 100 rounds
+SOLO_CAMP_FULL = False # single-camp groups deal full damage (no 60% "dies progressively" discount)
 PAIR_UP = True         # weak champions join an ally's joint target instead of starting their own
 ACT_LOG_EVERY = 200    # print how many turns each champion spent on each activity (0 disables)
 
@@ -104,7 +109,7 @@ def camp_health(c):
 
 class GroupInfo:
     __slots__ = ("idx", "handle", "group", "mask", "tiles", "gems", "gold", "health", "center", "contested",
-                 "strength", "count", "monolith", "altar_dist", "available_at", "state", "avoid_until")
+                 "strength", "count", "monolith", "altar_dist", "available_at", "state", "avoid_until", "seen_at")
 
     def __init__(self, idx, group):
         self.idx = idx
@@ -129,6 +134,7 @@ class GroupInfo:
         self.contested = False
         self.altar_dist = 0
         self.available_at = 0   # round from which we believe it is alive
+        self.seen_at = 0
         self.avoid_until = 0    # our own "gave up on it" marker; update_groups never resets it
         self.state = 0          # 0 unknown/alive, 1 alive (seen), 2 reward available, 3 respawning
 
@@ -141,6 +147,8 @@ class Bot:
         self.overruns = 0
         self.acts = {}
         self.waited_on_spawn = False
+        self.last_hp = 0
+        self.last_alive = True
 
     # ------------------------------------------------------------------ setup
     def setup(self):
@@ -150,6 +158,7 @@ class Bot:
         self.static_block = (game_map.walls() | game_map.holes() | game_map.altars()
                              | game_map.spawn_region(Team.ENEMY))
         self.spawn = game_map.spawn_region(Team.ALLY)
+        self.width, self.height = game_map.width(), game_map.height()
         self.altars = game_map.altars().positions()
         approach = cambc.Bitboard()
         for altar in self.altars:
@@ -266,6 +275,7 @@ class Bot:
                 state = g.group.state()
             except cambc.Error:
                 continue
+            g.seen_at = now
             if isinstance(state, game_map.CampGroupAlive):
                 g.state, g.available_at = 1, 0
             elif isinstance(state, game_map.CampGroupRewardAvailable):
@@ -279,6 +289,10 @@ class Bot:
         b = self.static_block | cambc.vision.champion_tiles() | cambc.vision.camp_tiles() | cambc.vision.teleport_tiles()
         b.set(cambc.me().position(), False)
         return b
+
+    def inner(self, p):
+        """Distance from the map border: equal-length paths prefer the interior over the edge."""
+        return min(p.x, p.y, self.width - 1 - p.x, self.height - 1 - p.y)
 
     def step_towards(self, goals, allow_dash=True):
         """Walk (and dash when it gains two tiles) towards the nearest goal tile."""
@@ -302,7 +316,7 @@ class Bot:
             dash = me.abilities()[self.dash_slot]
             if not dash.is_on_cooldown():
                 options = around(origin, 2) & ~blocked
-                best = min(options.positions(), key=field.get, default=None)
+                best = min(options.positions(), key=lambda p: (field.get(p), -self.inner(p)), default=None)
                 if best is not None and field.get(best) <= here - 2:
                     try:
                         if dash.use(best):
@@ -313,7 +327,7 @@ class Bot:
                         pass
         if me.can_move() and here > 0:
             options = around(origin, 1) & ~blocked
-            best = min(options.positions(), key=field.get, default=None)
+            best = min(options.positions(), key=lambda p: (field.get(p), -self.inner(p)), default=None)
             if best is not None and field.get(best) < here:
                 try:
                     if me.move_absolute(best):
@@ -355,7 +369,7 @@ class Bot:
                     pass
         return False
 
-    def try_attack(self, target):
+    def try_attack(self, target, others=()):
         me = cambc.me()
         if (not me.can_attack() or not target.is_visible() or target.health() <= 0
                 or not me.attack_tiles().is_set(target.position())):
@@ -369,24 +383,45 @@ class Bot:
             reset = me.abilities()[self.reset_slot]
             if not reset.is_on_cooldown():
                 try:
-                    reset.use()
-                    if target.is_visible() and target.health() > 0 and me.can_attack():
-                        me.attack(target)
+                    nxt = target
+                    if not (target.is_visible() and target.health() > 0):
+                        # First hit killed it: spend the reset on something else in range.
+                        tiles = me.attack_tiles()
+                        alive = [c for c in others if c.is_visible() and c.health() > 0
+                                 and tiles.is_set(c.position())]
+                        nxt = min(alive, key=lambda c: c.health()) if alive else None
+                    if nxt is not None:
+                        reset.use()
+                        if me.can_attack():
+                            me.attack(nxt)
                 except cambc.Error:
                     pass
         return True
 
-    def fight(self, target):
-        """Spell, attack, move into range, attack."""
+    def fight(self, target, others=()):
+        """In range: shield, spell, attack. Out of range: step first (damage spells are
+        exclusive with movement, so casting first used to cost the step), then attack
+        whatever is now in range, and cast only if we could not move."""
         me = cambc.me()
-        self.try_spell(target)
-        if self.try_attack(target):
-            return
         if not target.is_visible():
             return
-        goal = around(target.position(), me.attack_range())
-        if self.step_towards(goal, allow_dash=False) and self.melee:
-            self.try_attack(target)
+        if me.attack_tiles().is_set(target.position()):
+            if FIGHT_FIX and camp_strength(target) > 0 and me.health() < 0.9 * me.max_health():
+                self.self_buff(me)   # Varg's shield used to be PvP-only
+            self.try_spell(target)
+            self.try_attack(target, others)
+            return
+        if not FIGHT_FIX:
+            self.try_spell(target)
+            if self.step_towards(around(target.position(), me.attack_range()), allow_dash=False) and self.melee:
+                self.try_attack(target)
+            return
+        moved = self.step_towards(around(target.position(), me.attack_range()), allow_dash=False)
+        for c in (target,) + tuple(others):
+            if self.try_attack(c, others):
+                return
+        if not moved:
+            self.try_spell(target)
 
     # ------------------------------------------------------------------ shopping
     def shop(self):
@@ -590,6 +625,8 @@ class Bot:
                 self.tribute()
                 self.act = "flee-tribute"
             else:
+                if FAIL_MEMORY:
+                    self.mark_failed(cambc.round_number())
                 self.retreat_and_recall()
                 self.act = "flee"
             return True
@@ -612,6 +649,12 @@ class Bot:
         target = min(targets, key=lambda e: e.health())
         self.try_spell(target)
         return self.try_attack(target)
+
+    def mark_failed(self, now):
+        """Retreat or death on the way to a far target: avoid it for a while."""
+        t = self.target
+        if t is not None and self.target_dist > 9:
+            t.avoid_until = now + 100
 
     def threats(self, now):
         """Recently seen enemy positions (vision is per champion, so remember a few rounds)."""
@@ -669,7 +712,8 @@ class Bot:
         for n in range(1, self.team_size + 1):
             clear = g.health / (dps * n)
             # Monsters die progressively, so roughly 60% of full damage lands; spread over n.
-            if g.strength * clear * 0.6 <= 0.75 * health * n:
+            factor = 1.0 if (SOLO_CAMP_FULL and g.count == 1) else 0.6
+            if g.strength * clear * factor <= 0.75 * health * n:
                 return n
         return 0
 
@@ -719,6 +763,8 @@ class Bot:
             if wait > MAX_WAIT:
                 continue
             others = claim_count.get(g.idx, 0)
+            if CAPTURE_FIX and g.state == 2 and dist > 3 and (others > 0 or now - g.seen_at > 25):
+                continue  # an ally is taking that reward, or we saw it so long ago it is likely gone
             if g.state == 2:
                 need, clear = 1, 0
             elif g.monolith:
@@ -798,6 +844,9 @@ class Bot:
         self.waited_on_spawn = False
 
         if not me.is_alive():
+            if FAIL_MEMORY and self.last_alive:
+                self.mark_failed(now)
+            self.last_alive = False
             self.claim(None)
             self.shop()
             self.act = "dead"
@@ -831,8 +880,22 @@ class Bot:
             self.act = "heal"
             return
 
+        last_hp, self.last_hp = self.last_hp, me.health()
+        self.last_alive = True
         # Survival.
         if not at_spawn and hp_frac < (LOW_HP + (LOW_HP_GEMS if gems >= 30 else 0.0)):
+            if FAIL_MEMORY:
+                self.mark_failed(now)
+            if LOWHP_FIGHT and me.health() < last_hp:
+                # Being hit right now: running rarely escapes a chaser, so first take
+                # whatever is in range (a kill resets the chaser problem entirely).
+                enemies = [e for e in visible_enemies() if e.is_alive()
+                           and me.attack_tiles().is_set(e.position())]
+                if enemies:
+                    self.self_buff(me)
+                    if self.hit_in_range(me):
+                        self.act = "lowhp-fight"
+                        return
             self.claim(None)
             self.retreat_and_recall()
             self.act = "lowhp"
@@ -883,8 +946,11 @@ class Bot:
                 self.next_plan = 0
 
         # Spend gold: with an empty bag and enough for a full emblem, recall to shop.
+        busy_here = (CAPTURE_FIX and self.target is not None and self.target.state in (1, 2)
+                     and self.target_dist <= 7 and me.gold_count() < 2 * SHOP_RECALL_GOLD)
+        threatened = CAPTURE_FIX and any(chebyshev(pos, t) <= THREAT_RANGE + 2 for t in self.threats(now))
         if (gems == 0 and me.gold_count() >= SHOP_RECALL_GOLD and self.kind != CT.TAVI
-                and not at_spawn and now < 1800):
+                and not at_spawn and now < 1800 and not busy_here and not threatened):
             self.claim(None)
             self.retreat_and_recall()
             self.act = "shop-recall"
@@ -974,7 +1040,7 @@ class Bot:
             self.gather_turns = 0
             # Hit the most dangerous camp first, then the weakest.
             camps.sort(key=lambda c: (-(camp_strength(c) > 0), camp_health(c)))
-            self.fight(camps[0])
+            self.fight(camps[0], tuple(camps[1:]))
             self.act = "fight"
             return
         if target.state == 2:

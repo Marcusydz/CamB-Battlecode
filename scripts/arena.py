@@ -17,6 +17,8 @@ def run(a, b, mp, tmp):
     out = os.path.join(tmp, tag)
     subprocess.run(["cambc", "run", a, b, "--map", mp, "--statistics", stats, "-o", out],
                    cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=1500)
+    if not os.path.exists(stats):
+        return None
     d = json.load(open(stats))
     gems = [t["submittedGems"] for t in d["teams"]]
     faults = d.get("botFaults", [0, 0])
@@ -78,6 +80,7 @@ def main():
         results = list(ex.map(lambda j: run(*j), jobs))
     wins = 0; margin = 0; rounds = []; faults = 0
     names_A = {p[0] for p in pairs}
+    results = [r for r in results if r]
     for r in results:
         a_is_A = r["a"] in names_A
         mine, theirs = (0, 1) if a_is_A else (1, 0)
