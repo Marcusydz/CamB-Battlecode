@@ -15,7 +15,7 @@ Results are appended to DIR/results.jsonl as they finish, so an interrupted run 
 where it stopped. The opponent is always the same bot code with the base lineup, so the
 draft is the only difference.
 """
-import argparse, collections, itertools, json, os, re, shutil, subprocess, sys, tempfile, time
+import argparse, collections, itertools, json, os, re, shutil, subprocess, sys, tempfile, time, zlib
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -131,6 +131,8 @@ def main():
     ap.add_argument("--base", default="my-bot")
     ap.add_argument("--lineup", default=BASE_LINEUP)
     ap.add_argument("--champs", default=UNTESTED)
+    ap.add_argument("--tail", default="", help="orders mode: champions after the first ones (default --lineup)")
+    ap.add_argument("--no-permute", action="store_true", help="orders mode: only the order given in --champs")
     ap.add_argument("--slots", default="", help="only these slot numbers (1-based), e.g. 1,2,3")
     ap.add_argument("--maps", default="")
     ap.add_argument("--seeds", type=int, default=0)
@@ -164,13 +166,15 @@ def main():
                 label = f"{SHORT[c]}@{k + 1}: " + ",".join(SHORT[n] for n in new[:5])
                 variants.append((label, new, maps))
     else:
-        for perm in itertools.permutations(champs):
-            new = list(perm) + [n for n in lineup if n not in perm]
+        tail = o.tail.split(",") if o.tail else lineup
+        perms = [tuple(champs)] if o.no_permute else itertools.permutations(champs)
+        for perm in perms:
+            new = list(perm) + [n for n in tail if n not in perm]
             label = "order: " + ",".join(SHORT[n] for n in new[:5])
             variants.append((label, new, all_maps))
     jobs = []
     for i, (label, new, maps) in enumerate(variants):
-        name = f"_dv{i}"
+        name = f"_dv{o.mode[0]}{zlib.crc32(label.encode()) % 10**6}"
         build(name, new, o.base)
         for s in range(1, o.seeds + 1):
             build(f"{name}_s{s}", new, o.base, seed=s)
