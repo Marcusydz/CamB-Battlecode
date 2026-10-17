@@ -612,10 +612,11 @@ class Bot:
                         and chebyshev(dangerous.position(), pos) <= 4 and target.health() > burst):
                     self.try_spell(dangerous, want_stun=True)
                 self.try_spell(target, want_stun=False)
-                if not self.try_attack(target):
+                if not self.try_attack(target) and target.is_visible():
+                    # (a spell may just have killed it: a dead target has no position)
                     self.step_towards(around(target.position(), me.attack_range()))
                     self.try_attack(target)
-                if RALLY:
+                if RALLY and target.is_visible():
                     self.set_rally(target.position())
                 self.act = "engage"
                 return True
@@ -1019,7 +1020,11 @@ class Bot:
                 self.gather_turns += 1
                 switch = near < self.need - 1 and self.joint_claim_elsewhere(target, self.camp_dps(me), me.max_health())
                 if self.gather_turns > GATHER_MAX or switch:
-                    if not switch:
+                    if switch:
+                        # Leave it to the ally's joint target; without this marker the replan
+                        # could pick this same camp again and loop (500 turns on a 100x100 map).
+                        target.avoid_until = now + 30
+                    else:
                         target.avoid_until = now + 50
                         self.no_joint_until = now + 40   # stop starting joint targets for a while
                     self.target = None
