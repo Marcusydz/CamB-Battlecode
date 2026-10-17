@@ -58,6 +58,8 @@ CAPTURE_FIX = True     # one champion per reward; forget rewards not seen for a 
 LOWHP_FIGHT = True     # low-HP champion already being hit: finish/hit what is in range before running
 FAIL_MEMORY = False    # retreating or dying on the way to a far camp: skip that camp for 100 rounds
 SOLO_CAMP_FULL = True  # single-camp groups deal full damage (no 60% "dies progressively" discount)
+SCARCE_GEMS = 150      # fewer gems than this in camps the team can take: gem-scarce map, so the
+SCARCE_FROM = 0        # whole team attacks monoliths / super groups together from this round
 PAIR_UP = True         # weak champions join an ally's joint target instead of starting their own
 ACT_LOG_EVERY = 200    # print how many turns each champion spent on each activity (0 disables)
 
@@ -223,6 +225,9 @@ class Bot:
             self.team_size = len(picks) + (1 if 3 in picks else 0)
         except Exception:
             self.team_size = 3
+        dps0, hp0 = max(me.strength(), 20.0) + 15.0, me.max_health()
+        easy = sum(g.gems for g in self.groups if self.helpers_needed_raw(g, dps0, hp0) > 0)
+        self.scarce = SCARCE_GEMS > 0 and easy < SCARCE_GEMS and self.team_size >= 3
         self.target = None
         self.need = 1
         self.gather_turns = 0
@@ -706,6 +711,13 @@ class Bot:
 
     def helpers_needed(self, g, dps, health):
         """Smallest team size that clears g without anyone dying (rough), or 0 if none."""
+        n = self.helpers_needed_raw(g, dps, health)
+        if n == 0 and self.scarce and g.gems > 0 and cambc.round_number() >= SCARCE_FROM:
+            # Gem-scarce map (e.g. all gems in monoliths): the whole team goes, or nobody scores.
+            return self.team_size
+        return n
+
+    def helpers_needed_raw(self, g, dps, health):
         if g.monolith:
             return self.team_size if (MONOLITH and self.team_size >= 4) else 0
         if g.strength <= 0:
@@ -1019,7 +1031,7 @@ class Bot:
                     return
                 self.gather_turns += 1
                 switch = near < self.need - 1 and self.joint_claim_elsewhere(target, self.camp_dps(me), me.max_health())
-                if self.gather_turns > GATHER_MAX or switch:
+                if self.gather_turns > (GATHER_MAX * 5 if self.scarce else GATHER_MAX) or switch:
                     if switch:
                         # Leave it to the ally's joint target; without this marker the replan
                         # could pick this same camp again and loop (500 turns on a 100x100 map).
