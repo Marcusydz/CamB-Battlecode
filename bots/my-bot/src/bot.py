@@ -69,7 +69,7 @@ COMMIT = 1.5           # keep the current target unless another scores this much
 SPREAD_LOWER_ONLY = True  # the "someone else is on it" penalty only counts higher-priority allies,
                        # so two champions cannot keep pushing each other off the same camp
 GHOSTS = False         # count enemies seen in the last 3 rounds within 8 tiles but not visible now
-DISENGAGE = False      # losing side and an enemy within 4: back off (unless we can kill something now)
+DISENGAGE = True       # losing side and an enemy within 4: back off (unless we can kill something now)
 PAIR_UP = True         # weak champions join an ally's joint target instead of starting their own
 ACT_LOG_EVERY = 200    # print how many turns each champion spent on each activity (0 disables)
 
