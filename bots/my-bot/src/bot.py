@@ -62,6 +62,8 @@ SCARCE_GEMS = 0        # >0: on gem-scarce maps the whole team attacks monoliths
 SCARCE_FROM = 0        # the team softened the monolith and the enemy took the reward (and many kills)
 GOLD_MODE = False      # gem-scarce map: farm gold, fight only when clearly stronger. Tested: 0/7 vs v15,
 GOLD_ENGAGE = 1.5      # killed 14-87: backing off feeds the enemy kills and gold. Aggression wins here
+LINKED = False         # tested: no gain (2/12, 0/11 on 3-pick maps).    # Cassi & Issac: one death kills both, so retreat on the pair's lower HP,
+LINKED_GEM_CAP = 35    # bank earlier (two bags lost at once), and Issac follows Cassi's target
 PAIR_UP = True         # weak champions join an ally's joint target instead of starting their own
 ACT_LOG_EVERY = 200    # print how many turns each champion spent on each activity (0 disables)
 
@@ -224,9 +226,13 @@ class Bot:
                         CT.STELLAR: 4, CT.PRISM: 5, CT.MARCELLA: 6, CT.WILLOW: 7, CT.REN: 8,
                         CT.VARG: 9, CT.TAVI: 10}[self.kind]
             self.mem_slot = 7 if self.kind == CT.ISSAC else picks.index(draft_id)
+            self.cassi_slot = picks.index(3) if 3 in picks else None
             self.team_size = len(picks) + (1 if 3 in picks else 0)
         except Exception:
             self.team_size = 3
+            self.cassi_slot = None
+        self.linked = LINKED and self.kind in (CT.CASSI, CT.ISSAC)
+        self.partner_kind = CT.ISSAC if self.kind == CT.CASSI else CT.CASSI
         dps0, hp0 = max(me.strength(), 20.0) + 15.0, me.max_health()
         easy = sum(g.gems for g in self.groups if self.helpers_needed_raw(g, dps0, hp0) > 0)
         self.scarce = SCARCE_GEMS > 0 and easy < SCARCE_GEMS and self.team_size >= 3
@@ -901,6 +907,14 @@ class Bot:
         last_hp, self.last_hp = self.last_hp, me.health()
         self.last_alive = True
         # Survival.
+        if self.linked:
+            # Linked pair: whoever is weaker decides for both.
+            for a in cambc.vision.champions(Team.ALLY):
+                try:
+                    if a != me and a.champion_name() == self.partner_kind and a.is_alive() and a.is_visible():
+                        hp_frac = min(hp_frac, a.health() / a.max_health())
+                except cambc.Error:
+                    pass
         if not at_spawn and hp_frac < (LOW_HP + (LOW_HP_GEMS if gems >= 30 else 0.0)):
             if FAIL_MEMORY:
                 self.mark_failed(now)
@@ -989,6 +1003,13 @@ class Bot:
             roots.set(pos)
             my_field.compute(self.static_block, roots, cambc.Bitboard(), PLAN_RADIUS)
             target = self.choose_group(now, my_field)
+            if self.linked and self.kind == CT.ISSAC and self.cassi_slot is not None:
+                # Issac guards Cassi: take her target when she has one we can reach.
+                c = self.claims()[self.cassi_slot]
+                if c and c - 1 < len(self.groups):
+                    g = self.groups[c - 1]
+                    if min(my_field.get(t) for t in g.tiles) < UNREACHED:
+                        target = g
             if target is None and not low_fuel:
                 # Nothing within PLAN_RADIUS: search the whole map rather than idle.
                 my_field = cambc.DistanceField()
@@ -1004,7 +1025,7 @@ class Bot:
             altar_dist = self.altar_field.get(pos)
             target_dist = self.target_dist
             prism = self.kind == CT.PRISM
-            cap = PRISM_GEM_CAP if prism else GEM_CAP
+            cap = PRISM_GEM_CAP if prism else (LINKED_GEM_CAP if self.linked else GEM_CAP)
             on_the_way = altar_dist <= target_dist and (not prism or gems >= PRISM_EARLY_BANK)
             if target is None or gems >= cap or on_the_way:
                 self.claim(None)
