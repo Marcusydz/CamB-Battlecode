@@ -60,6 +60,8 @@ FAIL_MEMORY = False    # retreating or dying on the way to a far camp: skip that
 SOLO_CAMP_FULL = True  # single-camp groups deal full damage (no 60% "dies progressively" discount)
 SCARCE_GEMS = 0        # >0: on gem-scarce maps the whole team attacks monoliths. Tested 150: 1-2 of 8 vs v15,
 SCARCE_FROM = 0        # the team softened the monolith and the enemy took the reward (and many kills)
+GOLD_MODE = True       # gem-scarce map: ties at round 2000 go to gold earned, then kills, so farm
+GOLD_ENGAGE = 1.5      # gold at full value and only fight when clearly stronger (deaths feed enemy gold)
 PAIR_UP = True         # weak champions join an ally's joint target instead of starting their own
 ACT_LOG_EVERY = 200    # print how many turns each champion spent on each activity (0 disables)
 
@@ -228,6 +230,8 @@ class Bot:
         dps0, hp0 = max(me.strength(), 20.0) + 15.0, me.max_health()
         easy = sum(g.gems for g in self.groups if self.helpers_needed_raw(g, dps0, hp0) > 0)
         self.scarce = SCARCE_GEMS > 0 and easy < SCARCE_GEMS and self.team_size >= 3
+        # Engine tiebreak at round 2000: gems, then gold earned, then kills, then team B.
+        self.gold_mode = GOLD_MODE and easy < 150
         self.target = None
         self.need = 1
         self.gather_turns = 0
@@ -602,7 +606,7 @@ class Bot:
                          if a.is_alive() and a != me and chebyshev(a.position(), pos) <= 5]
         ratio = self.power(allies) / max(self.power(near), 1.0)
         # 2. Winning fight: focus fire (same rule on every ally), finish kills first.
-        if ratio >= ENGAGE_RATIO and hp_frac > 0.35:
+        if ratio >= (GOLD_ENGAGE if self.gold_mode else ENGAGE_RATIO) and hp_frac > 0.35:
             burst = self.burst(me)
             reach = [e for e in near if chebyshev(e.position(), pos) <= HUNT_RADIUS]
             if reach:
@@ -792,7 +796,8 @@ class Bot:
                 if need > 1 and others == 0 and no_new_joint:
                     continue  # join the ally already waiting for help, or recently gave up waiting
                 clear = g.health / (dps * max(need, others + 1))
-            value = (g.gems + 0.15 * g.gold) / max(need, others + 1)
+            gold_w = 1.0 if self.gold_mode else 0.15
+            value = (g.gems + gold_w * g.gold) / max(need, others + 1)
             cost = eta + wait + clear + CAPTURE_TIME + 0.5 * g.altar_dist + 1
             if need > 1:
                 cost += 4 * (need - 1 - min(others, need - 1))  # time to gather helpers
