@@ -60,8 +60,8 @@ FAIL_MEMORY = False    # retreating or dying on the way to a far camp: skip that
 SOLO_CAMP_FULL = True  # single-camp groups deal full damage (no 60% "dies progressively" discount)
 SCARCE_GEMS = 0        # >0: on gem-scarce maps the whole team attacks monoliths. Tested 150: 1-2 of 8 vs v15,
 SCARCE_FROM = 0        # the team softened the monolith and the enemy took the reward (and many kills)
-GOLD_MODE = True       # gem-scarce map: ties at round 2000 go to gold earned, then kills, so farm
-GOLD_ENGAGE = 1.5      # gold at full value and only fight when clearly stronger (deaths feed enemy gold)
+GOLD_MODE = False      # gem-scarce map: farm gold, fight only when clearly stronger. Tested: 0/7 vs v15,
+GOLD_ENGAGE = 1.5      # killed 14-87: backing off feeds the enemy kills and gold. Aggression wins here
 PAIR_UP = True         # weak champions join an ally's joint target instead of starting their own
 ACT_LOG_EVERY = 200    # print how many turns each champion spent on each activity (0 disables)
 
