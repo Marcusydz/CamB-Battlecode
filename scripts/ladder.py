@@ -33,6 +33,8 @@ def main():
     ap.add_argument("--team", default=TEAM)
     ap.add_argument("--download", default="")
     ap.add_argument("--limit", type=int, default=100, help="max match groups")
+    ap.add_argument("--since", default="", help="only matches created at/after this UTC time, e.g. 2026-10-17T14:32")
+    ap.add_argument("--until", default="", help="only matches created before this UTC time")
     o = ap.parse_args()
     groups, nxt = [], None
     while len(groups) < o.limit:
@@ -46,6 +48,8 @@ def main():
     by_opp = collections.defaultdict(lambda: [0, 0])
     for g in groups:
         if g["status"] != "finished":
+            continue
+        if (o.since and g["createdAt"] < o.since) or (o.until and g["createdAt"] >= o.until):
             continue
         detail = get(f"/api/v1/match-groups/{g['id']}")
         for m in detail["matches"]:
