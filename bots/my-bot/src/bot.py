@@ -58,8 +58,8 @@ CAPTURE_FIX = True     # one champion per reward; forget rewards not seen for a 
 LOWHP_FIGHT = True     # low-HP champion already being hit: finish/hit what is in range before running
 FAIL_MEMORY = False    # retreating or dying on the way to a far camp: skip that camp for 100 rounds
 SOLO_CAMP_FULL = True  # single-camp groups deal full damage (no 60% "dies progressively" discount)
-SCARCE_GEMS = 150      # fewer gems than this in camps the team can take: gem-scarce map, so the
-SCARCE_FROM = 0        # whole team attacks monoliths / super groups together from this round
+SCARCE_GEMS = 0        # >0: on gem-scarce maps the whole team attacks monoliths. Tested 150: 1-2 of 8 vs v15,
+SCARCE_FROM = 0        # the team softened the monolith and the enemy took the reward (and many kills)
 PAIR_UP = True         # weak champions join an ally's joint target instead of starting their own
 ACT_LOG_EVERY = 200    # print how many turns each champion spent on each activity (0 disables)
 
