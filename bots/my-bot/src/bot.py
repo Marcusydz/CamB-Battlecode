@@ -64,6 +64,10 @@ GOLD_MODE = False      # gem-scarce map: farm gold, fight only when clearly stro
 GOLD_ENGAGE = 1.5      # killed 14-87: backing off feeds the enemy kills and gold. Aggression wins here
 LINKED = False         # tested: no gain (2/12, 0/11 on 3-pick maps).    # Cassi & Issac: one death kills both, so retreat on the pair's lower HP,
 LINKED_GEM_CAP = 35    # bank earlier (two bags lost at once), and Issac follows Cassi's target
+COMMIT = 1.5           # keep the current target unless another scores this much more (was 1.2;
+                       # rows ladder game: Ryth flipped between two camps for 300 turns)
+SPREAD_LOWER_ONLY = True  # the "someone else is on it" penalty only counts higher-priority allies,
+                       # so two champions cannot keep pushing each other off the same camp
 PAIR_UP = True         # weak champions join an ally's joint target instead of starting their own
 ACT_LOG_EVERY = 200    # print how many turns each champion spent on each activity (0 disables)
 
@@ -768,9 +772,12 @@ class Bot:
         me = cambc.me()
         claims = self.claims()
         claim_count = {}
+        senior = {}   # claims by higher-priority (lower slot) allies
         for i in range(8):
             if i != self.mem_slot and claims[i]:
                 claim_count[claims[i] - 1] = claim_count.get(claims[i] - 1, 0) + 1
+                if i < self.mem_slot:
+                    senior[claims[i] - 1] = True
         dps = self.camp_dps(me)
         health = me.max_health()
         no_new_joint = now < self.no_joint_until or self.joint_claim_elsewhere(None, dps, health)
@@ -814,12 +821,12 @@ class Bot:
             else:
                 score_bonus = 1.0
             score = value / cost * score_bonus
-            if others and need <= 1 and g.state != 2:
+            if others and need <= 1 and g.state != 2 and (not SPREAD_LOWER_ONLY or g.idx in senior):
                 score *= 0.25   # someone else is on it; spread out
             if g.contested and others == 0:
                 score *= CONTEST_PENALTY
             if self.target is g:
-                score *= 1.2    # hysteresis
+                score *= COMMIT    # hysteresis
             if SEED:
                 h = (SEED * 1000003 + g.idx * 7919 + self.mem_slot * 104729 + now // 40) * 2654435761 % 4294967296
                 score *= 0.9 + 0.2 * (h / 4294967296.0)
