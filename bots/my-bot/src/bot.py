@@ -1129,4 +1129,8 @@ class Bot:
             # Give up on it for a while (unreachable, hidden, or contested).
             target.avoid_until = now + 40
             self.stuck = 0
+            # Drop it outright: with a target still set, a low-fuel turn skips the replan and the
+            # champion stayed on the same unreachable camp for 600 turns (rushbait ladder game).
+            self.target = None
+            self.next_plan = 0
 
