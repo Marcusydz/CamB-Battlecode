@@ -33,6 +33,7 @@ constexpr int CAPTURE_TIME = 5;
 constexpr int UNREACHED = 1000000;
 constexpr int SHOP_RECALL_GOLD = 150;   // recall to shop with an empty bag and this much gold
 constexpr bool BUY_JUNGLE = true;
+constexpr double SUPPORT_BONUS = 0.0;   // enemy power counts this much extra per enemy healer (Willow) or shielder (Varg) in the fight
 constexpr int JOIN = 10;                 // >0: walk to an ally up to this many tiles away who is fighting a fight we would win together
 constexpr int WARDS = 1;                // 1: keep a ward near where we last were, placed towards the enemy side, re-placed after moving WARD_GAP tiles
 constexpr int WARD_GAP = 8;
@@ -669,6 +670,20 @@ static double power(const std::vector<cambc::champion>& units) {
     return hp * dps;
 }
 
+// Enemy side's power, counting heals and shields the plain estimate leaves out (ladder: we lost
+// elkring fights 3-31 to a team with Willow and Varg).
+static double enemy_power(const std::vector<cambc::champion>& units) {
+    int support = 0;
+    for (const auto& u : units) {
+        try {
+            const auto k = u.champion_name();
+            if (k == CT::willow || k == CT::varg) support += 1;
+        } catch (const cambc::error&) {
+        }
+    }
+    return power(units) * (1.0 + SUPPORT_BONUS * support);
+}
+
 // Returns true if the turn was spent on PvP.
 bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     std::vector<cambc::champion> enemies;
@@ -715,8 +730,7 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     std::vector<cambc::champion> allies{me};
     for (const auto& a : cambc::vision::champions(team::ally))
         if (a.is_alive() && a != me && chebyshev(a.position(), pos) <= 5) allies.push_back(a);
-    const double enemy_power = power(near);
-    const double ratio = power(allies) / std::max(enemy_power, 1.0);
+    const double ratio = power(allies) / std::max(enemy_power(near), 1.0);
     // 2. Winning fight: focus fire (same rule on every ally), finish kills first.
     if (ratio >= ENGAGE_RATIO && hp_frac > 0.35) {
         const double b = burst(me);
@@ -825,7 +839,7 @@ bool Bot::join_fight(const cambc::champion& me, vec2 pos, int gems, double hp_fr
         if (theirs.empty()) continue;
         for (const auto& b : allies_all)
             if (b.is_alive() && b != me && chebyshev(b.position(), a.position()) <= 5) ours.push_back(b);
-        if (power(ours) < ENGAGE_RATIO * power(theirs)) continue;
+        if (power(ours) < ENGAGE_RATIO * enemy_power(theirs)) continue;
         if (d < best_d) {
             best_d = d;
             best = &a;

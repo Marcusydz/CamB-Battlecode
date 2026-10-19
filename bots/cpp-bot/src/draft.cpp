@@ -10,13 +10,14 @@ using List = std::array<D, 11>;
 
 // Candidate lists. 0 is v16's order (Ren, Tavi, Ryth, Stellar, Marcella), chosen by local tests against
 // itself. 1 is what teams rated 1700+ pick on almost every map (690 ladder games, October 2026).
-static constexpr std::array<List, 6> LISTS{{
+static constexpr std::array<List, 7> LISTS{{
     {D::ren, D::tavi, D::ryth, D::stellar, D::marcella, D::varg, D::vendetta, D::vesper_vale, D::prism, D::cassi_and_issac, D::willow},
     {D::cassi_and_issac, D::stellar, D::varg, D::ren, D::ryth, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::stellar, D::cassi_and_issac, D::ren, D::ryth, D::varg, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::cassi_and_issac, D::stellar, D::ren, D::ryth, D::tavi, D::varg, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::varg, D::cassi_and_issac, D::stellar, D::ren, D::ryth, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::ren, D::stellar, D::ryth, D::tavi, D::cassi_and_issac, D::varg, D::marcella, D::prism, D::vendetta, D::vesper_vale, D::willow},
+    {D::stellar, D::cassi_and_issac, D::varg, D::ryth, D::willow, D::ren, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale},
 }};
 
 constexpr int DRAFT = -1;  // >=0: use this list on every map (testing). -1: per-map table below.
