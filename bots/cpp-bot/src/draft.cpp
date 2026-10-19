@@ -19,31 +19,31 @@ static constexpr std::array<List, 6> LISTS{{
     {D::ren, D::stellar, D::ryth, D::tavi, D::cassi_and_issac, D::varg, D::marcella, D::prism, D::vendetta, D::vesper_vale, D::willow},
 }};
 
-constexpr int DRAFT = 0;  // >=0: use this list on every map (testing). -1: per-map table below.
+constexpr int DRAFT = -1;  // >=0: use this list on every map (testing). -1: per-map table below.
 
 struct MapDraft {
     int w, h, walls, list;
 };
 // Per-map choice, from local tests against v16 (see README).
 static constexpr std::array<MapDraft, 16> PER_MAP{{
-    {100, 100, 540, 0},  // ambush
+    {100, 100, 540, 2},  // ambush
     {41, 41, 84, 0},     // collision
-    {50, 50, 40, 0},     // contest
+    {50, 50, 40, 4},     // contest
     {71, 71, 44, 0},     // corners
-    {41, 30, 36, 0},     // eight
-    {30, 30, 0, 0},      // elkring
-    {80, 80, 224, 0},    // expanse
-    {30, 30, 24, 0},     // fragment
-    {40, 40, 76, 0},     // interlock
-    {90, 30, 0, 0},      // lanes
-    {50, 50, 98, 0},     // monolith
+    {41, 30, 36, 3},     // eight
+    {30, 30, 0, 3},      // elkring
+    {80, 80, 224, 4},    // expanse
+    {30, 30, 24, 4},     // fragment
+    {40, 40, 76, 5},     // interlock
+    {90, 30, 0, 4},      // lanes
+    {50, 50, 98, 1},     // monolith
     {31, 31, 0, 0},      // packs
-    {50, 65, 0, 0},      // pilgrimage
-    {50, 50, 214, 0},    // rows
-    {30, 80, 80, 0},     // rushbait_v2
-    {60, 50, 0, 0},      // stampede
+    {50, 65, 0, 5},      // pilgrimage
+    {50, 50, 214, 4},    // rows
+    {30, 80, 80, 5},     // rushbait_v2
+    {60, 50, 0, 5},      // stampede
 }};
-constexpr int DEFAULT_LIST = 0;  // maps not in the table (new or unseen ones)
+constexpr int DEFAULT_LIST = 4;  // maps not in the table (new or unseen ones)
 
 static int choose_list() {
     if (DRAFT >= 0) return DRAFT;

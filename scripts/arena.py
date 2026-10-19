@@ -79,6 +79,7 @@ def main():
     ap.add_argument("--jobs", type=int, default=2)
     ap.add_argument("--quiet", action="store_true")
     ap.add_argument("--seeds", type=int, default=0, help="also play N seeded copies of each bot")
+    ap.add_argument("--seed-base", type=int, default=0, help="offset seeds, for games independent of an earlier run")
     ap.add_argument("--out", default="", help="keep replays and statistics in this directory")
     ap.add_argument("--one-side", action="store_true", help="play each map once, alternating sides")
     o = ap.parse_args()
@@ -89,7 +90,9 @@ def main():
     tmp = os.path.abspath(o.out) if o.out else tempfile.mkdtemp(prefix="arena-")
     os.makedirs(tmp, exist_ok=True)
     pairs = [(o.A, o.B)]
-    for k in range(1, o.seeds + 1):
+    if o.seed_base:
+        pairs = []  # only fresh seeded games
+    for k in range(1 + o.seed_base, o.seeds + 1 + o.seed_base):
         pairs.append((make_seeded(o.A, k), make_seeded(o.B, 100 + k)))
     # Build C++ bots once up front: parallel matches building the same bot race and fail to link.
     for bot in sorted({x for p in pairs for x in p}):
