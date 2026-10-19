@@ -64,6 +64,10 @@ constexpr bool SPREAD_LOWER_ONLY = true;  // the "someone else is on it" penalty
 constexpr bool DISENGAGE = true;        // losing side and an enemy within 4: back off (unless we can kill something now)
 constexpr bool PAIR_UP = true;          // weak champions join an ally's joint target instead of starting their own
 constexpr double ALTAR_WEIGHT = 0.5;    // camp cost counts this fraction of the camp's distance to an altar
+constexpr int SCARCE_GEMS = 0;          // >0: map is gem-scarce if non-monolith groups hold fewer gems; then teams take monoliths. Tested 300: reaches 1000 gems vs a passive enemy, but 0 of 8 vs v16 (we feed kills while attacking)
+constexpr int MONOLITH_TEAM = 3;        // champions that take a monolith together on gem-scarce maps
+constexpr int MONOLITH_CLEAR = 12;      // no enemy may have been seen this close to a monolith ...
+constexpr int MONOLITH_MEMORY = 20;     // ... in this many rounds before (and while) we attack it
 constexpr int SEED = 0;                 // >0 adds small deterministic noise to camp choice (testing only)
 constexpr bool IGNORE_SPAWN_CAMPERS = true;  // enemies inside their own spawn are not chased or fled from
 constexpr int ACT_LOG_EVERY = 200;      // print how many turns each champion spent on each activity (0 disables)
@@ -243,6 +247,10 @@ void Bot::setup() {
     } catch (const std::exception&) {
         team_size = 3;
     }
+    int ordinary_gems = 0;
+    for (const auto& g : groups)
+        if (!g.monolith) ordinary_gems += g.gems;
+    scarce = ordinary_gems < SCARCE_GEMS;
     target = -1;
     need = 1;
     gather_turns = 0;
@@ -252,7 +260,7 @@ void Bot::setup() {
     target_dist = UNREACHED;
     ready = true;
     if (LOG_EVERY && mem_slot == 0) {
-        std::printf("map %dx%d groups:\n", width, height);
+        std::printf("map %dx%d groups (scarce=%d):\n", width, height, scarce ? 1 : 0);
         for (const auto& g : groups) {
             std::printf("  g%d n=%d hp=%d str=%d gems=%d gold=%d tile=(%d, %d) altar=%d\n", g.idx, g.count,
                         static_cast<int>(g.health), static_cast<int>(g.strength), g.gems, g.gold, g.tiles[0].x,
@@ -764,6 +772,13 @@ bool Bot::hit_in_range(const cambc::champion& me) {
     return try_attack(*target);
 }
 
+// An enemy was seen within `radius` of p in the last `rounds` rounds.
+bool Bot::enemy_near(vec2 p, int radius, int rounds, int now) const {
+    for (const auto& [h, s] : seen)
+        if (now - s.round <= rounds && chebyshev(p, s.pos) <= radius) return true;
+    return false;
+}
+
 // Recently seen enemy positions (vision is per champion, so remember a few rounds).
 std::vector<vec2> Bot::threats(int now) const {
     std::vector<vec2> out;
@@ -840,7 +855,10 @@ bool Bot::retreat_and_recall() {
 
 // Smallest team size that clears g without anyone dying (rough), or 0 if none.
 int Bot::helpers_needed(const GroupInfo& g, double dps, double health) const {
-    if (g.monolith) return 0;  // full-team monolith assault was tested and lost
+    // Monoliths: only on gem-scarce maps (few gems outside monoliths), as a team of MONOLITH_TEAM.
+    // A full-team assault on ordinary maps was tested in Python and lost; champions arriving one at a
+    // time also died one by one, so the team gathers first (the joint-target logic below).
+    if (g.monolith) return scarce ? std::min(team_size, MONOLITH_TEAM) : 0;
     if (g.strength <= 0) return 1;
     for (int n = 1; n <= team_size; ++n) {
         const double clear = g.health / (dps * n);
@@ -915,6 +933,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         } else if (g.monolith) {
             need = helpers_needed(g, dps, health);
             if (need == 0) continue;
+            if (enemy_near(g.center, MONOLITH_CLEAR, MONOLITH_MEMORY, now)) continue;  // they would take the reward
             clear = g.health / (dps * need);
         } else {
             need = helpers_needed(g, dps * (kind == CT::varg ? std::min(g.count, 2) : 1), health);
@@ -1155,6 +1174,16 @@ void Bot::turn() {
     }
 
     auto& tg = groups[tgt];
+    if (tg.monolith && tg.state != 2 && enemy_near(tg.center, MONOLITH_CLEAR, 2, now)) {
+        // Enemies arrived: a half-dead monolith team is easy kills and hands them the reward. Leave it.
+        tg.avoid_until = now + MONOLITH_MEMORY;
+        target = -1;
+        next_plan = 0;
+        claim(-1);
+        retreat_and_recall();
+        act = "monolith-abort";
+        return;
+    }
     claim(tgt);
     std::vector<cambc::camp> camps;
     for (auto& c : visible_camps())
@@ -1176,7 +1205,7 @@ void Bot::turn() {
             }
             gather_turns += 1;
             const bool sw = near < need - 1 && joint_claim_elsewhere(tgt, camp_dps(me), me.max_health());
-            if (gather_turns > GATHER_MAX || sw) {
+            if (gather_turns > (tg.monolith ? GATHER_MAX * 5 : GATHER_MAX) || sw) {
                 if (sw) {
                     // Leave it to the ally's joint target; without this marker the replan
                     // could pick this same camp again and loop (500 turns on a 100x100 map).
