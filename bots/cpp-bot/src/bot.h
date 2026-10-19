@@ -95,6 +95,7 @@ private:
     void fight(const cambc::camp& target, const std::vector<cambc::camp>& others);
 
     void shop();
+    void place_ward();
     bool tribute();
     bool place_lock(std::optional<cambc::vec2> only_altar = std::nullopt);
 
@@ -104,6 +105,7 @@ private:
     void self_buff(const cambc::champion& me);
     bool pvp(const cambc::champion& me, cambc::vec2 pos, int gems, double hp_frac);
     bool hit_in_range(const cambc::champion& me);
+    bool join_fight(const cambc::champion& me, cambc::vec2 pos, int gems, double hp_frac);
     std::vector<cambc::vec2> threats(int now) const;
     bool enemy_near(cambc::vec2 p, int radius, int rounds, int now) const;
     bool retreat_and_recall();

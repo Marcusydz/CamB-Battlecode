@@ -33,6 +33,10 @@ constexpr int CAPTURE_TIME = 5;
 constexpr int UNREACHED = 1000000;
 constexpr int SHOP_RECALL_GOLD = 150;   // recall to shop with an empty bag and this much gold
 constexpr bool BUY_JUNGLE = true;
+constexpr int JOIN = 0;                 // >0: walk to an ally up to this many tiles away who is fighting a fight we would win together
+constexpr int WARDS = 0;                // 1: keep a ward near where we last were, placed towards the enemy side, re-placed after moving WARD_GAP tiles
+constexpr int WARD_GAP = 8;
+constexpr int BUILD = 0;                // 0: v16 (monster, jungle, power strength). 1: power main stat, then durability health, then power. 2: power main stat only. 3: monster emblem of main stat, then power main stat
 constexpr int GEM_CAP = 60;
 constexpr int REPLAN_EVERY = 3;
 constexpr int PLAN_RADIUS = 50;         // max path length considered when choosing camps
@@ -476,10 +480,23 @@ void Bot::shop() {
     // Build order: Monster emblem (+10% camp damage), Jungle emblem of health
     // (-30% camp damage taken), then Power strength shards forever.
     Item primary = Item::power_shard_of_strength;
-    if (items[Item::monster_emblem_of_strength] == 0)
-        primary = Item::monster_shard_of_strength;
-    else if (items[Item::jungle_emblem_of_health] == 0 && BUY_JUNGLE)
-        primary = Item::jungle_shard_of_health;
+    if (BUILD == 0) {
+        if (items[Item::monster_emblem_of_strength] == 0)
+            primary = Item::monster_shard_of_strength;
+        else if (items[Item::jungle_emblem_of_health] == 0 && BUY_JUNGLE)
+            primary = Item::jungle_shard_of_health;
+    } else {
+        // Top ladder teams: casters stack focus, the rest strength, all through power shards.
+        const bool caster = kind == CT::cassi || kind == CT::stellar || kind == CT::ren || kind == CT::tavi
+                            || kind == CT::prism;
+        const Item power = caster ? Item::power_shard_of_focus : Item::power_shard_of_strength;
+        const Item power_emblem = caster ? Item::power_emblem_of_focus : Item::power_emblem_of_strength;
+        primary = power;
+        if (BUILD == 1 && items[power_emblem] >= 1 && items[Item::durability_emblem_of_health] == 0)
+            primary = Item::durability_shard_of_health;
+        if (BUILD == 3 && items[caster ? Item::monster_emblem_of_focus : Item::monster_emblem_of_strength] == 0)
+            primary = caster ? Item::monster_shard_of_focus : Item::monster_shard_of_strength;
+    }
     if (USE_LOCKS && (!me.is_alive() || spawn.is_set(me.position()))) {
         const auto lock = cambc::consumable_type::altar_lock;
         try {
@@ -494,6 +511,34 @@ void Bot::shop() {
             if (me.can_buy(primary, count)) me.buy(primary, count);
         } catch (const cambc::error&) {
         }
+    }
+}
+
+// Wards are free (one active per champion, recharging every round) and add vision, which feeds the
+// threat memory and the fight evaluator. Top ladder teams place one every few rounds.
+void Bot::place_ward() {
+    auto& me = cambc::self();
+    if (!ready || !me.is_alive() || me.is_recalling() || me.is_submitting_gems() || me.is_teleporting()) return;
+    if (cambc::fuel_remaining() < FUEL_RESERVE * TURN_FUEL) return;
+    try {
+        if (me.ward_cooldown() > 0) return;
+        const auto pos = me.position();
+        const auto mine = me.ward_positions();
+        for (auto w : mine)
+            if (chebyshev(w, pos) < WARD_GAP) return;
+        if (spawn.is_set(pos)) return;
+        const auto tiles = me.ward_placement_tiles() & ~static_block;
+        std::optional<vec2> best;
+        int best_d = 1 << 30;
+        for (auto t : tiles.positions()) {
+            const int d = static_cast<int>(enemy_field.get(t));
+            if (d < best_d) {
+                best_d = d;
+                best = t;
+            }
+        }
+        if (best) me.place_ward(*best);
+    } catch (const cambc::error&) {
     }
 }
 
@@ -758,6 +803,41 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     return false;
 }
 
+// Ladder replays: top teams kill with 3-5 champions and we die to 2-3 at a time. Help an ally who is
+// fighting nearby when the two (or more) of us would win, instead of farming next to the fight.
+bool Bot::join_fight(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
+    if (gems >= 30 || hp_frac < 0.6) return false;
+    std::vector<cambc::champion> enemies;
+    const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
+    for (auto& e : visible_enemies())
+        if (e.is_alive() && !enemy_spawn.is_set(e.position())) enemies.push_back(e);
+    if (enemies.empty()) return false;
+    const auto allies_all = cambc::vision::champions(team::ally);
+    const cambc::champion* best = nullptr;
+    int best_d = 1 << 30;
+    for (const auto& a : allies_all) {
+        if (!a.is_alive() || a == me) continue;
+        const int d = chebyshev(a.position(), pos);
+        if (d <= 5 || d > JOIN) continue;
+        std::vector<cambc::champion> theirs, ours{me};
+        for (const auto& e : enemies)
+            if (chebyshev(e.position(), a.position()) <= 6) theirs.push_back(e);
+        if (theirs.empty()) continue;
+        for (const auto& b : allies_all)
+            if (b.is_alive() && b != me && chebyshev(b.position(), a.position()) <= 5) ours.push_back(b);
+        if (power(ours) < ENGAGE_RATIO * power(theirs)) continue;
+        if (d < best_d) {
+            best_d = d;
+            best = &a;
+        }
+    }
+    if (!best) return false;
+    claim(-1);
+    step_towards(around(best->position(), 2));
+    act = "join";
+    return true;
+}
+
 // Spell and attack the weakest enemy already in attack range, without moving.
 bool Bot::hit_in_range(const cambc::champion& me) {
     const auto tiles = me.attack_tiles();
@@ -975,6 +1055,7 @@ void Bot::play_turn() {
     const auto start = cambc::fuel_remaining();
     const auto r0 = cambc::round_number();
     turn();
+    if (WARDS) place_ward();
     const auto used = start - cambc::fuel_remaining();
     if (cambc::round_number() != r0) {
         overruns += 1;
@@ -1081,6 +1162,7 @@ void Bot::turn() {
     }
 
     if (pvp(me, pos, gems, hp_frac)) return;
+    if (JOIN && join_fight(me, pos, gems, hp_frac)) return;
 
     // Lock any altar we pass (our own lock never blocks us).
     if (USE_LOCKS && cambc::fuel_remaining() > FUEL_RESERVE * TURN_FUEL) place_lock();
