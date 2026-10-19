@@ -40,7 +40,8 @@ constexpr int WARDS = 1;                // 1: keep a ward near where we last wer
 constexpr int WARD_GAP = 8;
 constexpr int BUILD = 4;                // 0: v16 (monster, jungle, power strength). 1: power main stat, then durability health, then power. 2: power main stat only. 3: monster emblem of main stat, then power main stat. 4: Intercontinental Fish's emblem order per champion
 constexpr int GEM_CAP = 60;
-constexpr int CLOSE_GIVEUP = 12;  // turns next to a target group without fighting it before dropping it
+constexpr int CLOSE_GIVEUP = 12;
+constexpr int DEATH_AVOID = 150;  // rounds to avoid camps near where enemies killed us  // turns next to a target group without fighting it before dropping it
 constexpr int MONO_KITE = 1;            // 1: casters take monoliths on every map (ladder #1 takes rows' 448-gem middle with Stellar and Prism)
 constexpr int MID_SQUAD = 2;            // >0: the first N casters in our draft farm the biggest monolith once strong enough (ladder #1: Stellar + Prism on rows)
 constexpr int KITER_BUILD = 1;          // 1: casters (never hit by camps) buy a monster emblem of focus, then power focus only, like ladder #1's Stellar and Prism
@@ -262,10 +263,11 @@ void Bot::setup() {
         auto it = std::find(picks.begin(), picks.end(), draft_id);
         if (it == picks.end()) throw std::runtime_error("not in draft");
         mem_slot = kind == CT::issac ? 7 : static_cast<int>(it - picks.begin());
-        // Caster rank: how many casters were drafted before us (Stellar 4, Prism 5, Cassi&Issac 3, Tavi 10).
-        kiter_rank = 0;
+        // Caster rank: how many AoE casters (Stellar 4, Prism 5) were drafted before us. Cassi in the
+        // mid squad did nothing all game on big_world vs Fish (930 camp damage), so only these two go.
+        kiter_rank = (kind == CT::stellar || kind == CT::prism) ? 0 : 9;
         for (auto i = picks.begin(); i != it; ++i)
-            if (*i == 4 || *i == 5 || *i == 3 || *i == 10) kiter_rank += 1;
+            if ((*i == 4 || *i == 5) && kiter_rank < 9) kiter_rank += 1;
         const bool has_pair = std::find(picks.begin(), picks.end(), 3) != picks.end();
         team_size = static_cast<int>(picks.size()) + (has_pair ? 1 : 0);
     } catch (const std::exception&) {
@@ -1275,6 +1277,14 @@ void Bot::turn() {
     waited_on_spawn = false;
 
     if (!me.is_alive()) {
+        if (last_alive && DEATH_AVOID && enemy_near(last_pos, 8, 6, now)) {
+            // Killed by champions: stay away from camps there for a while (interlock vs Fish: died
+            // 13 times walking back into their side for the same camp).
+            for (auto& g : groups)
+                if (chebyshev(g.center, last_pos) <= 8) g.avoid_until = std::max(g.avoid_until, now + DEATH_AVOID);
+            if (target >= 0) groups[target].avoid_until = std::max(groups[target].avoid_until, now + DEATH_AVOID);
+            target = -1;
+        }
         last_alive = false;
         claim(-1);
         shop();
@@ -1313,6 +1323,7 @@ void Bot::turn() {
     const double prev_hp = last_hp;
     last_hp = me.health();
     last_alive = true;
+    last_pos = pos;
     // Survival.
     if (!at_spawn && hp_frac < (LOW_HP + (gems >= 30 ? LOW_HP_GEMS : 0.0))) {
         if (me.health() < prev_hp) {

@@ -50,6 +50,7 @@ private:
     bool waited_on_spawn = false;
     double last_hp = 0;
     bool last_alive = true;
+    cambc::vec2 last_pos{};
 
     cambc::champion_type kind{};
     bool melee = false;
