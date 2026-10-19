@@ -13,12 +13,17 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def run(bot, mp, side, tmp):
     a, b = (bot, "passive") if side == 0 else ("passive", bot)
     stats = os.path.join(tmp, f"{bot}-{side}-{os.path.basename(mp)}.json")
-    subprocess.run(["cambc", "run", a, b, "--map", mp, "--statistics", stats, "-o", os.path.join(tmp, "r")],
-                   cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=1500)
-    if not os.path.exists(stats):
+    for _ in range(3):  # parallel runs occasionally fail to start; retry
+        subprocess.run(["cambc", "run", a, b, "--map", mp, "--statistics", stats, "--json", "--release", "-o",
+                        os.path.join(tmp, "r-" + os.path.basename(stats))],
+                       cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=1500)
+        if os.path.exists(stats):
+            break
+    else:
         return bot, mp, side, None, None
     d = json.load(open(stats))
-    return bot, mp, side, d["round"], d["teams"][side]["submittedGems"]
+    t = {x["team"]: int(x["submittedGems"]) for x in d["teams"]}
+    return bot, mp, side, d["match"]["roundsCompleted"], t["teamA" if side == 0 else "teamB"]
 
 
 def main():

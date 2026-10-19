@@ -34,12 +34,19 @@ constexpr int UNREACHED = 1000000;
 constexpr int SHOP_RECALL_GOLD = 150;   // recall to shop with an empty bag and this much gold
 constexpr bool BUY_JUNGLE = true;
 constexpr double SUPPORT_BONUS = 0.0;   // enemy power counts this much extra per enemy healer (Willow) or shielder (Varg) in the fight
+constexpr int OUTNUMBER = 2;            // >0: leave when at least this many more enemies were seen near us (last 4 rounds, 8 tiles) than allies within 6
 constexpr int JOIN = 10;                 // >0: walk to an ally up to this many tiles away who is fighting a fight we would win together
 constexpr int WARDS = 1;                // 1: keep a ward near where we last were, placed towards the enemy side, re-placed after moving WARD_GAP tiles
 constexpr int WARD_GAP = 8;
-constexpr int BUILD = 1;                // 0: v16 (monster, jungle, power strength). 1: power main stat, then durability health, then power. 2: power main stat only. 3: monster emblem of main stat, then power main stat
+constexpr int BUILD = 4;                // 0: v16 (monster, jungle, power strength). 1: power main stat, then durability health, then power. 2: power main stat only. 3: monster emblem of main stat, then power main stat. 4: Intercontinental Fish's emblem order per champion
 constexpr int GEM_CAP = 60;
+constexpr int MONO_KITE = 1;            // 1: casters take monoliths on every map (ladder #1 takes rows' 448-gem middle with Stellar and Prism)
+constexpr int MID_SQUAD = 2;            // >0: the first N casters in our draft farm the biggest monolith once strong enough (ladder #1: Stellar + Prism on rows)
+constexpr int KITER_BUILD = 1;          // 1: casters (never hit by camps) buy a monster emblem of focus, then power focus only, like ladder #1's Stellar and Prism
+constexpr double MONO_FOCUS = 200;      // casters take monoliths only with at least this much focus
+constexpr int KITE = 3;                 // casters fight attacking camps from spell range (4) only, outside camp range (3): ladder #1's Stellar takes ~0 camp damage. 2: only without a melee ally next to the camps. 3: only monoliths
 constexpr int REPLAN_EVERY = 3;
+constexpr int MAX_WAIT = 0;             // >0: also pick a camp that respawns up to this many rounds after we arrive, and wait beside it
 constexpr int PLAN_RADIUS = 50;         // max path length considered when choosing camps
 constexpr int LOG_EVERY = 25;           // status line per champion every N rounds (0 disables)
 constexpr double ENGAGE_RATIO = 0.8;    // fight when our side's power is at least this fraction of theirs
@@ -58,18 +65,22 @@ constexpr std::uint64_t TURN_FUEL = 100000;
 constexpr double LOW_HP = 0.3;          // retreat below this health fraction (+LOW_HP_GEMS when carrying 30+ gems)
 constexpr double LOW_HP_GEMS = 0.15;
 constexpr double SPAWN_HEAL_TO = 0.95;  // stay on spawn until this healthy
+constexpr double CAMP_RISK = 1.5;      // a team may take a camp group whose damage over the clear is up to this many times its total health
 constexpr int GATHER_MAX = 12;          // give up waiting for helpers after this many turns
 constexpr double JOIN_BONUS = 1.5;      // score boost for joining a joint target an ally already claimed
 constexpr double HEAL_MIN_USE = 0.6;    // heal only if at least this fraction of the heal lands (or the ally is below half HP)
 constexpr int PRISM_GEM_CAP = 60;       // Prism gains only +0.2 focus per gem carried, so it banks like the others
 constexpr int PRISM_EARLY_BANK = 0;
 constexpr bool SOLO_CAMP_FULL = true;   // single-camp groups deal full damage (no 60% "dies progressively" discount)
+constexpr double SPREAD = 0.25;          // score factor for a camp an ally already took (<1 spreads out; >1 packs up like ladder #1)
+constexpr int PACK = 0;
+constexpr int PACK_RANGE = 30;          // follow only if the leader's camp is this close (path length)                 // 1: everyone farms the camp the highest-priority ally claimed (ladder #1 moves as a pack of 3-5)
 constexpr double COMMIT = 1.5;          // keep the current target unless another scores this much more
 constexpr bool SPREAD_LOWER_ONLY = true;  // the "someone else is on it" penalty only counts higher-priority allies
 constexpr bool DISENGAGE = true;        // losing side and an enemy within 4: back off (unless we can kill something now)
 constexpr bool PAIR_UP = true;          // weak champions join an ally's joint target instead of starting their own
 constexpr double ALTAR_WEIGHT = 0.5;    // camp cost counts this fraction of the camp's distance to an altar
-constexpr int SCARCE_GEMS = 0;          // >0: map is gem-scarce if non-monolith groups hold fewer gems; then teams take monoliths. Tested 300: reaches 1000 gems vs a passive enemy, but 0 of 8 vs v16 (we feed kills while attacking)
+constexpr int SCARCE_GEMS = 1;          // >0: map is gem-scarce if non-monolith groups hold fewer gems; then teams take monoliths. Tested 300: reaches 1000 gems vs a passive enemy, but 0 of 8 vs v16 (we feed kills while attacking)
 constexpr int MONOLITH_TEAM = 3;        // champions that take a monolith together on gem-scarce maps
 constexpr int MONOLITH_CLEAR = 12;      // no enemy may have been seen this close to a monolith ...
 constexpr int MONOLITH_MEMORY = 20;     // ... in this many rounds before (and while) we attack it
@@ -220,6 +231,7 @@ void Bot::setup() {
             if (modifier > 0) nukes.push_back({modifier, slot, aoe, stuns});
         }
     }
+    kiter = me.attack_range() >= 3 && std::any_of(nukes.begin(), nukes.end(), [](const Nuke& n) { return n.modifier >= 1.0; });
     std::sort(nukes.begin(), nukes.end(), [](const Nuke& a, const Nuke& b) {
         return std::tie(a.modifier, a.slot, a.aoe, a.stuns) > std::tie(b.modifier, b.slot, b.aoe, b.stuns);
     });
@@ -247,11 +259,17 @@ void Bot::setup() {
         auto it = std::find(picks.begin(), picks.end(), draft_id);
         if (it == picks.end()) throw std::runtime_error("not in draft");
         mem_slot = kind == CT::issac ? 7 : static_cast<int>(it - picks.begin());
+        // Caster rank: how many casters were drafted before us (Stellar 4, Prism 5, Cassi&Issac 3, Tavi 10).
+        kiter_rank = 0;
+        for (auto i = picks.begin(); i != it; ++i)
+            if (*i == 4 || *i == 5 || *i == 3 || *i == 10) kiter_rank += 1;
         const bool has_pair = std::find(picks.begin(), picks.end(), 3) != picks.end();
         team_size = static_cast<int>(picks.size()) + (has_pair ? 1 : 0);
     } catch (const std::exception&) {
         team_size = 3;
     }
+    for (const auto& g : groups)
+        if (g.monolith && g.gems >= 200) has_mid = true;
     int ordinary_gems = 0;
     for (const auto& g : groups)
         if (!g.monolith) ordinary_gems += g.gems;
@@ -460,6 +478,7 @@ template <class T> bool Bot::try_attack(const T& target, const std::vector<T>& o
 void Bot::fight(const cambc::camp& target, const std::vector<cambc::camp>& others) {
     auto& me = cambc::self();
     if (!target.is_visible()) return;
+    if (KITE && kiter && kite(target, others)) return;
     if (me.attack_tiles().is_set(target.position())) {
         if (camp_strength(target) > 0 && me.health() < 0.9 * me.max_health())
             self_buff(me);  // Varg's shield used to be PvP-only
@@ -472,6 +491,59 @@ void Bot::fight(const cambc::camp& target, const std::vector<cambc::camp>& other
     for (const auto& c : others)
         if (try_attack(c, others)) return;
     if (!moved) try_spell(target);
+}
+
+// Casters: stand where the spells reach the camp (4) but no attacking camp reaches us (3), and only
+// cast. Returns false to fall back to the normal fight (no attacking camp, or a melee ally tanking).
+bool Bot::kite(const cambc::camp& target, const std::vector<cambc::camp>& others) {
+    auto& me = cambc::self();
+    std::vector<const cambc::camp*> all{&target};
+    for (const auto& c : others) all.push_back(&c);
+    std::vector<vec2> hostile;
+    for (auto c : all)
+        if (c->is_visible() && camp_health(*c) > 0 && camp_strength(*c) > 0
+            && !(MONO_KITE == 2 && c->kind() == cambc::camp_type::monolith))
+            hostile.push_back(c->position());
+    if (hostile.empty()) return false;
+    if (KITE == 3) {
+        bool mono = false;
+        for (auto c : all)
+            if (c->kind() == cambc::camp_type::monolith) mono = true;
+        if (!mono) return false;  // only monolith fights are kited
+    }
+    if (KITE == 2) {
+        for (const auto& a : cambc::vision::champions(team::ally)) {
+            if (a == me || !a.is_alive() || a.attack_range() > 1) continue;
+            for (auto h : hostile)
+                if (chebyshev(a.position(), h) <= 1) return false;
+        }
+    }
+    // Spell target: the camp with the most other camps within AoE radius 1, then the weakest.
+    const cambc::camp* aim = &target;
+    int aim_n = -1;
+    for (auto c : all) {
+        if (!c->is_visible() || camp_health(*c) <= 0) continue;
+        int n = 0;
+        for (auto d : all)
+            if (d != c && d->is_visible() && camp_health(*d) > 0 && chebyshev(c->position(), d->position()) <= 1) n += 1;
+        if (n > aim_n || (n == aim_n && camp_health(*c) < camp_health(*aim))) {
+            aim = c;
+            aim_n = n;
+        }
+    }
+    bitboard ring = around(aim->position(), 4);
+    for (auto h : hostile) ring &= ~around(h, 3);
+    const auto pos = me.position();
+    bool ready_spell = false;
+    const auto abilities = me.abilities();
+    for (const auto& n : nukes)
+        if (!abilities[n.slot].is_on_cooldown()) ready_spell = true;
+    if (ring.is_set(pos)) {
+        if (ready_spell) try_spell(*aim);
+        return true;
+    }
+    if (!step_towards(ring, false)) return false;  // no safe tile reachable: fight normally
+    return true;
 }
 
 // ------------------------------------------------------------------ shopping
@@ -497,6 +569,31 @@ void Bot::shop() {
             primary = Item::durability_shard_of_health;
         if (BUILD == 3 && items[caster ? Item::monster_emblem_of_focus : Item::monster_emblem_of_strength] == 0)
             primary = caster ? Item::monster_shard_of_focus : Item::monster_shard_of_strength;
+        if (BUILD == 4) {
+            // Emblems in the order ladder #1 (Intercontinental Fish) completes them, then power forever.
+            using P = std::pair<Item, Item>;  // shard, emblem
+            const P pw{power, power_emblem};
+            const P home{Item::home_shard_of_health, Item::home_emblem_of_health};
+            const P dura{Item::durability_shard_of_health, Item::durability_emblem_of_health};
+            const P brui{Item::bruiser_shard_of_health, Item::bruiser_emblem_of_health};
+            std::vector<P> order;
+            switch (kind) {
+            case CT::ren: case CT::ryth: order = {brui, dura}; break;
+            case CT::cassi: order = {pw, {Item::durability_shard_of_focus, Item::durability_emblem_of_focus}, brui}; break;
+            case CT::tavi: order = {{Item::treasure_shard_of_focus, Item::treasure_emblem_of_focus},
+                                    {Item::durability_shard_of_focus, Item::durability_emblem_of_focus}}; break;
+            default: order = {pw, home, dura}; break;
+            }
+            for (const auto& [shard, emblem] : order) {
+                if (items[emblem] == 0) {
+                    primary = shard;
+                    break;
+                }
+            }
+        }
+    }
+    if (KITE && kiter && KITER_BUILD && (KITE != 3 || (MID_SQUAD && kind != CT::issac && kiter_rank < MID_SQUAD && has_mid))) {
+        primary = items[Item::monster_emblem_of_focus] == 0 ? Item::monster_shard_of_focus : Item::power_shard_of_focus;
     }
     if (USE_LOCKS && (!me.is_alive() || spawn.is_set(me.position()))) {
         const auto lock = cambc::consumable_type::altar_lock;
@@ -506,7 +603,9 @@ void Bot::shop() {
         }
     }
     const auto cost = primary.cost();
-    const auto count = me.gold_count() / cost;
+    auto count = me.gold_count() / cost;
+    if (BUILD == 4 && primary != Item::power_shard_of_focus && primary != Item::power_shard_of_strength)
+        count = std::min<decltype(count)>(count, std::max(0, 5 - static_cast<int>(items[primary])));  // one emblem's worth
     if (count > 0) {
         try {
             if (me.can_buy(primary, count)) me.buy(primary, count);
@@ -817,6 +916,33 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     return false;
 }
 
+// Ladder #1 hunts in packs of 3-4 and caught our lone champions ~20 times a game. Leave early when
+// clearly outnumbered, before the fight starts, unless a kill is on offer right now.
+bool Bot::outnumbered(const cambc::champion& me, vec2 pos, int now) {
+    for (auto& e : visible_enemies())
+        if (e.is_alive()) seen[handle_of(e)] = {e.position(), now};
+    const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
+    int enemies = 0;
+    for (const auto& [h, s] : seen)
+        if (now - s.round <= 4 && chebyshev(s.pos, pos) <= 8 && !enemy_spawn.is_set(s.pos)) enemies += 1;
+    if (enemies < 2) return false;
+    int allies = 1;
+    for (const auto& a : cambc::vision::champions(team::ally))
+        if (a != me && a.is_alive() && chebyshev(a.position(), pos) <= 6) allies += 1;
+    if (enemies < allies + OUTNUMBER) return false;
+    if (spawn.is_set(pos)) return false;
+    const double b = burst(me);
+    const auto tiles = me.attack_tiles();
+    for (auto& e : visible_enemies())
+        if (e.is_alive() && tiles.is_set(e.position()) && e.health() <= b) return false;  // pvp() takes the kill
+    claim(-1);
+    const int gems = static_cast<int>(me.gem_count());
+    if (gems > 0 && altar_field.get(pos) <= 2) tribute();
+    else retreat_and_recall();
+    act = "outnumbered";
+    return true;
+}
+
 // Ladder replays: top teams kill with 3-5 champions and we die to 2-3 at a time. Help an ally who is
 // fighting nearby when the two (or more) of us would win, instead of farming next to the fight.
 bool Bot::join_fight(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
@@ -952,13 +1078,19 @@ int Bot::helpers_needed(const GroupInfo& g, double dps, double health) const {
     // Monoliths: only on gem-scarce maps (few gems outside monoliths), as a team of MONOLITH_TEAM.
     // A full-team assault on ordinary maps was tested in Python and lost; champions arriving one at a
     // time also died one by one, so the team gathers first (the joint-target logic below).
-    if (g.monolith) return scarce ? std::min(team_size, MONOLITH_TEAM) : 0;
+    if (g.monolith) {
+        if (KITE && MONO_KITE) return kiter && cambc::self().focus() >= MONO_FOCUS ? 1 : 0;  // casters hit it from out of reach; melee would only die
+        if (!scarce) return 0;
+        if (KITE) return kiter ? 1 : 0;
+        return std::min(team_size, MONOLITH_TEAM);
+    }
     if (g.strength <= 0) return 1;
+    if (KITE && KITE != 3 && kiter) return 1;  // out of camp range: nothing hits us
     for (int n = 1; n <= team_size; ++n) {
         const double clear = g.health / (dps * n);
         // Monsters die progressively, so roughly 60% of full damage lands; spread over n.
         const double factor = (SOLO_CAMP_FULL && g.count == 1) ? 1.0 : 0.6;
-        if (g.strength * clear * factor <= 0.75 * health * n) return n;
+        if (g.strength * clear * factor <= CAMP_RISK * health * n) return n;
     }
     return 0;
 }
@@ -966,6 +1098,12 @@ int Bot::helpers_needed(const GroupInfo& g, double dps, double health) const {
 // Rough damage per turn against camps: basic attack plus attack reset (every 8-turn cooldown).
 // Never below the old flat estimate.
 double Bot::camp_dps(const cambc::champion& me) const {
+    if (KITE && KITE != 3 && kiter) {
+        // Spells only (every 8 rounds), AoE counted on two camps.
+        double d = 0;
+        for (const auto& n : nukes) d += n.modifier * me.focus() * (n.aoe ? 2.0 : 1.0) / 8.0;
+        return std::max(d, 20.0);
+    }
     const double s = me.strength();
     const double dps = s + (reset_slot ? s / 8.0 : 0.0);
     return std::max(dps, std::max(s, 20.0) + 15.0);
@@ -1004,6 +1142,29 @@ int Bot::choose_group(int now, const distance_field& my_field) {
             if (i < mem_slot) senior[c[i] - 1] = true;
         }
     }
+    if (MID_SQUAD && kiter && kind != CT::issac && kiter_rank < MID_SQUAD && me.focus() >= MONO_FOCUS) {
+        const GroupInfo* mid = nullptr;
+        for (const auto& g : groups)
+            if (g.monolith && g.gems >= 200 && (!mid || g.gems > mid->gems)) mid = &g;
+        if (mid && mid->state != 3 && now >= mid->avoid_until && mid->available_at <= now + min_dist(my_field, *mid)
+            && min_dist(my_field, *mid) < UNREACHED && !enemy_near(mid->center, MONOLITH_CLEAR, 2, now)) {
+            need = 1;
+            return mid->idx;
+        }
+    }
+    if (PACK && mem_slot > 0) {
+        for (int i = 0; i < mem_slot; ++i) {
+            const int v = c[i];
+            if (!v || v - 1 >= static_cast<int>(groups.size())) continue;
+            const auto& g = groups[v - 1];
+            const int dist = min_dist(my_field, g);
+            if (g.state == 2 || g.state == 3 || now < g.avoid_until || dist >= UNREACHED || dist > PACK_RANGE
+                || g.available_at > now + dist || (g.monolith && !kiter))
+                break;
+            need = 1;
+            return g.idx;  // follow the leader's camp
+        }
+    }
     const double dps = camp_dps(me);
     const double health = me.max_health();
     const bool no_new_joint = now < no_joint_until || joint_claim_elsewhere(-1, dps, health);
@@ -1015,7 +1176,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         const int eta = dist;
         if (now < g.avoid_until) continue;
         const int wait = std::max(0, g.available_at - now - eta);
-        if (wait > 0) continue;
+        if (wait > MAX_WAIT) continue;
         const int others = claim_count.count(g.idx) ? claim_count[g.idx] : 0;
         if (g.state == 2 && dist > 3 && (others > 0 || now - g.seen_at > 25))
             continue;  // an ally is taking that reward, or we saw it so long ago it is likely gone
@@ -1045,8 +1206,9 @@ int Bot::choose_group(int now, const distance_field& my_field) {
             if (others > 0) score_bonus = JOIN_BONUS;
         }
         double score = value / cost * score_bonus;
-        if (others && need <= 1 && g.state != 2 && (!SPREAD_LOWER_ONLY || senior.count(g.idx)))
-            score *= 0.25;  // someone else is on it; spread out
+        if (others && need <= 1 && g.state != 2 && !(MONO_KITE && g.monolith) && (!SPREAD_LOWER_ONLY || senior.count(g.idx)))
+            score *= SPREAD;  // someone else is on it
+        if (MONO_KITE && g.monolith && others > 0) score *= JOIN_BONUS;  // a second caster halves the long monolith fight
         if (target == g.idx) score *= COMMIT;  // hysteresis
         if (SEED) {
             const std::uint64_t h = (static_cast<std::uint64_t>(SEED) * 1000003 + g.idx * 7919 + mem_slot * 104729
@@ -1093,8 +1255,8 @@ void Bot::play_turn() {
         auto& me = cambc::self();
         std::string where = "dead";
         if (me.is_alive()) where = cambc::to_string(me.position());
-        std::printf("r%u %s %s hp%d/%d gem%u gold%u tgt=%d st=%d act=%s fuelmax=%llu\n", now, kind_name(kind),
-                    where.c_str(), static_cast<int>(me.health()), static_cast<int>(me.max_health()), me.gem_count(),
+        std::printf("r%u %s %s foc%d hp%d/%d gem%u gold%u tgt=%d st=%d act=%s fuelmax=%llu\n", now, kind_name(kind),
+                    where.c_str(), static_cast<int>(me.focus()), static_cast<int>(me.health()), static_cast<int>(me.max_health()), me.gem_count(),
                     me.gold_count(), target, target < 0 ? -1 : groups[target].state, act.c_str(),
                     static_cast<unsigned long long>(max_fuel));
     }
@@ -1175,6 +1337,7 @@ void Bot::turn() {
         return;
     }
 
+    if (OUTNUMBER && outnumbered(me, pos, now)) return;
     if (pvp(me, pos, gems, hp_frac)) return;
     if (JOIN && join_fight(me, pos, gems, hp_frac)) return;
 
@@ -1221,8 +1384,8 @@ void Bot::turn() {
     }
 
     int tgt = target;
-    const bool valid = tgt >= 0 && now >= groups[tgt].avoid_until && groups[tgt].available_at <= now + 2
-                       && (groups[tgt].state != 3 || chebyshev(pos, groups[tgt].center) > 9);
+    const bool valid = tgt >= 0 && now >= groups[tgt].avoid_until && groups[tgt].available_at <= now + 2 + MAX_WAIT
+                       && (MAX_WAIT || groups[tgt].state != 3 || chebyshev(pos, groups[tgt].center) > 9);
     const bool engaged = valid && (groups[tgt].state == 1 || groups[tgt].state == 2)
                          && chebyshev(pos, groups[tgt].center) <= 6;
     const bool low_fuel = cambc::fuel_remaining() < LOW_FUEL * TURN_FUEL;
@@ -1360,6 +1523,11 @@ void Bot::turn() {
     if (step_towards(approach)) {
         stuck = 0;
         act = "approach";
+        return;
+    }
+    if (MAX_WAIT && tg.state == 3 && approach.is_set(pos)) {
+        stuck = 0;  // in place for the respawn
+        act = "wait-respawn";
         return;
     }
     stuck += 1;

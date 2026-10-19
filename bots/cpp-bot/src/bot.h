@@ -53,6 +53,7 @@ private:
 
     cambc::champion_type kind{};
     bool melee = false;
+    bool kiter = false;  // ranged with a damage spell: fights attacking camps from outside their range
     cambc::bitboard static_block, spawn, altar_approach;
     int width = 0, height = 0;
     std::vector<cambc::vec2> altars;
@@ -66,6 +67,8 @@ private:
 
     int mem_slot = 0;
     int team_size = 3;
+    int kiter_rank = 9;
+    bool has_mid = false;  // a monolith group worth 200+ gems  // casters drafted before us
     bool scarce = false;  // few gems outside monoliths
     int target = -1;  // index into groups, -1 = none
     int need = 1;
@@ -93,6 +96,7 @@ private:
     template <class T> bool try_spell(const T& target, bool want_stun = false);
     template <class T> bool try_attack(const T& target, const std::vector<T>& others = {});
     void fight(const cambc::camp& target, const std::vector<cambc::camp>& others);
+    bool kite(const cambc::camp& target, const std::vector<cambc::camp>& others);
 
     void shop();
     void place_ward();
@@ -105,6 +109,7 @@ private:
     void self_buff(const cambc::champion& me);
     bool pvp(const cambc::champion& me, cambc::vec2 pos, int gems, double hp_frac);
     bool hit_in_range(const cambc::champion& me);
+    bool outnumbered(const cambc::champion& me, cambc::vec2 pos, int now);
     bool join_fight(const cambc::champion& me, cambc::vec2 pos, int gems, double hp_frac);
     std::vector<cambc::vec2> threats(int now) const;
     bool enemy_near(cambc::vec2 p, int radius, int rounds, int now) const;
