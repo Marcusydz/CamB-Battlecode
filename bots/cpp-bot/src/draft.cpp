@@ -41,9 +41,9 @@ static constexpr std::array<MapDraft, 16> PER_MAP{{
     {30, 30, 0, 3},      // elkring
     {80, 80, 224, 4},    // expanse
     {30, 30, 24, 0},     // fragment
-    {40, 40, 76, 5},     // interlock
+    {40, 40, 76, 4},     // interlock (list 4 farms 602 -> 462 rounds)
     {90, 30, 0, 4},      // lanes
-    {50, 50, 98, 1},     // monolith
+    {50, 50, 98, 7},     // monolith (list 7 farms 412 -> 354 rounds)
     {31, 31, 0, 4},      // packs
     {50, 65, 0, 5},      // pilgrimage
     {50, 50, 214, 4},    // rows

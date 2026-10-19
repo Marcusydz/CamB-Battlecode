@@ -41,7 +41,8 @@ constexpr int WARD_GAP = 8;
 constexpr int BUILD = 4;                // 0: v16 (monster, jungle, power strength). 1: power main stat, then durability health, then power. 2: power main stat only. 3: monster emblem of main stat, then power main stat. 4: Intercontinental Fish's emblem order per champion
 constexpr int GEM_CAP = 60;
 constexpr int CLOSE_GIVEUP = 12;
-constexpr int DEATH_AVOID = 150;  // rounds to avoid camps near where enemies killed us  // turns next to a target group without fighting it before dropping it
+constexpr int MID_AOE_ONLY = 0;  // mid squad: only Stellar/Prism (1) or any caster (0)
+constexpr int DEATH_AVOID = 0;  // rounds to avoid camps near where enemies killed us  // turns next to a target group without fighting it before dropping it
 constexpr int MONO_KITE = 1;            // 1: casters take monoliths on every map (ladder #1 takes rows' 448-gem middle with Stellar and Prism)
 constexpr int MID_SQUAD = 2;            // >0: the first N casters in our draft farm the biggest monolith once strong enough (ladder #1: Stellar + Prism on rows)
 constexpr int KITER_BUILD = 1;          // 1: casters (never hit by camps) buy a monster emblem of focus, then power focus only, like ladder #1's Stellar and Prism
@@ -265,9 +266,15 @@ void Bot::setup() {
         mem_slot = kind == CT::issac ? 7 : static_cast<int>(it - picks.begin());
         // Caster rank: how many AoE casters (Stellar 4, Prism 5) were drafted before us. Cassi in the
         // mid squad did nothing all game on big_world vs Fish (930 camp damage), so only these two go.
-        kiter_rank = (kind == CT::stellar || kind == CT::prism) ? 0 : 9;
-        for (auto i = picks.begin(); i != it; ++i)
-            if ((*i == 4 || *i == 5) && kiter_rank < 9) kiter_rank += 1;
+        if (MID_AOE_ONLY) {
+            kiter_rank = (kind == CT::stellar || kind == CT::prism) ? 0 : 9;
+            for (auto i = picks.begin(); i != it; ++i)
+                if ((*i == 4 || *i == 5) && kiter_rank < 9) kiter_rank += 1;
+        } else {
+            kiter_rank = 0;
+            for (auto i = picks.begin(); i != it; ++i)
+                if (*i == 4 || *i == 5 || *i == 3 || *i == 10) kiter_rank += 1;
+        }
         const bool has_pair = std::find(picks.begin(), picks.end(), 3) != picks.end();
         team_size = static_cast<int>(picks.size()) + (has_pair ? 1 : 0);
     } catch (const std::exception&) {
