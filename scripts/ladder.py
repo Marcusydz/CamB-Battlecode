@@ -38,7 +38,7 @@ def main():
     o = ap.parse_args()
     groups, nxt = [], None
     while len(groups) < o.limit:
-        q = f"/api/v1/match-groups?team={o.team}" + (f"&cursor={nxt}" if nxt else "")
+        q = f"/api/v1/match-groups?team={o.team}" + (f"&before={nxt}" if nxt else "")
         d = get(q)
         groups += d["groups"]
         nxt = d.get("next")
