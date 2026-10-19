@@ -34,3 +34,15 @@ Build with `cambc build cpp-bot` (`cambc run` builds automatically). There is no
 rejects the session proxy's certificate. Fetch them with `curl` instead and unpack them there
 as `wasi-sdk-33`, `cmake-3.31.8-linux-x86_64` and `ninja-1.12.1-linux-x86_64` (the URLs are in
 the error message).
+
+## v17 changes (from top-team ladder replays, October 2026)
+
+All tested on fresh seeded games on the 16 ladder maps (swirl could not be downloaded).
+
+| Change | Why (ladder data) | Local result vs v16 |
+| --- | --- | --- |
+| Item build `BUILD=1`: power shards of the main stat (focus for Cassi, Stellar, Ren, Tavi, Prism), then a durability health emblem | 1800+ teams stack focus on casters; we bought strength on everyone | 64/94 (v16 build: 51/94) |
+| Per-map draft (`draft.cpp`), 6 candidate lists, picked from 12 games per map | 1700+ teams draft Cassi & Issac, Stellar, Varg first; we picked Marcella | 69/94 (fixed old draft: 61/95) |
+| Wards `WARDS=1`: keep one ward forward of where we were | top teams place ~300 wards per 1000 rounds; we placed none | 69/95, margin +206 |
+| Join fights `JOIN=10`: walk to an ally fighting a fight we would win together | top teams kill with 3-5 champions; we die to 2-3 at a time | 72/92 |
+| All combined | | 72/93 vs v16, 69/96 vs the plain C++ port |
