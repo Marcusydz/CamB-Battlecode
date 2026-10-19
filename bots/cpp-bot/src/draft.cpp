@@ -27,21 +27,21 @@ struct MapDraft {
 // Per-map choice, from local tests against v16 (see README).
 static constexpr std::array<MapDraft, 16> PER_MAP{{
     {100, 100, 540, 2},  // ambush
-    {41, 41, 84, 0},     // collision
-    {50, 50, 40, 4},     // contest
+    {41, 41, 84, 4},     // collision
+    {50, 50, 40, 0},     // contest
     {71, 71, 44, 0},     // corners
-    {41, 30, 36, 3},     // eight
+    {41, 30, 36, 0},     // eight
     {30, 30, 0, 3},      // elkring
     {80, 80, 224, 4},    // expanse
-    {30, 30, 24, 4},     // fragment
+    {30, 30, 24, 0},     // fragment
     {40, 40, 76, 5},     // interlock
     {90, 30, 0, 4},      // lanes
     {50, 50, 98, 1},     // monolith
-    {31, 31, 0, 0},      // packs
+    {31, 31, 0, 4},      // packs
     {50, 65, 0, 5},      // pilgrimage
     {50, 50, 214, 4},    // rows
     {30, 80, 80, 5},     // rushbait_v2
-    {60, 50, 0, 5},      // stampede
+    {60, 50, 0, 0},      // stampede
 }};
 constexpr int DEFAULT_LIST = 4;  // maps not in the table (new or unseen ones)
 
