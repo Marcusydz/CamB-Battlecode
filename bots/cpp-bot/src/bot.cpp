@@ -40,6 +40,7 @@ constexpr int WARDS = 1;                // 1: keep a ward near where we last wer
 constexpr int WARD_GAP = 8;
 constexpr int BUILD = 4;                // 0: v16 (monster, jungle, power strength). 1: power main stat, then durability health, then power. 2: power main stat only. 3: monster emblem of main stat, then power main stat. 4: Intercontinental Fish's emblem order per champion
 constexpr int GEM_CAP = 60;
+constexpr int CLOSE_GIVEUP = 12;  // turns next to a target group without fighting it before dropping it
 constexpr int MONO_KITE = 1;            // 1: casters take monoliths on every map (ladder #1 takes rows' 448-gem middle with Stellar and Prism)
 constexpr int MID_SQUAD = 2;            // >0: the first N casters in our draft farm the biggest monolith once strong enough (ladder #1: Stellar + Prism on rows)
 constexpr int KITER_BUILD = 1;          // 1: casters (never hit by camps) buy a monster emblem of focus, then power focus only, like ladder #1's Stellar and Prism
@@ -54,7 +55,9 @@ constexpr double FLEE_RATIO = 0.3;      // carriers run when our power is below 
 constexpr int HUNT_RADIUS = 10;         // how far we chase a winnable fight
 constexpr bool USE_LOCKS = true;        // buy altar locks and place them on altars we pass
 constexpr bool INTERRUPT = true;        // stun / lock enemies who are tributing
-constexpr int CONTEST_MARGIN = 4;       // tiles: a camp is "ours" if this much closer to our spawn
+constexpr int CONTEST_MARGIN = 4;
+constexpr double CONTEST_FACTOR = 1.0;   // <1: score factor for camps nearer the enemy spawn while early or while enemies were seen near them (collision: we fed the middle)
+constexpr int CONTEST_EARLY = 0;        // rounds counted as early       // tiles: a camp is "ours" if this much closer to our spawn
 constexpr int THREAT_RANGE = 5;         // enemies this close stop a recall (attack range 4 + a step)
 constexpr bool SOLO_CAPTURE = true;     // only one champion holds a capture; others move on
 // Fuel thresholds are fractions of the turn budget. C++ gets 100k fuel per turn (Python 2.5M), so
@@ -1209,6 +1212,8 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         if (others && need <= 1 && g.state != 2 && !(MONO_KITE && g.monolith) && (!SPREAD_LOWER_ONLY || senior.count(g.idx)))
             score *= SPREAD;  // someone else is on it
         if (MONO_KITE && g.monolith && others > 0) score *= JOIN_BONUS;  // a second caster halves the long monolith fight
+        if (CONTEST_FACTOR < 1.0 && g.contested && (now < CONTEST_EARLY || enemy_near(g.center, 8, 10, now)))
+            score *= CONTEST_FACTOR;
         if (target == g.idx) score *= COMMIT;  // hysteresis
         if (SEED) {
             const std::uint64_t h = (static_cast<std::uint64_t>(SEED) * 1000003 + g.idx * 7919 + mem_slot * 104729
@@ -1498,6 +1503,7 @@ void Bot::turn() {
         });
         std::vector<cambc::camp> rest(camps.begin() + 1, camps.end());
         fight(camps[0], rest);
+        close_turns = 0;
         act = "fight";
         return;
     }
@@ -1511,10 +1517,25 @@ void Bot::turn() {
     // spawn tile of a respawning group (an occupied spawn tile stops the respawn).
     const bool visible = !(tg.mask & cambc::vision::visible_tiles()).is_empty();
     // Bushes can hide a camp from attack range; then close in to adjacent tiles.
-    const int radius = (visible || stuck < 2) ? me.attack_range() : 1;
+    // Close by but never fighting it (hidden in bushes, already taken): the stuck counter alone
+    // can loop, since closing in to radius 1 resets it (seen: Cassi 300 rounds on big_world).
+    int closest = 1 << 20;
+    for (auto t : tg.tiles) closest = std::min(closest, chebyshev(pos, t));
+    if (closest <= 5 && close_tgt == tgt && !visible && tg.state != 3) close_turns += 1; else close_turns = 0;
+    close_tgt = tgt;
+    const int radius = visible || (stuck < 2 && close_turns < 3) ? me.attack_range() : 1;
     bitboard approach;
     for (auto t : tg.tiles) approach |= around(t, radius);
     approach &= ~tg.mask;
+    if (close_turns > CLOSE_GIVEUP) {
+        tg.avoid_until = now + 40;
+        close_turns = 0;
+        stuck = 0;
+        target = -1;
+        next_plan = 0;
+        act = "close-giveup";
+        return;
+    }
     if (tg.mask.is_set(pos)) {
         step_towards(approach);
         act = "unblock";

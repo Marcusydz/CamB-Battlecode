@@ -75,6 +75,7 @@ private:
     int gather_turns = 0;
     int no_joint_until = 0;
     int stuck = 0;
+    int close_turns = 0, close_tgt = -1;
     int next_plan = 0;
     int target_dist = 0;
 
