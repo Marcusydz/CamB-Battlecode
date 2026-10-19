@@ -63,6 +63,9 @@ constexpr double COMMIT = 1.5;          // keep the current target unless anothe
 constexpr bool SPREAD_LOWER_ONLY = true;  // the "someone else is on it" penalty only counts higher-priority allies
 constexpr bool DISENGAGE = true;        // losing side and an enemy within 4: back off (unless we can kill something now)
 constexpr bool PAIR_UP = true;          // weak champions join an ally's joint target instead of starting their own
+constexpr double ALTAR_WEIGHT = 0.5;    // camp cost counts this fraction of the camp's distance to an altar
+constexpr int SEED = 0;                 // >0 adds small deterministic noise to camp choice (testing only)
+constexpr bool IGNORE_SPAWN_CAMPERS = true;  // enemies inside their own spawn are not chased or fled from
 constexpr int ACT_LOG_EVERY = 200;      // print how many turns each champion spent on each activity (0 disables)
 
 static int chebyshev(vec2 a, vec2 b) {
@@ -646,8 +649,15 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
         }
     }
     std::vector<cambc::champion> near;
-    for (const auto& e : enemies)
-        if (chebyshev(e.position(), pos) <= 6) near.push_back(e);
+    const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
+    const auto my_tiles = me.attack_tiles();
+    for (const auto& e : enemies) {
+        if (chebyshev(e.position(), pos) > 6) continue;
+        // An enemy inside its own spawn heals there and cannot be reached: chasing it wasted
+        // whole games (1800 turns of "engage" beside the enemy spawn). Only hit it if already in range.
+        if (IGNORE_SPAWN_CAMPERS && enemy_spawn.is_set(e.position()) && !my_tiles.is_set(e.position())) continue;
+        near.push_back(e);
+    }
     if (near.empty()) return false;
     std::vector<cambc::champion> allies{me};
     for (const auto& a : cambc::vision::champions(team::ally))
@@ -915,7 +925,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         }
         const double gold_w = 0.15;
         const double value = (g.gems + gold_w * g.gold) / std::max(need, others + 1);
-        double cost = eta + wait + clear + CAPTURE_TIME + 0.5 * g.altar_dist + 1;
+        double cost = eta + wait + clear + CAPTURE_TIME + ALTAR_WEIGHT * g.altar_dist + 1;
         double score_bonus = 1.0;
         if (need > 1) {
             cost += 4 * (need - 1 - std::min(others, need - 1));  // time to gather helpers
@@ -925,6 +935,11 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         if (others && need <= 1 && g.state != 2 && (!SPREAD_LOWER_ONLY || senior.count(g.idx)))
             score *= 0.25;  // someone else is on it; spread out
         if (target == g.idx) score *= COMMIT;  // hysteresis
+        if (SEED) {
+            const std::uint64_t h = (static_cast<std::uint64_t>(SEED) * 1000003 + g.idx * 7919 + mem_slot * 104729
+                                     + now / 40) * 2654435761ULL % 4294967296ULL;
+            score *= 0.9 + 0.2 * (h / 4294967296.0);
+        }
         if (score > best_score) {
             best = g.idx;
             best_score = score;
