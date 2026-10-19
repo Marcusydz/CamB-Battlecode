@@ -45,7 +45,11 @@ constexpr bool INTERRUPT = true;        // stun / lock enemies who are tributing
 constexpr int CONTEST_MARGIN = 4;       // tiles: a camp is "ours" if this much closer to our spawn
 constexpr int THREAT_RANGE = 5;         // enemies this close stop a recall (attack range 4 + a step)
 constexpr bool SOLO_CAPTURE = true;     // only one champion holds a capture; others move on
-constexpr std::uint64_t FUEL_RESERVE = 700000;  // skip optional work when less fuel than this remains
+// Fuel thresholds are fractions of the turn budget. C++ gets 100k fuel per turn (Python 2.5M), so
+// my-bot's absolute values (700k reserve, low fuel below 1.6M) are scaled: 0.28 and 0.64 of a turn.
+constexpr double FUEL_RESERVE = 0.28;   // skip optional work when less than this fraction of the turn remains
+constexpr double LOW_FUEL = 0.64;       // below this fraction, keep the current target instead of replanning
+constexpr std::uint64_t TURN_FUEL = 100000;
 constexpr double LOW_HP = 0.3;          // retreat below this health fraction (+LOW_HP_GEMS when carrying 30+ gems)
 constexpr double LOW_HP_GEMS = 0.15;
 constexpr double SPAWN_HEAL_TO = 0.95;  // stay on spawn until this healthy
@@ -156,13 +160,14 @@ void Bot::setup() {
     altar_approach = approach & ~static_block;
 
     // Distance from every tile to the nearest altar-approach tile (static terrain only).
-    bitboard visited;
-    altar_field.compute(static_block & ~altar_approach, altar_approach, visited);
+    // (each compute gets a fresh `visited` board: it is scratch state, not an output to reuse)
+    bitboard visited_a, visited_h, visited_e;
+    altar_field.compute(static_block & ~altar_approach, altar_approach, visited_a);
 
     // Distances to each spawn, for retreat paths and for judging contested camps.
-    home_field.compute(static_block & ~spawn, spawn, visited);
+    home_field.compute(static_block & ~spawn, spawn, visited_h);
     const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
-    enemy_field.compute(static_block & ~enemy_spawn, enemy_spawn, visited);
+    enemy_field.compute(static_block & ~enemy_spawn, enemy_spawn, visited_e);
     auto all = cambc::map::camp_groups();
     groups.reserve(all.size());
     for (std::size_t i = 0; i < all.size(); ++i) groups.emplace_back(static_cast<int>(i), all[i]);
@@ -942,7 +947,7 @@ void Bot::play_turn() {
         if (LOG_EVERY) std::printf("OVERRUN r%u act=%s\n", r0, act.c_str());
     }
     if (used > max_fuel && turns > 1) max_fuel = used;
-    if (used > 2400000 && turns > 1 && LOG_EVERY)
+    if (used > TURN_FUEL * 96 / 100 && turns > 1 && LOG_EVERY)
         std::printf("heavy turn r%u used=%llu act=%s\n", cambc::round_number(),
                     static_cast<unsigned long long>(used), act.c_str());
     turns += 1;
@@ -1044,7 +1049,7 @@ void Bot::turn() {
     if (pvp(me, pos, gems, hp_frac)) return;
 
     // Lock any altar we pass (our own lock never blocks us).
-    if (USE_LOCKS && cambc::fuel_remaining() > FUEL_RESERVE) place_lock();
+    if (USE_LOCKS && cambc::fuel_remaining() > FUEL_RESERVE * TURN_FUEL) place_lock();
 
     // Hold a capture in progress, unless an ally (lower handle) is already holding it:
     // one champion captures, the rest move on (rewards split, so nothing is lost).
@@ -1090,7 +1095,7 @@ void Bot::turn() {
                        && (groups[tgt].state != 3 || chebyshev(pos, groups[tgt].center) > 9);
     const bool engaged = valid && (groups[tgt].state == 1 || groups[tgt].state == 2)
                          && chebyshev(pos, groups[tgt].center) <= 6;
-    const bool low_fuel = cambc::fuel_remaining() < FUEL_RESERVE + 900000;
+    const bool low_fuel = cambc::fuel_remaining() < LOW_FUEL * TURN_FUEL;
     if ((!valid && !(low_fuel && tgt >= 0)) || (now >= next_plan && !engaged && !low_fuel)) {
         distance_field my_field;
         bitboard roots, visited;

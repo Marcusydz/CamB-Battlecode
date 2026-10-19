@@ -15,8 +15,10 @@ Build with `cambc build cpp-bot` (`cambc run` builds automatically). There is no
 
 ## Differences from my-bot
 
-- **Fuel.** A turn costs about 40k fuel here against about 1.3M for the Python bot (limit 2.5M),
-  so the low-fuel shortcuts (`FUEL_RESERVE`: skipping altar locks and replans) never trigger.
+- **Fuel.** C++ gets 100k fuel per turn (Python gets 2.5M; the units differ). my-bot's absolute
+  fuel thresholds are scaled to fractions of the turn: `FUEL_RESERVE` 0.28, `LOW_FUEL` 0.64.
+  Copying the Python numbers unscaled made every turn look "low on fuel" and lost 43 of 49 games.
+  A heavy turn uses about 55% of the budget here, against about 88% for the Python bot.
 - **Rejected switches are not ported.** `RALLY`, `MONOLITH`, `GHOSTS`, `FAIL_MEMORY`, `MAX_WAIT`,
   `SPELL_DPS`, `SCARCE_GEMS`, `GOLD_MODE`, `LINKED`, `CONTEST_PENALTY` and `SEED` were off in v16
   and lost when tested; their code paths are left out. Switches that were on (`FIGHT_FIX`,
