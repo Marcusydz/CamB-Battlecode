@@ -31,7 +31,7 @@ static std::pair<double, double> camp_stats(cambc::camp_type t) {
 // Tuning parameters (same names and values as my-bot v16).
 constexpr int CAPTURE_TIME = 5;
 constexpr int UNREACHED = 1000000;
-constexpr int SHOP_RECALL_GOLD = 150;   // recall to shop with an empty bag and this much gold
+constexpr int SHOP_RECALL_GOLD = 300;   // recall to shop with an empty bag and this much gold
 constexpr bool BUY_JUNGLE = true;
 constexpr double SUPPORT_BONUS = 0.0;   // enemy power counts this much extra per enemy healer (Willow) or shielder (Varg) in the fight
 constexpr int OUTNUMBER = 2;            // >0: leave when at least this many more enemies were seen near us (last 4 rounds, 8 tiles) than allies within 6
@@ -51,7 +51,7 @@ constexpr int KITE = 3;                 // casters fight attacking camps from sp
 constexpr int REPLAN_EVERY = 3;
 constexpr int MAX_WAIT = 0;             // >0: also pick a camp that respawns up to this many rounds after we arrive, and wait beside it
 constexpr int PLAN_RADIUS = 50;         // max path length considered when choosing camps
-constexpr int LOG_EVERY = 25;           // status line per champion every N rounds (0 disables)
+constexpr int LOG_EVERY = 0;           // status line per champion every N rounds (0 disables)
 constexpr double ENGAGE_RATIO = 0.8;    // fight when our side's power is at least this fraction of theirs
 constexpr double FLEE_RATIO = 0.3;      // carriers run when our power is below this fraction of theirs
 constexpr int HUNT_RADIUS = 10;         // how far we chase a winnable fight
@@ -84,14 +84,14 @@ constexpr double COMMIT = 1.5;          // keep the current target unless anothe
 constexpr bool SPREAD_LOWER_ONLY = true;  // the "someone else is on it" penalty only counts higher-priority allies
 constexpr bool DISENGAGE = true;        // losing side and an enemy within 4: back off (unless we can kill something now)
 constexpr bool PAIR_UP = true;          // weak champions join an ally's joint target instead of starting their own
-constexpr double ALTAR_WEIGHT = 0.5;    // camp cost counts this fraction of the camp's distance to an altar
+constexpr double ALTAR_WEIGHT = 0.0;    // camp cost counts this fraction of the camp's distance to an altar
 constexpr int SCARCE_GEMS = 1;          // >0: map is gem-scarce if non-monolith groups hold fewer gems; then teams take monoliths. Tested 300: reaches 1000 gems vs a passive enemy, but 0 of 8 vs v16 (we feed kills while attacking)
 constexpr int MONOLITH_TEAM = 3;        // champions that take a monolith together on gem-scarce maps
 constexpr int MONOLITH_CLEAR = 12;      // no enemy may have been seen this close to a monolith ...
 constexpr int MONOLITH_MEMORY = 20;     // ... in this many rounds before (and while) we attack it
 constexpr int SEED = 0;                 // >0 adds small deterministic noise to camp choice (testing only)
 constexpr bool IGNORE_SPAWN_CAMPERS = true;  // enemies inside their own spawn are not chased or fled from
-constexpr int ACT_LOG_EVERY = 200;      // print how many turns each champion spent on each activity (0 disables)
+constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spent on each activity (0 disables)
 
 static int chebyshev(vec2 a, vec2 b) {
     return std::max(std::abs(a.x - b.x), std::abs(a.y - b.y));
