@@ -51,4 +51,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 88 | v66 candidate | 61ad076 (branch exp/v66) | LOW_HP 0.5 except 40x40: vs Nyx elk 216-864 (lost), CW 246, gold_rush 583, lanes 529, corners 205; total 1779. Rejected |
 | 89 | v65 | 42a42aa (same bot source as 87) | v65 restored after 88. |
 | 90 | v67 candidate | 8876b4c (branch exp/v67) | Willow fights only beside two allies, never joins (except 40x40): vs Nyx elk 432-720 (lost), CW 516, gold_rush 445, lanes 280, corners 494; total 2167. Rejected |
-| 91 | v65 | 42a42aa (same bot source as 87) | v65 restored after 90. Live. |
+| 91 | v65 | 42a42aa (same bot source as 87) | v65 restored after 90. |
+| 92 | v68 candidate | 3fa9d89 (branch exp/v68) | Parting shot: hit anything in range while backing off or disengaging (except 40x40). Testing vs Nyx. |
