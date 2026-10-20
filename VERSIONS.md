@@ -94,4 +94,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 131 | v86 candidate | c94fc7d (branch exp/v86) | Before round 150, engage only at 1.5x power (except broken_curve). vs Nyx: elk 432-792 (lost), CW 348, lanes 469, gold_rush 539, corners 382 (2170 vs 2822). Rejected |
 | 132 | v85 | 73660fb | v85 restored after 131. |
 | 133 | v87 candidate | 66fe781 (branch exp/v87) | Treasure emblem first (except Tavi, broken_curve), as Fish/Sponge/Nyx do. Unopposed 7-map mean 1304 -> 1268 rounds. vs Nyx: elk 324-756 (lost), CW 363, gold_rush 660, corners 332, lanes 466 (2145 vs 2822); rows 1005-991 WIN (v78 922), islands 482 (696), expanse 647 (790), big_world/ambush 833 and 648 (767, 940). Rejected |
-| 134 | v85 | 73660fb | v85 restored after 133. Live. |
+| 134 | v85 | 73660fb | v85 restored after 133. |
+| 135 | v88 candidate | 02419d5 (branch exp/v88) | Draft HoR, Ren, Stellar, Ryth, Varg (top-3 core). Unopposed 8-map mean 1291 -> 1386 (slower). Testing vs Nyx. |
