@@ -90,4 +90,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 127 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 126. |
 | 128 | v85 candidate | 044db2d (branch exp/v85) | Freeze only broken_curve (40x40, 274 walls), not every 40x40 map: shortcut and interlock now get normal play. broken_curve identical locally. Local h2h vs v78: wins both sides on shortcut and interlock. vs Nyx: interlock 289-1024 (v78 224), shortcut 196-1019 (v78 0-1058); unaffected maps elk 720-432 WIN, CW 348, corridors 430 (same code as v78: Nyx games vary ~150 gems run to run). Accepted. |
 | 129 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 128 for a baseline on shortcut/interlock: shortcut 0-1058, interlock 224-1004, pilgrimage 342-1055, split 386, quadrants 394. |
-| 130 | v85 | 044db2d | v85 accepted (see 128). Live. |
+| 130 | v85 | 73660fb (same bot source as 044db2d) | v85 accepted (see 128). Live. |
