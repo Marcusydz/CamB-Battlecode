@@ -119,7 +119,8 @@ constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spen
 static bool caster_power = true;
 static double engage_ratio = ENGAGE_RATIO;
 static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
-constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy and carrying < 10 gems
+constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
+constexpr int SOFT_BACK_GEMS = 20;       // ... and carrying fewer gems than this (was 10)
 
 
 static int chebyshev(vec2 a, vec2 b) {
@@ -1067,7 +1068,7 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
             return true;
         }
         claim(-1);
-        if (soft_back && hp_frac >= SOFT_BACK_HP && gems < 10) {
+        if (soft_back && hp_frac >= SOFT_BACK_HP && gems < SOFT_BACK_GEMS) {
             // Healthy and carrying little: step out of reach and farm elsewhere instead of recalling
             // (vs Nyx we spent 10-30% of turns dead or walking back from spawn).
             if (!retreat_and_recall(false)) return false;
@@ -1130,7 +1131,7 @@ bool Bot::outnumbered(const cambc::champion& me, vec2 pos, int now) {
     claim(-1);
     const int gems = static_cast<int>(me.gem_count());
     if (gems > 0 && altar_field.get(pos) <= 2) tribute();
-    else if (soft_back && gems < 10 && me.health() >= SOFT_BACK_HP * me.max_health()) {
+    else if (soft_back && gems < SOFT_BACK_GEMS && me.health() >= SOFT_BACK_HP * me.max_health()) {
         if (!retreat_and_recall(false)) return false;
         if (caster_power) hit_in_range(me);
         act = "back-off";
