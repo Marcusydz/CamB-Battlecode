@@ -98,4 +98,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 135 | v88 candidate | 02419d5 (branch exp/v88) | Draft HoR, Ren, Stellar, Ryth, Varg (top-3 core). Unopposed 8-map mean 1291 -> 1386 (slower). vs Nyx: elk 468-684, CW 380, lanes 316, gold_rush 484, corners 223 (1871 vs 2822); rows 924, islands 534, expanse 534, big_world/ambush 610 and 670 (3272 vs 4115). Rejected |
 | 136 | v85 | 73660fb | v85 restored after 135. |
 | 137 | v89 candidate | 7861dac (branch exp/v89) | Top-3 package together: HoR/Ren/Stellar/Ryth/Varg draft + treasure first + shop at 90 gold (except broken_curve). vs Nyx: elk 0-1008, CW 359, lanes 301, gold_rush 539, corners 272 (1471 vs 2822); rows 934, islands 712, expanse 696, big_world/ambush 438 and 652 (3432 vs 4115). Rejected |
-| 138 | v85 | 73660fb | v85 restored after 137. Live. |
+| 138 | v85 | 73660fb | v85 restored after 137. |
+| 139 | v90 candidate | eadefef (branch exp/v90) | Contested-camp penalty (x0.3) after round 300 only on single-herd maps (elk-type, broken_curve); elsewhere only the first 300 rounds. Local vs v85: ~13-7. Testing vs Nyx. |
