@@ -5,6 +5,7 @@
 // and the others avoid that group. Switches that were tested and rejected in Python (and were
 // off in v16) are not ported; see TODO.md and bots/my-bot/README.md for their results.
 #include "bot.h"
+#include "camp_waiting_area.h"
 #include <algorithm>
 #include <cstdio>
 #include <tuple>
@@ -39,7 +40,8 @@ static std::pair<double, double> camp_stats(cambc::camp_type t) {
 
 // Tuning parameters (same names and values as my-bot v16).
 constexpr int CAPTURE_TIME = 5;
-constexpr int UNREACHED = 1000000;
+// Unreached uint16 distances are the SDK sentinel, not a large valid path cost (Codex review of v44).
+constexpr int UNREACHED = cambc::distance_field::unreachable;
 constexpr int SHOP_RECALL_GOLD = 150;   // recall to shop with an empty bag and this much gold (default of shop_gold)
 constexpr bool BUY_JUNGLE = true;
 constexpr double SUPPORT_BONUS = 0.0;   // enemy power counts this much extra per enemy healer (Willow) or shielder (Varg) in the fight
@@ -410,7 +412,7 @@ bool Bot::step_static(int g) {
     auto origin = me.position();
     const auto blk = blocked();
     int here = gdist(g, origin);
-    if (here <= 0 || here >= 60000) return false;
+    if (here <= 0 || here >= UNREACHED) return false;
     auto pick = [&](const bitboard& options) -> std::optional<vec2> {
         std::optional<vec2> best;
         int best_d = 0, best_in = 0;
@@ -1323,7 +1325,7 @@ int Bot::team_plan(int now) {
         for (int i = 0; i < A; ++i) {
             const int d = f[allies[i].pos.y * width + allies[i].pos.x];
             // MAX_WAIT 0: only camps alive when we would get there.
-            c.dist[i] = (d >= 60000 || g.available_at > now + d) ? (1 << 20) : d;
+            c.dist[i] = (d >= UNREACHED || g.available_at > now + d) ? (1 << 20) : d;
             c.order[i] = static_cast<std::int8_t>(i);
         }
         for (int i = 1; i < A; ++i)  // insertion sort: allies nearest first
@@ -1732,7 +1734,7 @@ void Bot::turn() {
                     if (g.monolith && g.gems >= 200 && (!mid || g.gems > mid->gems)) mid = &g;
                 if (mid) {
                     const int d = gdist(mid->idx, pos);
-                    if (mid->state != 3 && now >= mid->avoid_until && mid->available_at <= now + d && d < 60000
+                    if (mid->state != 3 && now >= mid->avoid_until && mid->available_at <= now + d && d < UNREACHED
                         && !enemy_near(mid->center, MONOLITH_CLEAR, 2, now)) {
                         tgt = mid->idx;
                         need = 1;
@@ -1836,7 +1838,7 @@ void Bot::turn() {
             }
             if (near < need - 1) {
                 bitboard ring;
-                for (const auto& c : camps) ring |= around(c.position(), 5);
+                for (const auto& c : camps) ring |= camp_waiting_area(c.position(), camp_range(c.kind()));
                 for (const auto& c : camps) ring &= ~around(c.position(), camp_range(c.kind()));
                 claim(tgt);
                 act = "gather";
