@@ -72,4 +72,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 109 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 108. |
 | 110 | v77 draft | e1f8ba5 (branch exp/v77) | ETA_W 5, SPREAD 0.5 everywhere; replaced within a minute because SPREAD also changed 40x40 maps. Not tested. |
 | 111 | v77 candidate | 8dfc7fb (branch exp/v77) | ETA_W 3 -> 5 (40x40 keeps 1) and SPREAD 0.25 -> 0.5 except 40x40; unopposed farm sweep mean 1245 -> 1202 rounds (CW 1665 -> 1305). vs Nyx: elk 288-576 (lost), CW 251, gold_rush 528, lanes 347, corners 391 (1805 vs 2879); corridors 380 (+146), expanse 662, islands 452, big_world 861. Rejected |
-| 112 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 111. Live. |
+| 112 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 111. |
+| 113 | v78 candidate | e5d5b24 (branch exp/v78) | Give up on a camp after 12 failed approach steps even with steps in between (except 40x40); unopposed corridors Stellar/Willow oscillated 600+ turns beside a walled-off camp. Testing vs Nyx on 10 maps. |
