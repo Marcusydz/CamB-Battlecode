@@ -1972,6 +1972,23 @@ void Bot::turn() {
     }
     stuck += 1;
     act = "approach-wait";
+    // A step forward then a failed step resets `stuck`, so a champion could oscillate beside an
+    // unreachable camp for hundreds of turns (corridors: Stellar and Willow 600+ turns each, a wall
+    // between them and a respawning camp). Count failed steps per target without resets.
+    if (caster_power) {
+        if (aw_target != tgt) {
+            aw_target = tgt;
+            aw_count = 0;
+        }
+        if (++aw_count > 12) {
+            tg.avoid_until = now + 100;
+            aw_count = 0;
+            stuck = 0;
+            target = -1;
+            next_plan = 0;
+            return;
+        }
+    }
     if (stuck > 6) {
         // Give up on it for a while (unreachable, hidden, or contested).
         tg.avoid_until = now + 40;
