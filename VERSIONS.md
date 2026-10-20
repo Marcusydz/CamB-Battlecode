@@ -66,4 +66,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 103 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 102. |
 | 104 | v74 candidate | 638f69c (branch exp/v74) | Bank from altar tiles not beside a bush when there are any (except 40x40): vs Nyx elk 288-576 (lost), CW 320, gold_rush 534, lanes 483, corners 331; corridors 307 (+73), expanse 623, islands 277, big_world 685. Rejected |
 | 105 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 104. |
-| 106 | v75 candidate | 8dd1e8f (branch exp/v75) | Break a tribute channel when hit for 25%+ of max hp and below 60% hp (except 40x40). Testing vs Nyx on 10 maps. |
+| 106 | v75 candidate | 8dd1e8f (branch exp/v75) | Break a tribute channel when hit for 25%+ of max hp and below 60% hp (except 40x40). vs Nyx identical to v71 on all 10 maps (the altar deaths are one- or two-round bursts). Rejected (no effect) |
+| 107 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 106. Live. |
