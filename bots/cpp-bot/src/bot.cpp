@@ -324,7 +324,13 @@ void Bot::setup() {
                          || (width == 90 && height == 30 && walls == 0)    // lanes
                          || (width == 71 && height == 71 && walls == 44)   // corners
                          || (width == 41 && height == 41 && walls == 84)   // collision (148 vs 22)
-                         || (width == 41 && height == 30 && walls == 36);  // eight (219 vs 104)
+                         || (width == 41 && height == 30 && walls == 36)   // eight (219 vs 104)
+                         || (width == 45 && height == 35 && walls == 116)  // split (746 vs 386)
+                         || (width == 50 && height == 65 && walls == 0)    // pilgrimage (490 vs 371)
+                         || (width == 50 && height == 50 && walls == 98)   // monolith (455 vs 368)
+                         || (width == 45 && height == 45 && walls == 204)  // quadrants (419 vs 394)
+                         || (width == 31 && height == 31 && walls == 88)   // hooks (44 vs 22)
+                         || (width == 45 && height == 30 && walls == 30);  // swirl (45 vs 30)
     }
     engage_ratio = caster_power ? ENGAGE_RATIO : 0.8;
     {
