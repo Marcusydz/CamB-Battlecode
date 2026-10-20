@@ -77,4 +77,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 114 | v79 candidate | 239f8db (branch exp/v79) | No monolith targets (except 40x40): unopposed on contest the team died 80 times at the two 20000-hp monoliths. vs Nyx: contest still 0-1000 (Nyx won sooner, round 1489 vs 1773, killing us 62 times), monolith 460, hooks 22, fragment 46, boss same as v78. Rejected |
 | 115 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 114. |
 | 116 | v80 candidate | 827c616 (branch exp/v80) | Big herds (10+ camps) use CAMP_RISK 1.0 instead of 1.5 (except 40x40). Unopposed: stampede 2292 -> 1987 rounds, starvation 2378 -> 1984, starfish 1260 -> 1338. vs Nyx: stampede 0-1120 (v78 0-960), starvation 140 (128), starfish 97 (65), rows 960 (922, unaffected), contest 0-1000 (same); Nyx kills us 22-49 times per game, we kill 0-3. Within noise. Rejected |
-| 117 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 116. Live. |
+| 117 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 116. |
+| 118 | v81 candidate | e9008cf (branch exp/v81) | Gem-scarce maps (only contest): farm gold (weight 1.0) until round 600, then take monoliths with 3. Unopposed contest 3666 -> 1412 rounds (died 87 times attacking itemless). Testing vs Nyx. |
