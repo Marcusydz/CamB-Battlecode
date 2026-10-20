@@ -57,7 +57,8 @@ constexpr int PLAN_KEEP_CLAIMS = 1;   // allies with a claimed camp are fixed in
 constexpr int FIELDS_PER_TURN = 1;
 constexpr int PLAN_CHECK = 0;    // group distance fields computed per turn until all exist
 constexpr int HIDDEN_ENEMIES = 1;  // count recently seen, now hidden enemies in fight odds
-constexpr double GOLD_W = 0.0;   // camp value per gold, in gems (0 after the week-2 patch: 1538 -> 1370 rounds unopposed on the new engine)
+constexpr double GOLD_W = 0.1;   // camp value per gold, in gems (week-2 patch: 0 beat 1.0 unopposed; 0.1 with ETA_W 3 is ~8% faster)
+constexpr double ETA_W = 3.0;    // walking time counts this many times in a camp's cost (Nyx circles nearby small camps as they respawn)
 constexpr double GOLD_RUSH_GOLD_W = 0.0;  // 0.5 was worse vs Fish (644 vs 828 gems)
 constexpr int MID_AOE_ONLY = 0;  // mid squad: only Stellar/Prism (1) or any caster (0)
 constexpr int DEATH_AVOID = 0;  // rounds to avoid camps near where enemies killed us  // turns next to a target group without fighting it before dropping it
@@ -1505,7 +1506,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         }
         const double gold_w = gold_weight;
         const double value = (g.gems + gold_w * g.gold) / std::max(need, others + 1);
-        double cost = eta + wait + clear + CAPTURE_TIME + altar_weight * g.altar_dist + 1;
+        double cost = ETA_W * eta + wait + clear + CAPTURE_TIME + altar_weight * g.altar_dist + 1;
         double score_bonus = 1.0;
         if (need > 1) {
             cost += 4 * (need - 1 - std::min(others, need - 1));  // time to gather helpers
