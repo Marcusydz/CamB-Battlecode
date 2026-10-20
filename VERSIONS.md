@@ -60,4 +60,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 97 | v71 | 0f825d6 (submitted 4dd9930, same code, comment fixed after) | Soft back-off while carrying < 20 gems (was 10; except 40x40): vs Nyx elk 864-360 WIN, CW 579, gold_rush 556, lanes 482, corners 398; total 2879 (v68 2773; only gold_rush changed). Accepted. |
 | 98 | v72 candidate | 46d7242 (branch exp/v72) | Soft back-off while carrying < 30 gems (except 40x40): vs Nyx identical to v71 on all 5 maps (2879). Rejected (no effect) |
 | 99 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 98. |
-| 100 | v73 candidate | f6bf08e (branch exp/v73) | Don't walk to an altar enemies are waiting at; keep farming, bank once clear (except 40x40). Testing vs Nyx on 10 maps (v71: 2879 on the 5 standard maps; corridors 234). |
+| 100 | v73 candidate | f6bf08e (branch exp/v73) | Don't walk to an altar enemies are waiting at; keep farming, bank once clear (except 40x40). vs Nyx: elk 468-540 (lost), CW 213, gold_rush 561, lanes 482, corners 398 (2122); corridors unchanged 234. Rejected |
+| 101 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 100. Live. |

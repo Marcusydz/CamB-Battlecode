@@ -44,5 +44,6 @@ Format: date - change - evidence - conclusion. Opponent results are 5-game unran
 - Death diagnostic (official 85, prints 8 turns before each death): hurt champions hit by unseen attackers recalled, the hit cancelled the recall, and they restarted it every turn, standing still 6-8 turns until dead. Walking home instead (v65, official 87): 2555 vs 2412, elk win 792-360.
 - Also rejected: OUTNUMBER 1 (1818), no contest penalty on the elk middle (elk 144-1008), leave at 1.5x visible enemy power (elk lost; farm maps +61). After v65 (vs 2555): LOW_HP 0.5 retreat 1779; Willow fights only beside two allies 2167 (elk lost 432-720).
 - Parting shot (v68, official 92): chasers (often a lone Ren at range 2-3) keep pace with a retreating champion, so hit anything in range while backing off/disengaging: 2773 vs 2555 (lanes +141, elk 864-360 W). Extending it to flee/low-hp (v69) gave 2489: rejected. Spending every unused attack on an enemy in reach (v70) lost elk 360-792: rejected (extra hits draw fights).
-- Soft back-off while carrying < 20 gems instead of < 10 (v71, official 97): 2879; only gold_rush changed (450 -> 556).
+- Soft back-off while carrying < 20 gems instead of < 10 (v71, official 97): 2879; only gold_rush changed (450 -> 556). < 30 gems: identical (no effect).
+- corridors: one shared altar in the middle; our champions die beside it carrying 58-102 gems and Nyx picks them up. Skipping the altar while enemies are seen near it (v73) did not change corridors at all (the killers are unseen) and lost elk: rejected.
 
