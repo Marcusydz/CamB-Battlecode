@@ -69,4 +69,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 106 | v75 candidate | 8dd1e8f (branch exp/v75) | Break a tribute channel when hit for 25%+ of max hp and below 60% hp (except 40x40). vs Nyx identical to v71 on all 10 maps (the altar deaths are one- or two-round bursts). Rejected (no effect) |
 | 107 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 106. |
 | 108 | v76 candidate | b1a5456 (branch exp/v76) | Recall to shop at 90 gold instead of 150 (except 40x40 and islands). vs Nyx: elk 756-324 WIN, CW 400, gold_rush 627, lanes 575, corners 317 (2675 vs 2879); corridors 74, expanse 746, big_world 845, islands same. Rejected |
-| 109 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 108. Live. |
+| 109 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 108. |
+| 110 | v77 draft | e1f8ba5 (branch exp/v77) | ETA_W 5, SPREAD 0.5 everywhere; replaced within a minute because SPREAD also changed 40x40 maps. Not tested. |
+| 111 | v77 candidate | 8dfc7fb (branch exp/v77) | ETA_W 3 -> 5 (40x40 keeps 1) and SPREAD 0.25 -> 0.5 except 40x40; unopposed farm sweep mean 1245 -> 1202 rounds (CW 1665 -> 1305). Testing vs Nyx on 10 maps. |
