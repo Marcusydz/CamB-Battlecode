@@ -10,7 +10,7 @@ using List = std::array<D, 11>;
 
 // Candidate lists. 0 is v16's order (Ren, Tavi, Ryth, Stellar, Marcella), chosen by local tests against
 // itself. 1 is what teams rated 1700+ pick on almost every map (690 ladder games, October 2026).
-static constexpr std::array<List, 11> LISTS{{
+static constexpr std::array<List, 14> LISTS{{
     {D::ren, D::tavi, D::ryth, D::stellar, D::marcella, D::varg, D::vendetta, D::vesper_vale, D::prism, D::cassi_and_issac, D::willow},
     {D::cassi_and_issac, D::stellar, D::varg, D::ren, D::ryth, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::stellar, D::cassi_and_issac, D::ren, D::ryth, D::varg, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
@@ -23,6 +23,10 @@ static constexpr std::array<List, 11> LISTS{{
     {D::cassi_and_issac, D::stellar, D::varg, D::ren, D::ryth, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::stellar, D::tavi, D::prism, D::cassi_and_issac, D::ren, D::ryth, D::varg, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::stellar, D::prism, D::cassi_and_issac, D::varg, D::ren, D::ryth, D::tavi, D::vendetta, D::marcella, D::vesper_vale, D::willow},
+    // 11-13: no Cassi & Issac (on gold_rush vs Fish they died together 5 times and farmed 46 gems each).
+    {D::varg, D::stellar, D::ryth, D::ren, D::tavi, D::prism, D::cassi_and_issac, D::vendetta, D::marcella, D::vesper_vale, D::willow},
+    {D::varg, D::ryth, D::stellar, D::ren, D::tavi, D::prism, D::cassi_and_issac, D::vendetta, D::marcella, D::vesper_vale, D::willow},
+    {D::varg, D::stellar, D::ren, D::ryth, D::tavi, D::prism, D::cassi_and_issac, D::vendetta, D::marcella, D::vesper_vale, D::willow},
 }};
 
 constexpr int DRAFT = -1;  // >=0: use this list on every map (testing). -1: per-map table below.
@@ -32,7 +36,7 @@ struct MapDraft {
     int w, h, walls, list;
 };
 // Per-map choice, from local tests against v16 (see README).
-static constexpr std::array<MapDraft, 16> PER_MAP{{
+static constexpr std::array<MapDraft, 17> PER_MAP{{
     {100, 100, 540, 2},  // ambush
     {41, 41, 84, 4},     // collision
     {50, 50, 40, 0},     // contest
@@ -42,13 +46,14 @@ static constexpr std::array<MapDraft, 16> PER_MAP{{
     {80, 80, 224, 4},    // expanse
     {30, 30, 24, 0},     // fragment
     {40, 40, 76, 4},     // interlock (list 4 farms 602 -> 462 rounds)
-    {90, 30, 0, 4},      // lanes
+    {90, 30, 0, 13},     // lanes
     {50, 50, 98, 7},     // monolith (list 7 farms 412 -> 354 rounds)
-    {31, 31, 0, 4},      // packs
+    {31, 31, 0, 12},     // gold_rush (also old packs): no Cassi & Issac
     {50, 65, 0, 5},      // pilgrimage
     {50, 50, 214, 4},    // rows
     {30, 80, 80, 5},     // rushbait_v2
     {60, 50, 0, 0},      // stampede
+    {60, 60, 0, 13},     // islands
 }};
 // Intercontinental Fish: list 7 everywhere except these.
 static constexpr std::array<MapDraft, 4> FISH_MAP{{

@@ -41,6 +41,7 @@ constexpr int WARD_GAP = 8;
 constexpr int BUILD = 4;                // 0: v16 (monster, jungle, power strength). 1: power main stat, then durability health, then power. 2: power main stat only. 3: monster emblem of main stat, then power main stat. 4: Intercontinental Fish's emblem order per champion
 constexpr int GEM_CAP = 60;
 constexpr int CLOSE_GIVEUP = 12;
+constexpr double GOLD_W = 0.15;  // camp value per gold, in gems
 constexpr int MID_AOE_ONLY = 0;  // mid squad: only Stellar/Prism (1) or any caster (0)
 constexpr int DEATH_AVOID = 0;  // rounds to avoid camps near where enemies killed us  // turns next to a target group without fighting it before dropping it
 constexpr int MONO_KITE = 1;            // 1: casters take monoliths on every map (ladder #1 takes rows' 448-gem middle with Stellar and Prism)
@@ -1209,7 +1210,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
                 continue;  // join the ally already waiting for help, or recently gave up waiting
             clear = g.health / (dps * std::max(need, others + 1));
         }
-        const double gold_w = 0.15;
+        const double gold_w = GOLD_W;
         const double value = (g.gems + gold_w * g.gold) / std::max(need, others + 1);
         double cost = eta + wait + clear + CAPTURE_TIME + ALTAR_WEIGHT * g.altar_dist + 1;
         double score_bonus = 1.0;
