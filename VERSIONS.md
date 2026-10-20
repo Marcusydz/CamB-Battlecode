@@ -19,4 +19,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 56 | v46 | 1f4847e (same bot source as 52) | v46 restored after 55. |
 | 57 | v49 | d631fcf | post-patch draft (Heart of Ruin, Varg, Stellar, Ryth, Willow) on all maps except 40x40 (broken_curve unchanged). vs procless CW 239 (v46 332), lanes 549 (458), gold_rush 440 (484), elk_arena 0 (0), corners 463 (339); total 1691 vs 1613; faster unopposed on most maps. Accepted. |
 | 58 | v50 candidate | 9211172 (branch exp/v50) | hub maps (elk_arena) move as one team of 5 and wait at the middle: vs procless elk 0 (40 deaths), lanes 447, rest same; unopposed elk never reaches 1000. Rejected |
-| 59 | v49 | d631fcf (same bot source as 57) | v49 restored after 58. Live. |
+| 59 | v49 | d631fcf (same bot source as 57) | v49 restored after 58. |
+| 60 | v51 candidate | 6422450 (branch exp/v51) | procless's item build (monster emblem, durability emblem of health, bruiser shards forever) except on 40x40: vs procless lanes 478 (v49 549), CW 190 (239), gold_rush 495 (440), corners 276 (463), elk 0; total 1439 vs 1691. Rejected |
+| 61 | v49 | d631fcf (same bot source as 57) | v49 restored after 60. Live. |
