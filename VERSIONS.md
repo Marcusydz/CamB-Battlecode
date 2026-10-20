@@ -32,4 +32,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 69 | v57 candidate | b8e5625 (branch exp/v57) | ENGAGE_RATIO 1.3: vs Nyx elk 0-1008 (lost), CW 253, gold_rush 693, lanes 401, corners 283; total 1630. Rejected |
 | 70 | v56 | 070fd7a (same bot source as 68) | v56 restored after 69. |
 | 71 | v58 candidate | 35123db (branch exp/v58) | solo farming (no squads) except 40x40: vs Nyx elk 288-864 (lost), CW 266, gold_rush 583, lanes 302, corners 405; total 1844 vs 2412. Rejected |
-| 72 | v56 | 070fd7a (same bot source as 68) | v56 restored after 71. Live. |
+| 72 | v56 | 070fd7a (same bot source as 68) | v56 restored after 71. |
+| 73 | v59 candidate | ec0506f (branch exp/v59) | enemy power +30% per Varg/Willow: vs Nyx results identical to 68 (no effect). Rejected |
+| 74 | v56 | 070fd7a (same bot source as 68) | v56 restored after 73. Live. |
