@@ -49,4 +49,5 @@ Format: date - change - evidence - conclusion. Opponent results are 5-game unran
 - Economy: Nyx clears ~2x our camps even on expanse where we never die, buys from round ~40 in 30-gold steps (treasure shards first). Recall to shop at 90 gold instead of 150 (v76): 2675 vs 2879 (lanes/gold_rush up, CW/corners/corridors down): rejected.
 - Unopposed local farm speed does not predict Nyx results: ETA_W 5 + SPREAD 0.5 was the fastest unopposed (mean 1245 -> 1202 rounds, CW 1665 -> 1305) but scored 1805 vs 2879 against Nyx (v77): rejected.
 - Oscillation fix (v78, official 113): a champion stepping forward then failing reset its stuck counter, so Stellar and Willow sat 600+ turns beside a walled-off respawning camp on corridors. Giving up after 12 failed steps per target: corridors 234 -> 418, CW -57, ten-map +86; vs Fish 1408 -> 1531. Accepted.
+- Monoliths (20000 hp, str 200, range 5 since the patch): unopposed on contest our team died 80 times attacking them (killed 3 in 2000 rounds). Never targeting them (v79) wins contest locally on gold but vs Nyx contest stayed 0-1000: rejected, the loss there is to Nyx's champions.
 

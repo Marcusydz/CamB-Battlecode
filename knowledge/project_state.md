@@ -15,6 +15,9 @@ expanse 578, islands 457, big_world 756, boss_battle gold 39.8k-54.4k. broken_cu
 ## Official 97/99 (v71) on other maps vs Nyx (vs official 68)
 corridors 234-1070 (317), expanse 790 (578), islands 696 (457), big_world 808 (756), boss_battle gold 48.2k-53.2k (39.8k-54.4k). corridors is now the weakest map: we earn 2.3k gold to Nyx's 8.3k.
 
+## v78 on more maps vs Nyx (official 113)
+contest 0-1000 (Nyx kills us 57 times), monolith 460-1020, hooks 22-1012 (37 deaths), fragment 46-1000 (39 deaths), boss_battle gold tiebreak. hooks and fragment are now the worst maps.
+
 ## Known issues
 - Top teams clear ~3x as many camp groups as we do; we lose most farm races by ~2x gems.
 - gold_rush: our 3 champions are killed 27-44 times per game.
