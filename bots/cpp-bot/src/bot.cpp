@@ -1071,10 +1071,12 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
             // Healthy and carrying little: step out of reach and farm elsewhere instead of recalling
             // (vs Nyx we spent 10-30% of turns dead or walking back from spawn).
             if (!retreat_and_recall(false)) return false;
+            if (caster_power) hit_in_range(me);  // parting shot: a chaser keeps pace, so hit it while leaving
             act = "back-off";
             return true;
         }
         retreat_and_recall();
+        if (caster_power) hit_in_range(me);
         act = "disengage";
         return true;
     }
@@ -1130,9 +1132,11 @@ bool Bot::outnumbered(const cambc::champion& me, vec2 pos, int now) {
     if (gems > 0 && altar_field.get(pos) <= 2) tribute();
     else if (soft_back && gems < 10 && me.health() >= SOFT_BACK_HP * me.max_health()) {
         if (!retreat_and_recall(false)) return false;
+        if (caster_power) hit_in_range(me);
         act = "back-off";
         return true;
     } else retreat_and_recall();
+    if (caster_power) hit_in_range(me);
     act = "outnumbered";
     return true;
 }
