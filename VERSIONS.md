@@ -61,4 +61,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 98 | v72 candidate | 46d7242 (branch exp/v72) | Soft back-off while carrying < 30 gems (except 40x40): vs Nyx identical to v71 on all 5 maps (2879). Rejected (no effect) |
 | 99 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 98. |
 | 100 | v73 candidate | f6bf08e (branch exp/v73) | Don't walk to an altar enemies are waiting at; keep farming, bank once clear (except 40x40). vs Nyx: elk 468-540 (lost), CW 213, gold_rush 561, lanes 482, corners 398 (2122); corridors unchanged 234. Rejected |
-| 101 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 100. Live. |
+| 101 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 100. |
+| 102 | diag-death2 | 1b01cc8 (branch exp/diag-death2) | Diagnostic: v71 printing the 8 turns before each death (temporary, never kept live). |
+| 103 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 102. Live. |
