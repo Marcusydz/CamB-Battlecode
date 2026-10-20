@@ -111,4 +111,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 148 | v95 candidate | 163be63 (branch exp/v95) | v90 + DEATH_AVOID 120: after enemy champions kill us, avoid camps within 8 tiles for 120 rounds (corners: 17 deaths in the middle). Local vs v90 ~9-7. vs Nyx: 2340 / 3868 (v90 2488 / 3990): lanes +52, corners +63, but CW -108, gold_rush -83, elk 648 vs 720, islands -118. Rejected. |
 | 149 | v90 | 38fff25 | v90 restored after 148. vs Fish (CW, expanse, lanes, gold_rush, islands): 2047 (v85 earlier 1598). |
 | 150 | v96 candidate | f74d23b (branch exp/v96) | v90 + treasure emblem first except elk-type maps and broken_curve (v87 lost only elk). Unopposed 1270 -> 1249, elk identical. vs Nyx: 2494 / 3573 (v90 2488 / 3990). Won rows 1005-991, lanes +155, corners +92; CW -191, islands -206, big_world+ambush -248. Rejected. |
-| 151 | v90 | 38fff25 | v90 restored after 150. Live. |
+| 151 | v90 | 38fff25 | v90 restored after 150. |
+| 152 | v100 candidate | 7ab8c86 (branch exp/v100) | v90 + treasure emblem first on rows, lanes, corners only (where v96 beat v90). Other maps identical to v90 locally. Testing vs Nyx. |
