@@ -1,10 +1,10 @@
 # Project state
 
-Updated 2026-10-20 19:05 UTC by Claude.
+Updated 2026-10-20 20:05 UTC by Claude.
 
 ## Live and accepted bot
 - Accepted branch: `top-team-study`. Bot source: `bots/cpp-bot` (C++). Version map: `VERSIONS.md`.
-- Live on the ladder: official **115** (internal v78; 113 was the same source, 114 the rejected v79), commit `e5d5b24`. vs Nyx: elk 864-360 W, CW 522, gold_rush 556, lanes 482, corners 398 (2822), corridors 418, expanse 790, islands 696, big_world 767. vs Fish: 1531 on the five standard maps (0-5).
+- Live on the ladder: official **130** (internal v85), commit `73660fb`: v78 plus broken_curve recognised by its 274 walls instead of by 40x40 size (shortcut and interlock now get normal play). vs Nyx with v78 play: elk 864-360 / 720-432 W, CW 522 / 348, gold_rush 556, lanes 482, corners 398, corridors 418-430, expanse 790, islands 696, big_world 767. vs Fish (v78): 1531 on the five standard maps.
 - Latest review-ready release: **official 97** (v71), commit `4dd9930` (= `0f825d6`), record `releases/official-97.md`. Previous: official 68.
   (GitHub tags/releases can't be created from Claude's session; release records are files.)
 
@@ -17,7 +17,7 @@ corridors 234-1070 (317), expanse 790 (578), islands 696 (457), big_world 808 (7
 
 ## v78 on more maps vs Nyx (official 113)
 contest 0-1000 (Nyx kills us 57 times), monolith 460-1020, hooks 22-1012 (37 deaths), fragment 46-1000 (39 deaths), boss_battle gold tiebreak. hooks and fragment are now the worst maps.
-New-pool maps: rows 922-1003, stampede 0-960, starfish 65-1012, starvation 128-984.
+New-pool maps (v78): rows 922-1003, pilgrimage 342, split 386, quadrants 394, swirl 15-181, shortcut 0 (v85: 196), interlock 224 (v85: 289),, stampede 0-960, starfish 65-1012, starvation 128-984.
 
 ## New map pool (35 maps, installed locally 2026-10-20 from Marcus's files)
 - stampede (60x50): every camp gives 0 gems except one 20-camp herd (str 360, 160 gems) at the far right, 58 steps from the altar. Unopposed we first bank at round ~937. Vs Nyx we never collect it; Nyx banks it 6 times and hunts our gold farmers.
@@ -26,6 +26,8 @@ New-pool maps: rows 922-1003, stampede 0-960, starfish 65-1012, starvation 128-9
 - Opponent: Nyx and Fish (Marcus 16:44: Fish is back online).
 
 ## Known issues
+- Nyx results with identical code vary ~150 gems per map between runs (elk 864 vs 720, CW 522 vs 348): judge on totals over many maps.
+- Fights: Nyx deals ~10x our champion damage on brawl maps (contest, hooks, fragment, swirl); kill gold snowballs into power shards. v82 (stay in fights) and v83 (hit anything in reach) both lost elsewhere.
 - Top teams clear ~3x as many camp groups as we do; we lose most farm races by ~2x gems.
 - gold_rush: our 3 champions are killed 27-44 times per game.
 - Single panels are chaotic: an unrelated code change can move one map by +-150 gems.
