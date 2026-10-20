@@ -15,11 +15,25 @@ def run(a, b, mp, tmp):
     tag = f"{a}-{b}-{os.path.basename(mp)}"
     stats = os.path.join(tmp, tag + ".json")
     out = os.path.join(tmp, tag)
-    subprocess.run(["cambc", "run", a, b, "--map", mp, "--statistics", stats, "-o", out],
+    subprocess.run(["cambc", "run", a, b, "--map", mp, "--statistics", stats, "--json", "-o", out],
                    cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=1500)
     if not os.path.exists(stats):
         return None
     d = json.load(open(stats))
+    if "match" in d:  # sdk 2.2 summary format
+        ti = {"teamA": 0, "teamB": 1}
+        gems = [0, 0]
+        for t in d["teams"]:
+            gems[ti[t["team"]]] = int(t["submittedGems"])
+        bf = d["diagnostics"]["botFaults"]
+        faults = [bf.get("teamA", 0), bf.get("teamB", 0)]
+        kills = [0, 0]
+        for c in d["champions"]:
+            kills[ti[c["team"]]] += int(c["metrics"]["kills"])
+        oc = d["match"]["outcome"]
+        outcome = oc
+        return {"a": a, "b": b, "map": os.path.basename(mp).split(".")[0], "outcome": outcome,
+                "round": d["match"]["roundsCompleted"], "gems": gems, "faults": faults, "kills": kills}
     gems = [t["submittedGems"] for t in d["teams"]]
     faults = d.get("botFaults", [0, 0])
     kills = [0, 0]
@@ -36,6 +50,15 @@ def make_seeded(bot, seed):
     name = f"_s{bot}_{seed}"
     dst = os.path.join(ROOT, "bots", name)
     path = os.path.join(src, "src", "bot.py")
+    cpp = os.path.join(src, "src", "bot.cpp")
+    if os.path.exists(cpp) and "\nconstexpr int SEED = " in open(cpp).read():
+        if os.path.exists(dst):
+            shutil.rmtree(dst)
+        shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".cambc"))
+        p = os.path.join(dst, "src", "bot.cpp")
+        text = re.sub(r"\nconstexpr int SEED = [^;]*;", f"\nconstexpr int SEED = {seed};", open(p).read())
+        open(p, "w").write(text)
+        return name
     if not os.path.exists(path) or "\nSEED = " not in open(path).read():
         return bot
     if os.path.exists(dst):
@@ -56,6 +79,7 @@ def main():
     ap.add_argument("--jobs", type=int, default=2)
     ap.add_argument("--quiet", action="store_true")
     ap.add_argument("--seeds", type=int, default=0, help="also play N seeded copies of each bot")
+    ap.add_argument("--seed-base", type=int, default=0, help="offset seeds, for games independent of an earlier run")
     ap.add_argument("--out", default="", help="keep replays and statistics in this directory")
     ap.add_argument("--one-side", action="store_true", help="play each map once, alternating sides")
     o = ap.parse_args()
@@ -66,8 +90,14 @@ def main():
     tmp = os.path.abspath(o.out) if o.out else tempfile.mkdtemp(prefix="arena-")
     os.makedirs(tmp, exist_ok=True)
     pairs = [(o.A, o.B)]
-    for k in range(1, o.seeds + 1):
+    if o.seed_base:
+        pairs = []  # only fresh seeded games
+    for k in range(1 + o.seed_base, o.seeds + 1 + o.seed_base):
         pairs.append((make_seeded(o.A, k), make_seeded(o.B, 100 + k)))
+    # Build C++ bots once up front: parallel matches building the same bot race and fail to link.
+    for bot in sorted({x for p in pairs for x in p}):
+        if os.path.exists(os.path.join(ROOT, "bots", bot, "src", "bot.cpp")):
+            subprocess.run(["cambc", "build", bot], cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     jobs = []
     for a, b in pairs:
         for i, m in enumerate(maps):
