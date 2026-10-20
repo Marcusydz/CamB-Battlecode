@@ -174,7 +174,7 @@ static double camp_health(const cambc::camp& c) {
 }
 
 static const char* kind_name(CT kind) {
-    static std::string names[12];
+    static std::string names[32];
     auto& s = names[static_cast<int>(kind)];
     if (s.empty()) s = cambc::to_string(kind);
     return s.c_str();

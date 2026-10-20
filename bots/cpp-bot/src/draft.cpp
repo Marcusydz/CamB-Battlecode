@@ -10,7 +10,7 @@ using List = std::array<D, 11>;
 
 // Candidate lists. 0 is v16's order (Ren, Tavi, Ryth, Stellar, Marcella), chosen by local tests against
 // itself. 1 is what teams rated 1700+ pick on almost every map (690 ladder games, October 2026).
-static constexpr std::array<List, 16> LISTS{{
+static constexpr std::array<List, 17> LISTS{{
     {D::ren, D::tavi, D::ryth, D::stellar, D::marcella, D::varg, D::vendetta, D::vesper_vale, D::prism, D::cassi_and_issac, D::willow},
     {D::cassi_and_issac, D::stellar, D::varg, D::ren, D::ryth, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::stellar, D::cassi_and_issac, D::ren, D::ryth, D::varg, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
@@ -29,6 +29,9 @@ static constexpr std::array<List, 16> LISTS{{
     {D::varg, D::stellar, D::ren, D::ryth, D::tavi, D::prism, D::cassi_and_issac, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::varg, D::stellar, D::tavi, D::ryth, D::ren, D::prism, D::cassi_and_issac, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::varg, D::stellar, D::prism, D::ryth, D::ren, D::tavi, D::cassi_and_issac, D::vendetta, D::marcella, D::vesper_vale, D::willow},
+    // 16: after the week-2 patch (nerfs to Stellar, Varg, Ryth, Ren, Cassi & Issac, Tavi; Willow buffed; new Heart of Ruin).
+    // Unopposed on cambc 3.0.1 it farmed faster than list 4 on most of the 21 maps.
+    {D::heart_of_ruin, D::varg, D::stellar, D::ryth, D::willow, D::ren, D::marcella, D::cassi_and_issac, D::prism, D::tavi, D::vendetta},
 }};
 
 constexpr int DRAFT = -1;  // >=0: use this list on every map (testing). -1: per-map table below.
@@ -64,7 +67,8 @@ static constexpr std::array<MapDraft, 4> FISH_MAP{{
     {60, 50, 0, 9},      // stampede
     {50, 50, 214, 10},   // rows
 }};
-constexpr int DEFAULT_LIST = 4;  // maps not in the table (new or unseen ones)
+constexpr int DEFAULT_LIST = 4;
+constexpr int POST_PATCH_LIST = 16;  // every map except 40x40  // maps not in the table (new or unseen ones)
 
 static int choose_list() {
     if (DRAFT >= 0) return DRAFT;
@@ -75,9 +79,13 @@ static int choose_list() {
             if (m.w == w && m.h == h && m.walls == walls) return m.list;
         return 7;
     }
-    for (const auto& m : PER_MAP)
-        if (m.w == w && m.h == h && m.walls == walls) return m.list;
-    return DEFAULT_LIST;
+    // broken_curve and interlock (40x40) keep the old lists: we beat Nyx on broken_curve with list 4.
+    if (w == 40 && h == 40) {
+        for (const auto& m : PER_MAP)
+            if (m.w == w && m.h == h && m.walls == walls) return m.list;
+        return DEFAULT_LIST;
+    }
+    return POST_PATCH_LIST;
 }
 
 void play_draft() {
