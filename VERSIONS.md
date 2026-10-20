@@ -23,4 +23,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 60 | v51 candidate | 6422450 (branch exp/v51) | procless's item build (monster emblem, durability emblem of health, bruiser shards forever) except on 40x40: vs procless lanes 478 (v49 549), CW 190 (239), gold_rush 495 (440), corners 276 (463), elk 0; total 1439 vs 1691. Rejected |
 | 61 | v49 | d631fcf (same bot source as 57) | v49 restored after 60. |
 | 62 | v52 candidate | 1a4d082 (branch exp/v52) | gold weight 1.0 on hub maps (elk_arena): vs procless elk 0 (42 deaths), lanes 447 (v49 549, fuel chaos), rest identical; total 1589 vs 1691. Rejected |
-| 63 | v49 | d631fcf (same bot source as 57) | v49 restored after 62. Live. |
+| 63 | v49 | d631fcf (same bot source as 57) | v49 restored after 62. |
+| 64 | diagnostic | 29d9076 (branch exp/diag-act) | v49 with activity log every 200 rounds, vs Nyx only; same results as 63 |
+| 65 | v49 | d631fcf (same bot source as 57) | v49 restored after 64. Live. |
