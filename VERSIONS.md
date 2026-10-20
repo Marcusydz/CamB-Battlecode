@@ -121,4 +121,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 156 | v102 candidate | c30069d (branch exp/v102) | v101 + treasure first on split, pilgrimage, monolith, quadrants, hooks, swirl. vs Nyx exactly as the probe: set e 1744 vs 1203, set f 1398 vs 1311. Accepted. |
 | (156) | v102 | aee550d | Accepted onto top-team-study. Live as official 156. |
 | 157 | v103 probe | 9d2be05 (branch exp/v103p) | v102 + DEATH_AVOID 120 (not elk-type/broken_curve), probed on 30 maps to choose per map. Won pilgrimage 873-521, corners 487 vs 372; worse on packs (448 vs 876), lanes, CW, gold_rush, reverse_spiral, swirl, quadrants. |
-| 158 | v103 candidate | bbb6f57 (branch exp/v103) | v102 + DEATH_AVOID on pilgrimage and corners only. Testing vs Nyx. |
+| 158 | v103 candidate | bbb6f57 (branch exp/v103) | v102 + DEATH_AVOID on pilgrimage and corners only. vs Nyx: pilgrimage WIN 873-521, corners 487; lanes 478, split 746, elk 720 W unchanged. Accepted. |
+| (158) | v103 | bd6f944 | Accepted onto top-team-study. Live as official 158. |
