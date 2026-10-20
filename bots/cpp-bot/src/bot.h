@@ -50,6 +50,7 @@ private:
     bool waited_on_spawn = false;
     double last_hp = 0;
     int hit_round = -100;  // last round our health dropped
+    int aw_target = -1, aw_count = 0;  // failed approach steps per target (see approach-wait)
     bool last_alive = true;
     cambc::vec2 last_pos{};
 
