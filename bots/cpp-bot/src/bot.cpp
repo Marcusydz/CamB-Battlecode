@@ -119,6 +119,7 @@ constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spen
 // focus) look weak: we engaged and lost 1-12 in kills on lanes. Off on 40x40 maps (broken_curve stays as v42).
 static bool caster_power = true;
 static double engage_ratio = ENGAGE_RATIO;
+static bool treasure_first = false;  // treasure emblem opens the build (per map, see setup)
 static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
 constexpr int SOFT_BACK_GEMS = 20;       // ... and carrying fewer gems than this (was 10)
@@ -317,6 +318,12 @@ void Bot::setup() {
     eta_w = ETA_W;
     caster_power = !is_broken_curve();  // was every 40x40 map, which froze shortcut and interlock too
     soft_back = caster_power;
+    {
+        const int walls = static_cast<int>(cambc::map::walls().count());
+        treasure_first = (width == 50 && height == 50 && walls == 214)     // rows
+                         || (width == 90 && height == 30 && walls == 0)    // lanes
+                         || (width == 71 && height == 71 && walls == 44);  // corners
+    }
     engage_ratio = caster_power ? ENGAGE_RATIO : 0.8;
     {
         // elk_arena (all gems in the middle group): v53's full recall won 828-324 vs Nyx, backing off 612-540.
@@ -748,6 +755,14 @@ void Bot::shop() {
             case CT::tavi: order = {{Item::treasure_shard_of_focus, Item::treasure_emblem_of_focus},
                                     {Item::durability_shard_of_focus, Item::durability_emblem_of_focus}}; break;
             default: order = {pw, home, dura}; break;
+            }
+            // Fish, Sponge and Nyx open with a treasure emblem (20% more gold) in most games (2026-10-20 ladder).
+            // Only where it beat v90 vs Nyx (v96: rows won 1005-991, lanes +155, corners +92); it lost
+            // elk (v87), CW, islands, big_world and ambush.
+            if (treasure_first && kind != CT::tavi) {
+                const P treasure = caster ? P{Item::treasure_shard_of_focus, Item::treasure_emblem_of_focus}
+                                          : P{Item::treasure_shard_of_strength, Item::treasure_emblem_of_strength};
+                order.insert(order.begin(), treasure);
             }
             for (const auto& [shard, emblem] : order) {
                 if (items[emblem] == 0) {
