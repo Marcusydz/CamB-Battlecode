@@ -64,4 +64,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 101 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 100. |
 | 102 | diag-death2 | 1b01cc8 (branch exp/diag-death2) | Diagnostic: v71 printing the 8 turns before each death (temporary, never kept live). |
 | 103 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 102. |
-| 104 | v74 candidate | 638f69c (branch exp/v74) | Bank from altar tiles not beside a bush when there are any (except 40x40). Testing vs Nyx on 10 maps. |
+| 104 | v74 candidate | 638f69c (branch exp/v74) | Bank from altar tiles not beside a bush when there are any (except 40x40): vs Nyx elk 288-576 (lost), CW 320, gold_rush 534, lanes 483, corners 331; corridors 307 (+73), expanse 623, islands 277, big_world 685. Rejected |
+| 105 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 104. Live. |
