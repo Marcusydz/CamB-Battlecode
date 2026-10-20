@@ -25,4 +25,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 62 | v52 candidate | 1a4d082 (branch exp/v52) | gold weight 1.0 on hub maps (elk_arena): vs procless elk 0 (42 deaths), lanes 447 (v49 549, fuel chaos), rest identical; total 1589 vs 1691. Rejected |
 | 63 | v49 | d631fcf (same bot source as 57) | v49 restored after 62. |
 | 64 | diagnostic | 29d9076 (branch exp/diag-act) | v49 with activity log every 200 rounds, vs Nyx only; same results as 63 |
-| 65 | v49 | d631fcf (same bot source as 57) | v49 restored after 64. Live. |
+| 65 | v49 | d631fcf (same bot source as 57) | v49 restored after 64. |
+| 66 | v53 | 073a079 | fight power counts casters' focus fully (except 40x40). vs Nyx: elk_arena WIN 828-324 (v49 72-1008), CW 270 (143), gold_rush 610 (583), lanes 390 (613), corners 253 (345); total 2351 vs 1756. Accepted. Live. |
