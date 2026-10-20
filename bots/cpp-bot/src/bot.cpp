@@ -17,6 +17,14 @@ using CT = cambc::champion_type;
 using Item = cambc::item_type;
 
 // Base camp stats per camp type: (health, strength).
+// Attack range per camp kind (week-2 patch: elk 3 -> 4, monolith 3 -> 5, golem 4).
+static int camp_range(cambc::camp_type t) {
+    if (t == cambc::camp_type::elk) return 4;
+    if (t == cambc::camp_type::monolith) return 5;
+    if (static_cast<int>(t) == 5) return 4;  // golem
+    return 3;
+}
+
 static std::pair<double, double> camp_stats(cambc::camp_type t) {
     switch (t) {
     case cambc::camp_type::wolf: return {1350, 20};
@@ -42,6 +50,7 @@ constexpr int WARD_GAP = 8;
 constexpr int BUILD = 4;                // 0: v16 (monster, jungle, power strength). 1: power main stat, then durability health, then power. 2: power main stat only. 3: monster emblem of main stat, then power main stat. 4: Intercontinental Fish's emblem order per champion
 constexpr int GEM_CAP = 60;
 constexpr int CLOSE_GIVEUP = 12;
+constexpr int CAMP_DEATH_AVOID = 150; // after a camp kills us (no enemy nearby), skip that group this many rounds
 constexpr int REACH_FALLBACK = 1;     // fight: after this many turns unable to reach the target, walk to the nearest reachable harmless camp (0 off)
 constexpr int TEAM_PLAN = 0;          // 1: every champion runs the same greedy camp assignment for the whole team and takes its own share
 constexpr int PLAN_KEEP_CLAIMS = 1;   // allies with a claimed camp are fixed in the team plan
@@ -1142,7 +1151,7 @@ bool Bot::retreat_and_recall() {
         if (chebyshev(pos, t) <= THREAT_RANGE) danger.push_back(t);
     for (const auto& c : visible_camps())
         if (c.is_visible() && camp_strength(c) > 0 && camp_health(c) < c.max_health()
-            && chebyshev(pos, c.position()) <= 3)
+            && chebyshev(pos, c.position()) <= camp_range(c.kind()) + 1)  // ladder: recalls inside elk range 4 died
             danger.push_back(c.position());
     if (danger.empty()) {
         try {
@@ -1577,6 +1586,13 @@ void Bot::turn() {
             if (target >= 0) groups[target].avoid_until = std::max(groups[target].avoid_until, now + DEATH_AVOID);
             target = -1;
         }
+        if (last_alive && CAMP_DEATH_AVOID && target >= 0 && !enemy_near(last_pos, 8, 6, now)
+            && chebyshev(groups[target].center, last_pos) <= 8) {
+            // Killed by the camp itself (vs Nyx after the patch: 16 of 21 deaths on lanes, five at
+            // the same group): leave it alone for a while.
+            groups[target].avoid_until = std::max(groups[target].avoid_until, now + CAMP_DEATH_AVOID);
+            target = -1;
+        }
         last_alive = false;
         claim(-1);
         shop();
@@ -1813,7 +1829,7 @@ void Bot::turn() {
             if (near < need - 1) {
                 bitboard ring;
                 for (const auto& c : camps) ring |= around(c.position(), 5);
-                for (const auto& c : camps) ring &= ~around(c.position(), 3);
+                for (const auto& c : camps) ring &= ~around(c.position(), camp_range(c.kind()));
                 claim(tgt);
                 act = "gather";
                 step_towards(ring);
