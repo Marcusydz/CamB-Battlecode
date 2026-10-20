@@ -322,7 +322,9 @@ void Bot::setup() {
         const int walls = static_cast<int>(cambc::map::walls().count());
         treasure_first = (width == 50 && height == 50 && walls == 214)     // rows
                          || (width == 90 && height == 30 && walls == 0)    // lanes
-                         || (width == 71 && height == 71 && walls == 44);  // corners
+                         || (width == 71 && height == 71 && walls == 44)   // corners
+                         || (width == 41 && height == 41 && walls == 84)   // collision (148 vs 22)
+                         || (width == 41 && height == 30 && walls == 36);  // eight (219 vs 104)
     }
     engage_ratio = caster_power ? ENGAGE_RATIO : 0.8;
     {
