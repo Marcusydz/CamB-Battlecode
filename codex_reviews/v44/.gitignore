@@ -1,0 +1,10 @@
+sdk/
+cmake/
+.cambc/
+maps/
+bots/_*/
+bots/passive/
+bots/*/.cambc/
+__pycache__/
+runs/
+*.zip
