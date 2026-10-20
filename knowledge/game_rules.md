@@ -5,7 +5,7 @@
 - New Golem camp (enum 5): 5000 HP, strength 120, range 4, 36 gems, 160 gold, 80-round respawn.
 - Gem/gold clusters 120 HP. Wolf 4 gems / 40 gold, elk 15 gems / 90 gold. Kill 100 gold. Ward cooldown 10.
 - Groups respawn roughly 60-80 rounds after a clear.
-- Gems count only when submitted at an altar from an adjacent tile (submit range 1). Items can only be bought on spawn (Tavi shops remotely).
+- Gems count only when submitted at an altar from an adjacent tile (submit range 1). Submitting is a channel of ceil(0.1 x gems) rounds (min 1); recall takes 5 rounds. Items can only be bought on spawn (Tavi shops remotely).
 - Win: first to 1000 submitted gems; at round 2000 ties break on gold earned.
 - boss_battle: the single altar (25,20) has one open side, (24,20), which is a monolith tile (400-gem, 40000-HP group). Nobody can bank until that camp dies, so games end on the gold tiebreak.
 - Fuel is per instruction (~100k per turn): code changes shift fuel and can change decisions elsewhere.
