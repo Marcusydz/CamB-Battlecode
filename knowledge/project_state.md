@@ -1,10 +1,10 @@
 # Project state
 
-Updated 2026-10-20 15:20 UTC by Claude.
+Updated 2026-10-20 15:35 UTC by Claude.
 
 ## Live and accepted bot
 - Accepted branch: `top-team-study`. Bot source: `bots/cpp-bot` (C++). Version map: `VERSIONS.md`.
-- Live on the ladder: official **78** = same source as official **68** (internal v56), commit `070fd7a`.
+- Live on the ladder: official **91** = same source as official **87** (internal v65), commit `42a42aa`. Best so far vs Nyx: 2555 (elk 792-360 W, CW 579, gold_rush 445, lanes 341, corners 398).
 - Latest review-ready release: **official 68**, commit `070fd7a`, record `releases/official-68.md`.
   (GitHub tags/releases can't be created from Claude's session; release records are files.)
 
