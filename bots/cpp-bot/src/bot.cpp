@@ -41,6 +41,7 @@ constexpr int WARD_GAP = 8;
 constexpr int BUILD = 4;                // 0: v16 (monster, jungle, power strength). 1: power main stat, then durability health, then power. 2: power main stat only. 3: monster emblem of main stat, then power main stat. 4: Intercontinental Fish's emblem order per champion
 constexpr int GEM_CAP = 60;
 constexpr int CLOSE_GIVEUP = 12;
+constexpr int HIDDEN_ENEMIES = 1;  // count recently seen, now hidden enemies in fight odds
 constexpr double GOLD_W = 0.15;  // camp value per gold, in gems
 constexpr double GOLD_RUSH_GOLD_W = 0.15;  // 0.5 was worse vs Fish (644 vs 828 gems)
 constexpr int MID_AOE_ONLY = 0;  // mid squad: only Stellar/Prism (1) or any caster (0)
@@ -852,7 +853,18 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     std::vector<cambc::champion> allies{me};
     for (const auto& a : cambc::vision::champions(team::ally))
         if (a.is_alive() && a != me && chebyshev(a.position(), pos) <= 5) allies.push_back(a);
-    const double ratio = power(allies) / std::max(enemy_power(near), 1.0);
+    // Enemies seen in the last few rounds but now hidden (bushes, out of vision) still fight:
+    // scale the visible side up for them (power grows with count squared).
+    int hidden = 0;
+    if (HIDDEN_ENEMIES) {
+        for (const auto& [h, s] : seen) {
+            if (now - s.round > 5 || now == s.round || chebyshev(s.pos, pos) > 8) continue;
+            if (enemy_spawn.is_set(s.pos)) continue;
+            hidden += 1;
+        }
+    }
+    const double scale = static_cast<double>(near.size() + hidden) / near.size();
+    const double ratio = power(allies) / std::max(enemy_power(near) * scale * scale, 1.0);
     // 2. Winning fight: focus fire (same rule on every ally), finish kills first.
     if (ratio >= ENGAGE_RATIO && hp_frac > 0.35) {
         const double b = burst(me);
