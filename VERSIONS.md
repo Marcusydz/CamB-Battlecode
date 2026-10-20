@@ -28,4 +28,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 65 | v49 | d631fcf (same bot source as 57) | v49 restored after 64. |
 | 66 | v53 | 073a079 | fight power counts casters' focus fully (except 40x40). vs Nyx: elk_arena WIN 828-324 (v49 72-1008), CW 270 (143), gold_rush 610 (583), lanes 390 (613), corners 253 (345); total 2351 vs 1756. Accepted. |
 | 67 | v54 | f608616 | v53 + healthy champions with < 10 gems back off without recalling (except 40x40). vs Nyx: elk WIN 612-540 (v53 828-324), CW 405 (270), gold_rush 610 (610), lanes 418 (390), corners 324 (253); total 2369 vs 2351. Accepted. |
-| 68 | v56 | 070fd7a | v54 + ENGAGE_RATIO 1.0 (0.8 on 40x40). vs Nyx: elk WIN 672-432, CW 377 (405), gold_rush 583 (610), lanes 412 (418), corners 368 (324); total 2412 vs 2369. Accepted (small gain). Live. |
+| 68 | v56 | 070fd7a | v54 + ENGAGE_RATIO 1.0 (0.8 on 40x40). vs Nyx: elk WIN 672-432, CW 377 (405), gold_rush 583 (610), lanes 412 (418), corners 368 (324); total 2412 vs 2369. Accepted (small gain). |
+| 69 | v57 candidate | b8e5625 (branch exp/v57) | ENGAGE_RATIO 1.3: vs Nyx elk 0-1008 (lost), CW 253, gold_rush 693, lanes 401, corners 283; total 1630. Rejected |
+| 70 | v56 | 070fd7a (same bot source as 68) | v56 restored after 69. Live. |
