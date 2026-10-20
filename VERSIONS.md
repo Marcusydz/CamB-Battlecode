@@ -40,4 +40,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 77 | v61 candidate | 5b17798 (branch exp/v61) | treasure emblem first except 40x40: vs Nyx elk 510-642 (lost), CW 262, gold_rush 627, lanes 319, corners 358; total 2076 vs 2412. Rejected |
 | 78 | v56 | 070fd7a (same bot source as 68) | v56 restored after 77. |
 | 79 | v62 candidate | 0056b2e (branch exp/v62) | OUTNUMBER 1 except 40x40: vs Nyx elk 72-1008 (lost), CW 351, gold_rush 561, lanes 439, corners 395; total 1818. Rejected |
-| 80 | v56 | 070fd7a (same bot source as 68) | v56 restored after 79. Live. |
+| 80 | v56 | 070fd7a (same bot source as 68) | v56 restored after 79. |
+| 81 | v63 candidate | 2002f8e (branch exp/v63) | no contest penalty on elk_arena's middle group: vs Nyx elk 144-1008 (57 deaths), other 4 maps identical to 68. Rejected |
+| 82 | v56 | 070fd7a (same bot source as 68) | v56 restored after 81. Live. |
