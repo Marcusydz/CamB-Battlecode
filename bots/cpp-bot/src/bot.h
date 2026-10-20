@@ -124,7 +124,7 @@ private:
     bool join_fight(const cambc::champion& me, cambc::vec2 pos, int gems, double hp_frac);
     std::vector<cambc::vec2> threats(int now) const;
     bool enemy_near(cambc::vec2 p, int radius, int rounds, int now) const;
-    bool retreat_and_recall();
+    bool retreat_and_recall(bool allow_recall = true);
 
     // camp choice
     int helpers_needed(const GroupInfo& g, double dps, double health) const;

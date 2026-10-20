@@ -117,6 +117,8 @@ constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spen
 // Casters deal damage from focus. Counting focus at 0.25 made Nyx (Ren, Stellar, Cassi & Issac stacking
 // focus) look weak: we engaged and lost 1-12 in kills on lanes. Off on 40x40 maps (broken_curve stays as v42).
 static bool caster_power = true;
+static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
+constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy and carrying < 10 gems
 
 
 static int chebyshev(vec2 a, vec2 b) {
@@ -311,6 +313,7 @@ void Bot::setup() {
     gold_weight = GOLD_W;
     eta_w = ETA_W;
     caster_power = !(width == 40 && height == 40);
+    soft_back = caster_power;
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
     // islands (60x60, no walls): v24's settings got 718 gems vs Fish there, v26's 312.
@@ -1053,6 +1056,13 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
             return true;
         }
         claim(-1);
+        if (soft_back && hp_frac >= SOFT_BACK_HP && gems < 10) {
+            // Healthy and carrying little: step out of reach and farm elsewhere instead of recalling
+            // (vs Nyx we spent 10-30% of turns dead or walking back from spawn).
+            if (!retreat_and_recall(false)) return false;
+            act = "back-off";
+            return true;
+        }
         retreat_and_recall();
         act = "disengage";
         return true;
@@ -1107,7 +1117,11 @@ bool Bot::outnumbered(const cambc::champion& me, vec2 pos, int now) {
     claim(-1);
     const int gems = static_cast<int>(me.gem_count());
     if (gems > 0 && altar_field.get(pos) <= 2) tribute();
-    else retreat_and_recall();
+    else if (soft_back && gems < 10 && me.health() >= SOFT_BACK_HP * me.max_health()) {
+        if (!retreat_and_recall(false)) return false;
+        act = "back-off";
+        return true;
+    } else retreat_and_recall();
     act = "outnumbered";
     return true;
 }
@@ -1177,7 +1191,7 @@ std::vector<vec2> Bot::threats(int now) const {
 }
 
 // Recall if no enemy can reach us; otherwise walk home, away from enemies.
-bool Bot::retreat_and_recall() {
+bool Bot::retreat_and_recall(bool allow_recall) {
     auto& me = cambc::self();
     auto pos = me.position();
     const int now = static_cast<int>(cambc::round_number());
@@ -1189,6 +1203,7 @@ bool Bot::retreat_and_recall() {
             && chebyshev(pos, c.position()) <= camp_range(c.kind()) + 1)  // ladder: recalls inside elk range 4 died
             danger.push_back(c.position());
     if (danger.empty()) {
+        if (!allow_recall) return false;
         try {
             me.recall();
             return true;
