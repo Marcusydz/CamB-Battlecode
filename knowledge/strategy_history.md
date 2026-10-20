@@ -43,5 +43,5 @@ Format: date - change - evidence - conclusion. Opponent results are 5-game unran
 - elk_arena vs Nyx swings with small code changes (828-324 win to 0-1008 loss); judge on several maps.
 - Death diagnostic (official 85, prints 8 turns before each death): hurt champions hit by unseen attackers recalled, the hit cancelled the recall, and they restarted it every turn, standing still 6-8 turns until dead. Walking home instead (v65, official 87): 2555 vs 2412, elk win 792-360.
 - Also rejected: OUTNUMBER 1 (1818), no contest penalty on the elk middle (elk 144-1008), leave at 1.5x visible enemy power (elk lost; farm maps +61). After v65 (vs 2555): LOW_HP 0.5 retreat 1779; Willow fights only beside two allies 2167 (elk lost 432-720).
-- Parting shot (v68, official 92): chasers (often a lone Ren at range 2-3) keep pace with a retreating champion, so hit anything in range while backing off/disengaging: 2773 vs 2555 (lanes +141, elk 864-360 W).
+- Parting shot (v68, official 92): chasers (often a lone Ren at range 2-3) keep pace with a retreating champion, so hit anything in range while backing off/disengaging: 2773 vs 2555 (lanes +141, elk 864-360 W). Extending it to flee/low-hp (v69) gave 2489: rejected.
 
