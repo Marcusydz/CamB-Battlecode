@@ -992,11 +992,15 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     std::vector<cambc::champion> near;
     const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
     const auto my_tiles = me.attack_tiles();
+    const double spawn_burst = burst(me);
     for (const auto& e : enemies) {
         if (chebyshev(e.position(), pos) > 6) continue;
         // An enemy inside its own spawn heals there and cannot be reached: chasing it wasted
         // whole games (1800 turns of "engage" beside the enemy spawn). Only hit it if already in range.
-        if (IGNORE_SPAWN_CAMPERS && enemy_spawn.is_set(e.position()) && !my_tiles.is_set(e.position())) continue;
+        // In range but not killable now: it out-heals our hits (corridors: 800 turns of "engage" at the spawn edge).
+        if (IGNORE_SPAWN_CAMPERS && enemy_spawn.is_set(e.position())
+            && (!my_tiles.is_set(e.position()) || (caster_power && e.health() > spawn_burst)))
+            continue;
         near.push_back(e);
     }
     if (near.empty()) return false;
