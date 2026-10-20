@@ -114,6 +114,10 @@ constexpr int MONOLITH_MEMORY = 20;     // ... in this many rounds before (and w
 constexpr int SEED = 0;                 // >0 adds small deterministic noise to camp choice (testing only)
 constexpr bool IGNORE_SPAWN_CAMPERS = true;  // enemies inside their own spawn are not chased or fled from
 constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spent on each activity (0 disables)
+// Casters deal damage from focus. Counting focus at 0.25 made Nyx (Ren, Stellar, Cassi & Issac stacking
+// focus) look weak: we engaged and lost 1-12 in kills on lanes. Off on 40x40 maps (broken_curve stays as v42).
+static bool caster_power = true;
+
 
 static int chebyshev(vec2 a, vec2 b) {
     return std::max(std::abs(a.x - b.x), std::abs(a.y - b.y));
@@ -306,6 +310,7 @@ void Bot::setup() {
         if (g.monolith && g.gems >= 200) has_mid = true;
     gold_weight = GOLD_W;
     eta_w = ETA_W;
+    caster_power = !(width == 40 && height == 40);
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
     // islands (60x60, no walls): v24's settings got 718 gems vs Fish there, v26's 312.
@@ -908,7 +913,16 @@ static double power(const std::vector<cambc::champion>& units) {
     double hp = 0, dps = 0;
     for (const auto& u : units) {
         hp += std::max<double>(u.health(), 1.0);
-        dps += u.strength() + 0.25 * u.focus();
+        bool caster = false;
+        if (caster_power) {
+            try {
+                const auto k = u.champion_name();
+                caster = k == CT::cassi || k == CT::issac || k == CT::stellar || k == CT::ren || k == CT::tavi
+                         || k == CT::prism;
+            } catch (const cambc::error&) {
+            }
+        }
+        dps += caster ? u.focus() + 0.25 * u.strength() : u.strength() + 0.25 * u.focus();
     }
     return hp * dps;
 }
