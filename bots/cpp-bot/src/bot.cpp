@@ -303,6 +303,7 @@ void Bot::setup() {
     for (const auto& g : groups)
         if (g.monolith && g.gems >= 200) has_mid = true;
     gold_weight = GOLD_W;
+    eta_w = ETA_W;
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
     // islands (60x60, no walls): v24's settings got 718 gems vs Fish there, v26's 312.
@@ -313,6 +314,12 @@ void Bot::setup() {
     // gold_rush (31x31, no walls): Fish farms the harmless gold groups around the middle for items
     // (twice our gold) and clears its three gem groups more often than we clear ours.
     if (width == 31 && height == 31 && cambc::map::walls().count() == 0) gold_weight = GOLD_RUSH_GOLD_W;
+    // broken_curve (40x40; interlock is 40x40 too): v42's choice (walk weight 1, gold 0) beat Nyx 1013-901,
+    // the walk weight 3 version lost 609-1050 there while gaining 90-200 gems on the other test maps.
+    if (width == 40 && height == 40) {
+        eta_w = 1.0;
+        gold_weight = 0.0;
+    }
     int ordinary_gems = 0;
     for (const auto& g : groups)
         if (!g.monolith) ordinary_gems += g.gems;
@@ -1506,7 +1513,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         }
         const double gold_w = gold_weight;
         const double value = (g.gems + gold_w * g.gold) / std::max(need, others + 1);
-        double cost = ETA_W * eta + wait + clear + CAPTURE_TIME + altar_weight * g.altar_dist + 1;
+        double cost = eta_w * eta + wait + clear + CAPTURE_TIME + altar_weight * g.altar_dist + 1;
         double score_bonus = 1.0;
         if (need > 1) {
             cost += 4 * (need - 1 - std::min(others, need - 1));  // time to gather helpers
