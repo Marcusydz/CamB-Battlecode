@@ -81,3 +81,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 118 | v81 candidate | e9008cf (branch exp/v81) | Gem-scarce maps (only contest): farm gold (weight 1.0) until round 600, then take monoliths with 3. Unopposed contest 3666 -> 1412 rounds. vs Nyx contest still 0-1000 (Nyx kills our gold farmers 64 times; our champions dealt 9k damage to champions, theirs 106k). Same-as-v78 maps: pilgrimage 342-1055, split 386 (r742), quadrants 394 (r486), swirl 30-1005 (43 deaths). Rejected (no gain vs Nyx) |
 | 119 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 118. |
 | 120 | diag-fight | 46b5147 (branch exp/diag-fight) | Diagnostic: v78 plus death context and a fight log line per turn near enemies. Not a candidate. |
+| 121 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 120. Live. |
