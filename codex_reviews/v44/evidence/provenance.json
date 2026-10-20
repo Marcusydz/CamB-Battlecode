@@ -1,0 +1,893 @@
+{
+  "date": "2026-10-20",
+  "repository": "Marcusydz/CamB-Battlecode",
+  "baseCommit": "c10db83cc3bd5f1a146d60a86fdfa15fc82d43bb",
+  "reviewBranch": "codex/review-v44",
+  "cambridgeVersion": 44,
+  "submissionId": "06c5cb2e-4c13-4018-bc8e-33b4ece09650",
+  "sourceVerification": "All five files matched Cambridge code viewer after trimming line-end whitespace; original ZIP blocked by Brave ERR_BLOCKED_BY_CLIENT. Pinned Git files used for build.",
+  "v45AtInspection": "Waiting; selected for next match; v44 live fallback",
+  "cli": "cambc 3.0.1",
+  "sdk": "3.0.1",
+  "compiler": "Clang 22.1.0 (WASI SDK 33)",
+  "sourceSHA256": {
+    "final": {
+      "bot.cpp": "3b9ec1ba351e84fb3ac7333decada1c4bba2ff10c8460eba8cf794bfb7091e50",
+      "bot.h": "e2e476156c0f9c2381d030468deea6814774e7c1c63fb7141d09aa13f4a0c809",
+      "camp_waiting_area.h": "e46282bfd9ad8126a6b3f02b3fcf9697407ac8b416099988c17c6231f82e9c6f",
+      "draft.cpp": "59d91e860e4fa1eecc6926a1527f44b00e85a24bbc58ece877f315febfb2b562",
+      "draft.h": "15ddeaeb4ab39f6e3e80647fad56de9c0da7fc728d4c24ca83475060703a7bfd",
+      "main.cpp": "db90b6bcbcb7e0af94993304a06130f77c7d5e303a36384732f0285cf5be6a65"
+    },
+    "correctness-only": {
+      "bot.cpp": "482fb098f70cc736948d6c2aaf0790bc0ef01cdee28926c4e6f7ada633b1d8ea",
+      "bot.h": "e2e476156c0f9c2381d030468deea6814774e7c1c63fb7141d09aa13f4a0c809",
+      "camp_waiting_area.h": "e46282bfd9ad8126a6b3f02b3fcf9697407ac8b416099988c17c6231f82e9c6f",
+      "draft.cpp": "59d91e860e4fa1eecc6926a1527f44b00e85a24bbc58ece877f315febfb2b562",
+      "draft.h": "15ddeaeb4ab39f6e3e80647fad56de9c0da7fc728d4c24ca83475060703a7bfd",
+      "main.cpp": "db90b6bcbcb7e0af94993304a06130f77c7d5e303a36384732f0285cf5be6a65"
+    },
+    "original-v44": {
+      "bot.cpp": "e90a9c5cab26903b97af38fdd8633684d56904998098308e96be3611f9d3f287",
+      "bot.h": "e2e476156c0f9c2381d030468deea6814774e7c1c63fb7141d09aa13f4a0c809",
+      "draft.cpp": "59d91e860e4fa1eecc6926a1527f44b00e85a24bbc58ece877f315febfb2b562",
+      "draft.h": "15ddeaeb4ab39f6e3e80647fad56de9c0da7fc728d4c24ca83475060703a7bfd",
+      "main.cpp": "db90b6bcbcb7e0af94993304a06130f77c7d5e303a36384732f0285cf5be6a65"
+    },
+    "reference-v43": {
+      "bot.cpp": "353857af8686f01d091ad52e16fb903fa04777c614ff72b2cce743e60b75a70e",
+      "bot.h": "e2e476156c0f9c2381d030468deea6814774e7c1c63fb7141d09aa13f4a0c809",
+      "draft.cpp": "59d91e860e4fa1eecc6926a1527f44b00e85a24bbc58ece877f315febfb2b562",
+      "draft.h": "15ddeaeb4ab39f6e3e80647fad56de9c0da7fc728d4c24ca83475060703a7bfd",
+      "main.cpp": "db90b6bcbcb7e0af94993304a06130f77c7d5e303a36384732f0285cf5be6a65"
+    }
+  },
+  "mapsSHA256": {
+    "00ambush.map26a": "81ac8b6689f275d24e57d586f2451a160484c15144f86afd0c4450e02c39e579",
+    "00collision.map26a": "6e3c67956080f8da5a0042e68ea481189cd6f61061a742a8be0354a9ea5c5620",
+    "00contest.map26a": "554240a5a793f8c1ac9c518cb6edbacab0129ec4dfd94b199331aaebd0bf418a",
+    "00corners.map26a": "97906cc38f503e027c041b681a877465519b3fcb19a410c316cf6efc40c909ea",
+    "00eight.map26a": "76b5ce0895130f5f423f3ac6a630c5cf8e1202d4150e6ad4e287c75d21794765",
+    "00elkring.map26a": "4621e92590befe6b0438b7ecdd8fde5aa85945b27535f4968e701cf86934746e",
+    "00expanse.map26a": "af4236f408f8450f7da871731f08ef80295f07fac86b541f6547639a78dc2205",
+    "00fragment.map26a": "46512bf4fe1fc57d1651b15d44c283cac69cfce1914a5000d19fab979f5b8bbb",
+    "00interlock.map26a": "140e5bc3ac11c7f74dfc4ed99cc53739a34be8d3f71a7f4d0520dc4a3c197e19",
+    "00lanes.map26a": "8ca26ed2ea65c7d80ceb9604a7431ca1dc056922912b4e2f46cad06051e4886a",
+    "00monolith.map26a": "ba5674bf2ab26336eb99df0c9e97c16b27bd231deffc023de1d873a05a558313",
+    "01big_world.map26a": "f1ecb726472858efb1d75d00b0d7668be18d83a010b2abf9a1f8c38aab456aa5",
+    "01boss_battle.map26a": "53086e249294aed6f427fe647d578303589a081e953c62a0ff8f20cade9993fa",
+    "01broken_curve.map26a": "1763423b171f3b61128b2a913a10f46ba550e7a2e79ae27dd89e915c952b5117",
+    "01concentrated_wealth.map26a": "dc09c386d5e9dec3cec8bc4575c19d43233e08790e138ccd02be4644f2808c65",
+    "01corridors.map26a": "794132d979b297de5a534da393af8932cd2d5cc9d831e79d2cefdb4617d4d5e8",
+    "01elk_arena.map26a": "72b8e03bc4378d5f988f9c1c07609848bfb42fd8a883cce01820d96212f21c0a",
+    "01fracture.map26a": "f82a1b99a7a70f8ab21f275dc8e22fbad6a71030f09fdd224d61977fe55dd914",
+    "01gold_rush.map26a": "6e564fdf09fdf67a4182a909d6985737b488742e64f2c3e164204e78bc64c898",
+    "01hooks.map26a": "23e58fe8f41ff66761ade251d3d10a9c3eead864f9ad74f12ad9e34f4bece378",
+    "01islands.map26a": "d97cf04b738393812fb51024582e2a6cfba8a850b19ce031f2c1ad3d7b916acb"
+  },
+  "experiments": [
+    {
+      "name": "correctness-only-v44",
+      "stage": "correctness-only",
+      "planned": 126,
+      "completed": 126,
+      "failed": 0,
+      "wins": 59,
+      "losses": 67,
+      "meanGemMargin": -30.404761904761905,
+      "meanDuration": 1690.952380952381,
+      "gamesReaching1000": 44,
+      "engineFaults": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        4,
+        5
+      ],
+      "botScoringSeeds": [
+        3101,
+        3102,
+        3103
+      ],
+      "opponentScoringSeeds": [
+        3201,
+        3202,
+        3203
+      ],
+      "perMap": {
+        "00ambush": {
+          "wins": 4,
+          "games": 6,
+          "meanGemMargin": 12.0
+        },
+        "00collision": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": -244.5
+        },
+        "00contest": {
+          "wins": 0,
+          "games": 6,
+          "meanGemMargin": -200.0
+        },
+        "00corners": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": 124.16666666666667
+        },
+        "00eight": {
+          "wins": 1,
+          "games": 6,
+          "meanGemMargin": -333.3333333333333
+        },
+        "00elkring": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": -51.0
+        },
+        "00expanse": {
+          "wins": 4,
+          "games": 6,
+          "meanGemMargin": 44.0
+        },
+        "00fragment": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": -94.0
+        },
+        "00interlock": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": -395.5
+        },
+        "00lanes": {
+          "wins": 5,
+          "games": 6,
+          "meanGemMargin": 165.66666666666666
+        },
+        "00monolith": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": -78.16666666666667
+        },
+        "01big_world": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": 26.666666666666668
+        },
+        "01boss_battle": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": 0.0
+        },
+        "01broken_curve": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": -20.333333333333332
+        },
+        "01concentrated_wealth": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": 107.0
+        },
+        "01corridors": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": 54.5
+        },
+        "01elk_arena": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": 204.0
+        },
+        "01fracture": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": -42.333333333333336
+        },
+        "01gold_rush": {
+          "wins": 4,
+          "games": 6,
+          "meanGemMargin": 55.833333333333336
+        },
+        "01hooks": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": -207.16666666666666
+        },
+        "01islands": {
+          "wins": 6,
+          "games": 6,
+          "meanGemMargin": 234.0
+        }
+      },
+      "engineBuilds": [
+        {
+          "version": "1.0.0",
+          "hash": "2b36d9c61b2710d06036680d07fc4b7a8319ba35f634e4f1445725e0d99a1e16"
+        }
+      ]
+    },
+    {
+      "name": "correctness-only-v43",
+      "stage": "correctness-only",
+      "planned": 42,
+      "completed": 42,
+      "failed": 0,
+      "wins": 14,
+      "losses": 28,
+      "meanGemMargin": -166.21428571428572,
+      "meanDuration": 1628.547619047619,
+      "gamesReaching1000": 10,
+      "engineFaults": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        2,
+        2
+      ],
+      "botScoringSeeds": [
+        4101
+      ],
+      "opponentScoringSeeds": [
+        4201
+      ],
+      "perMap": {
+        "00ambush": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -160.5
+        },
+        "00collision": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -747.5
+        },
+        "00contest": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -600.0
+        },
+        "00corners": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 206.5
+        },
+        "00eight": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -212.0
+        },
+        "00elkring": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 291.5
+        },
+        "00expanse": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -232.0
+        },
+        "00fragment": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -7.0
+        },
+        "00interlock": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -822.5
+        },
+        "00lanes": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -14.0
+        },
+        "00monolith": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -143.0
+        },
+        "01big_world": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -61.5
+        },
+        "01boss_battle": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 0.0
+        },
+        "01broken_curve": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -235.5
+        },
+        "01concentrated_wealth": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -102.0
+        },
+        "01corridors": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 328.0
+        },
+        "01elk_arena": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -756.0
+        },
+        "01fracture": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -355.5
+        },
+        "01gold_rush": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 154.5
+        },
+        "01hooks": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 88.0
+        },
+        "01islands": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -110.0
+        }
+      },
+      "engineBuilds": [
+        {
+          "version": "1.0.0",
+          "hash": "2b36d9c61b2710d06036680d07fc4b7a8319ba35f634e4f1445725e0d99a1e16"
+        }
+      ]
+    },
+    {
+      "name": "original-v44-v43",
+      "stage": "original-v44",
+      "planned": 42,
+      "completed": 42,
+      "failed": 0,
+      "wins": 14,
+      "losses": 28,
+      "meanGemMargin": -186.85714285714286,
+      "meanDuration": 1625.5238095238096,
+      "gamesReaching1000": 10,
+      "engineFaults": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        1,
+        3
+      ],
+      "botScoringSeeds": [
+        4101
+      ],
+      "opponentScoringSeeds": [
+        4201
+      ],
+      "perMap": {
+        "00ambush": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -355.0
+        },
+        "00collision": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -747.5
+        },
+        "00contest": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -700.0
+        },
+        "00corners": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 206.5
+        },
+        "00eight": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -212.0
+        },
+        "00elkring": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 291.5
+        },
+        "00expanse": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -232.0
+        },
+        "00fragment": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -7.0
+        },
+        "00interlock": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -822.5
+        },
+        "00lanes": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 192.0
+        },
+        "00monolith": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -143.0
+        },
+        "01big_world": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -43.5
+        },
+        "01boss_battle": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 0.0
+        },
+        "01broken_curve": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -235.5
+        },
+        "01concentrated_wealth": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -30.5
+        },
+        "01corridors": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 328.0
+        },
+        "01elk_arena": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -909.0
+        },
+        "01fracture": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -355.5
+        },
+        "01gold_rush": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 154.5
+        },
+        "01hooks": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 88.0
+        },
+        "01islands": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -391.5
+        }
+      },
+      "engineBuilds": [
+        {
+          "version": "1.0.0",
+          "hash": "2b36d9c61b2710d06036680d07fc4b7a8319ba35f634e4f1445725e0d99a1e16"
+        }
+      ]
+    },
+    {
+      "name": "final-v44",
+      "stage": "final",
+      "planned": 126,
+      "completed": 126,
+      "failed": 0,
+      "wins": 76,
+      "losses": 50,
+      "meanGemMargin": 120.13492063492063,
+      "meanDuration": 1636.968253968254,
+      "gamesReaching1000": 57,
+      "engineFaults": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        8,
+        4
+      ],
+      "botScoringSeeds": [
+        6101,
+        6102,
+        6103
+      ],
+      "opponentScoringSeeds": [
+        6201,
+        6202,
+        6203
+      ],
+      "perMap": {
+        "00ambush": {
+          "wins": 6,
+          "games": 6,
+          "meanGemMargin": 173.33333333333334
+        },
+        "00collision": {
+          "wins": 4,
+          "games": 6,
+          "meanGemMargin": 427.6666666666667
+        },
+        "00contest": {
+          "wins": 6,
+          "games": 6,
+          "meanGemMargin": 633.3333333333334
+        },
+        "00corners": {
+          "wins": 1,
+          "games": 6,
+          "meanGemMargin": -187.16666666666666
+        },
+        "00eight": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": -195.5
+        },
+        "00elkring": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": -49.5
+        },
+        "00expanse": {
+          "wins": 5,
+          "games": 6,
+          "meanGemMargin": 186.33333333333334
+        },
+        "00fragment": {
+          "wins": 4,
+          "games": 6,
+          "meanGemMargin": 293.6666666666667
+        },
+        "00interlock": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": -53.333333333333336
+        },
+        "00lanes": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": -28.0
+        },
+        "00monolith": {
+          "wins": 5,
+          "games": 6,
+          "meanGemMargin": 320.3333333333333
+        },
+        "01big_world": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": -8.5
+        },
+        "01boss_battle": {
+          "wins": 4,
+          "games": 6,
+          "meanGemMargin": 0.0
+        },
+        "01broken_curve": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": -133.5
+        },
+        "01concentrated_wealth": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": 0.3333333333333333
+        },
+        "01corridors": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": -200.5
+        },
+        "01elk_arena": {
+          "wins": 5,
+          "games": 6,
+          "meanGemMargin": 440.0
+        },
+        "01fracture": {
+          "wins": 6,
+          "games": 6,
+          "meanGemMargin": 285.5
+        },
+        "01gold_rush": {
+          "wins": 2,
+          "games": 6,
+          "meanGemMargin": -98.16666666666667
+        },
+        "01hooks": {
+          "wins": 5,
+          "games": 6,
+          "meanGemMargin": 698.5
+        },
+        "01islands": {
+          "wins": 3,
+          "games": 6,
+          "meanGemMargin": 18.0
+        }
+      },
+      "engineBuilds": [
+        {
+          "version": "1.0.0",
+          "hash": "2b36d9c61b2710d06036680d07fc4b7a8319ba35f634e4f1445725e0d99a1e16"
+        }
+      ]
+    },
+    {
+      "name": "final-v43",
+      "stage": "final",
+      "planned": 42,
+      "completed": 42,
+      "failed": 0,
+      "wins": 22,
+      "losses": 20,
+      "meanGemMargin": 47.595238095238095,
+      "meanDuration": 1622.452380952381,
+      "gamesReaching1000": 17,
+      "engineFaults": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        1,
+        1
+      ],
+      "botScoringSeeds": [
+        7101
+      ],
+      "opponentScoringSeeds": [
+        7201
+      ],
+      "perMap": {
+        "00ambush": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -122.5
+        },
+        "00collision": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 722.5
+        },
+        "00contest": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 0.0
+        },
+        "00corners": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -112.0
+        },
+        "00eight": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 546.0
+        },
+        "00elkring": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -86.5
+        },
+        "00expanse": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -46.5
+        },
+        "00fragment": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 454.0
+        },
+        "00interlock": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 5.5
+        },
+        "00lanes": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -3.5
+        },
+        "00monolith": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 119.0
+        },
+        "01big_world": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 58.0
+        },
+        "01boss_battle": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": 0.0
+        },
+        "01broken_curve": {
+          "wins": 0,
+          "games": 2,
+          "meanGemMargin": -423.0
+        },
+        "01concentrated_wealth": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -195.5
+        },
+        "01corridors": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 12.0
+        },
+        "01elk_arena": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -54.0
+        },
+        "01fracture": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": 202.0
+        },
+        "01gold_rush": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -41.5
+        },
+        "01hooks": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -27.5
+        },
+        "01islands": {
+          "wins": 1,
+          "games": 2,
+          "meanGemMargin": -7.0
+        }
+      },
+      "engineBuilds": [
+        {
+          "version": "1.0.0",
+          "hash": "2b36d9c61b2710d06036680d07fc4b7a8319ba35f634e4f1445725e0d99a1e16"
+        }
+      ]
+    },
+    {
+      "name": "final-passive",
+      "stage": "final",
+      "planned": 6,
+      "completed": 6,
+      "failed": 0,
+      "wins": 6,
+      "losses": 0,
+      "meanGemMargin": 968.5,
+      "meanDuration": 1533.0,
+      "gamesReaching1000": 4,
+      "engineFaults": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "botScoringSeeds": [
+        0
+      ],
+      "opponentScoringSeeds": [
+        0
+      ],
+      "perMap": {
+        "00expanse": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 1019.5
+        },
+        "01gold_rush": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 863.5
+        },
+        "01islands": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 1022.5
+        }
+      },
+      "engineBuilds": [
+        {
+          "version": "1.0.0",
+          "hash": "2b36d9c61b2710d06036680d07fc4b7a8319ba35f634e4f1445725e0d99a1e16"
+        }
+      ]
+    },
+    {
+      "name": "original-passive",
+      "stage": "original-v44",
+      "planned": 6,
+      "completed": 6,
+      "failed": 0,
+      "wins": 6,
+      "losses": 0,
+      "meanGemMargin": 1013.5,
+      "meanDuration": 1415.8333333333333,
+      "gamesReaching1000": 6,
+      "engineFaults": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "botScoringSeeds": [
+        0
+      ],
+      "opponentScoringSeeds": [
+        0
+      ],
+      "perMap": {
+        "00expanse": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 1032.0
+        },
+        "01gold_rush": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 1001.0
+        },
+        "01islands": {
+          "wins": 2,
+          "games": 2,
+          "meanGemMargin": 1007.5
+        }
+      },
+      "engineBuilds": [
+        {
+          "version": "1.0.0",
+          "hash": "2b36d9c61b2710d06036680d07fc4b7a8319ba35f634e4f1445725e0d99a1e16"
+        }
+      ]
+    }
+  ],
+  "normalizedSourceChecksums": {
+    "bot.cpp": {
+      "v44": "884d64cc5e1dba1b",
+      "v43": "c35ae41084ad8d17"
+    },
+    "bot.h": {
+      "both": "2358402c391c9413"
+    },
+    "draft.cpp": {
+      "both": "1fc7d7314842ffd2"
+    },
+    "draft.h": {
+      "both": "457b6250d9feb16b"
+    },
+    "main.cpp": {
+      "both": "ba2a1ccaab233c6a"
+    }
+  },
+  "normalization": "Trim trailing whitespace per line and at EOF; FNV-1a 64-bit checksums plus length/line checks; not a raw archive hash.",
+  "pullRequestBase": "claude/sharp-mayer-maf56h",
+  "acceptedBaseAtHandoff": "2c4f698a84594b55fbe18e5e735f9ef8fce09566",
+  "baseVerification": "PR #1 merged top-team-study into default claude/sharp-mayer-maf56h at 2026-10-20T09:46:32Z. Original v44 commit is ancestor, two commits behind."
+}
