@@ -4,7 +4,7 @@ Updated 2026-10-20 20:05 UTC by Claude.
 
 ## Live and accepted bot
 - Accepted branch: `top-team-study`. Bot source: `bots/cpp-bot` (C++). Version map: `VERSIONS.md`.
-- Live on the ladder: official **130** (internal v85), commit `73660fb`: v78 plus broken_curve recognised by its 274 walls instead of by 40x40 size (shortcut and interlock now get normal play). vs Nyx with v78 play: elk 864-360 / 720-432 W, CW 522 / 348, gold_rush 556, lanes 482, corners 398, corridors 418-430, expanse 790, islands 696, big_world 767. vs Fish (v78): 1531 on the five standard maps.
+- Live on the ladder: official **152** (internal v100), commit `4d49ece`: v85 + v90 (contested-camp penalty after round 300 only on single-herd maps) + treasure emblem first on rows, lanes, corners. vs Nyx (games repeat exactly): elk 720-432 W, rows 1005-991 W, gold_rush 611, CW 554, lanes 478, corners 372, expanse 703, islands 598, big_world/ambush 940 and 789. vs Fish (v90): 2047 on CW, expanse, lanes, gold_rush, islands.
 - Latest review-ready release: **official 97** (v71), commit `4dd9930` (= `0f825d6`), record `releases/official-97.md`. Previous: official 68.
   (GitHub tags/releases can't be created from Claude's session; release records are files.)
 
