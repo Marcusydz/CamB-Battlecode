@@ -96,4 +96,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 133 | v87 candidate | 66fe781 (branch exp/v87) | Treasure emblem first (except Tavi, broken_curve), as Fish/Sponge/Nyx do. Unopposed 7-map mean 1304 -> 1268 rounds. vs Nyx: elk 324-756 (lost), CW 363, gold_rush 660, corners 332, lanes 466 (2145 vs 2822); rows 1005-991 WIN (v78 922), islands 482 (696), expanse 647 (790), big_world/ambush 833 and 648 (767, 940). Rejected |
 | 134 | v85 | 73660fb | v85 restored after 133. |
 | 135 | v88 candidate | 02419d5 (branch exp/v88) | Draft HoR, Ren, Stellar, Ryth, Varg (top-3 core). Unopposed 8-map mean 1291 -> 1386 (slower). vs Nyx: elk 468-684, CW 380, lanes 316, gold_rush 484, corners 223 (1871 vs 2822); rows 924, islands 534, expanse 534, big_world/ambush 610 and 670 (3272 vs 4115). Rejected |
-| 136 | v85 | 73660fb | v85 restored after 135. Live. |
+| 136 | v85 | 73660fb | v85 restored after 135. |
+| 137 | v89 candidate | 7861dac (branch exp/v89) | Top-3 package together: HoR/Ren/Stellar/Ryth/Varg draft + treasure first + shop at 90 gold (except broken_curve). Testing vs Nyx. |
