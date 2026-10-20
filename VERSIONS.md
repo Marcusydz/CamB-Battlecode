@@ -93,4 +93,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 130 | v85 | 73660fb (same bot source as 044db2d) | v85 accepted (see 128). vs Fish 1598 (v78 1531). New maps vs Nyx: ambush 940-1021, packs 518, fracture 406, elkring 396, yellow_brick_road 387, the_farm 264, reverse_spiral 157, collision/eight 86 and 0. |
 | 131 | v86 candidate | c94fc7d (branch exp/v86) | Before round 150, engage only at 1.5x power (except broken_curve). vs Nyx: elk 432-792 (lost), CW 348, lanes 469, gold_rush 539, corners 382 (2170 vs 2822). Rejected |
 | 132 | v85 | 73660fb | v85 restored after 131. |
-| 133 | v87 candidate | 66fe781 (branch exp/v87) | Treasure emblem first (except Tavi, broken_curve), as Fish/Sponge/Nyx do. Unopposed 7-map mean 1304 -> 1268 rounds. Testing vs Nyx. |
+| 133 | v87 candidate | 66fe781 (branch exp/v87) | Treasure emblem first (except Tavi, broken_curve), as Fish/Sponge/Nyx do. Unopposed 7-map mean 1304 -> 1268 rounds. vs Nyx: elk 324-756 (lost), CW 363, gold_rush 660, corners 332, lanes 466 (2145 vs 2822); rows 1005-991 WIN (v78 922), islands 482 (696), expanse 647 (790), big_world/ambush 833 and 648 (767, 940). Rejected |
+| 134 | v85 | 73660fb | v85 restored after 133. Live. |
