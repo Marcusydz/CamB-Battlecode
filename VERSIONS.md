@@ -38,4 +38,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 75 | v60 candidate | d402440 (branch exp/v60) | Nyx's draft (HoR, Ren, Stellar, Ryth, Tavi) except 40x40: vs Nyx elk 0, CW 189, gold_rush 605, lanes 118, corners 269; total 1181. Rejected |
 | 76 | v56 | 070fd7a (same bot source as 68) | v56 restored after 75. |
 | 77 | v61 candidate | 5b17798 (branch exp/v61) | treasure emblem first except 40x40: vs Nyx elk 510-642 (lost), CW 262, gold_rush 627, lanes 319, corners 358; total 2076 vs 2412. Rejected |
-| 78 | v56 | 070fd7a (same bot source as 68) | v56 restored after 77. Live. |
+| 78 | v56 | 070fd7a (same bot source as 68) | v56 restored after 77. |
+| 79 | v62 candidate | 0056b2e (branch exp/v62) | OUTNUMBER 1 except 40x40: vs Nyx elk 72-1008 (lost), CW 351, gold_rush 561, lanes 439, corners 395; total 1818. Rejected |
+| 80 | v56 | 070fd7a (same bot source as 68) | v56 restored after 79. Live. |
