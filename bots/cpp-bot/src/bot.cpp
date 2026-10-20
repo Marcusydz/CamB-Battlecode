@@ -1213,6 +1213,12 @@ bool Bot::retreat_and_recall(bool allow_recall) {
         if (c.is_visible() && camp_strength(c) > 0 && camp_health(c) < c.max_health()
             && chebyshev(pos, c.position()) <= camp_range(c.kind()) + 1)  // ladder: recalls inside elk range 4 died
             danger.push_back(c.position());
+    if (danger.empty() && allow_recall && caster_power && now - hit_round <= 1 && !spawn.is_set(pos)) {
+        // Hit by something we cannot see (an enemy in a bush or out of vision): a recall would be cancelled
+        // by the next hit and restarted every turn; Nyx diagnostic deaths stood still 6-8 turns like this.
+        step_towards(spawn);
+        return true;
+    }
     if (danger.empty()) {
         if (!allow_recall) return false;
         try {
@@ -1691,6 +1697,7 @@ void Bot::turn() {
     }
 
     const double prev_hp = last_hp;
+    if (me.health() < prev_hp) hit_round = now;
     last_hp = me.health();
     last_alive = true;
     last_pos = pos;

@@ -49,6 +49,7 @@ private:
     std::string act = "?";
     bool waited_on_spawn = false;
     double last_hp = 0;
+    int hit_round = -100;  // last round our health dropped
     bool last_alive = true;
     cambc::vec2 last_pos{};
 
