@@ -44,4 +44,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 81 | v63 candidate | 2002f8e (branch exp/v63) | no contest penalty on elk_arena's middle group: vs Nyx elk 144-1008 (57 deaths), other 4 maps identical to 68. Rejected |
 | 82 | v56 | 070fd7a (same bot source as 68) | v56 restored after 81. |
 | 83 | v64 candidate | 7bad316 (branch exp/v64) | leave when visible enemies have 1.5x our power (not 40x40/elk): vs Nyx elk 288-1008 (lost, fuel chaos), CW 460, gold_rush 594, lanes 357, corners 390; farm maps 1801 vs 1740. Rejected (elk loss) |
-| 84 | v56 | 070fd7a (same bot source as 68) | v56 restored after 83. Live. |
+| 84 | v56 | 070fd7a (same bot source as 68) | v56 restored after 83. |
+| 85 | diagnostic | 88c8cdf (branch exp/diag-death) | v56 printing the 8 turns before each death; vs Nyx only |
+| 86 | v56 | 070fd7a (same bot source as 68) | v56 restored after 85. Live. |
