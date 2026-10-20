@@ -12,6 +12,9 @@ Updated 2026-10-20 17:00 UTC by Claude.
 elk_arena 672-432 WIN, concentrated_wealth 377, lanes 412, gold_rush 583, corners 368, corridors 317,
 expanse 578, islands 457, big_world 756, boss_battle gold 39.8k-54.4k. broken_curve unchanged (won 1013-901 as official 45).
 
+## Official 97/99 (v71) on other maps vs Nyx (vs official 68)
+corridors 234-1070 (317), expanse 790 (578), islands 696 (457), big_world 808 (756), boss_battle gold 48.2k-53.2k (39.8k-54.4k). corridors is now the weakest map: we earn 2.3k gold to Nyx's 8.3k.
+
 ## Known issues
 - Top teams clear ~3x as many camp groups as we do; we lose most farm races by ~2x gems.
 - gold_rush: our 3 champions are killed 27-44 times per game.
