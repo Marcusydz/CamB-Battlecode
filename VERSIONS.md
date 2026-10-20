@@ -106,4 +106,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 143 | v90 | 38fff25 | v90 accepted (vs fresh v85: +148 set a, +349 set b). |
 | 144 | v92 candidate | 8f89be7 (branch exp/v92) | v90 + early contest window 150 rounds (was 300) on multi-herd maps. Local vs v90 ~9-7. vs Nyx: 2163 / 3666 (v90 2488 / 3990; rows 525 vs 703, elk 272 vs 280). Rejected. |
 | 145 | v90 | 38fff25 | v90 restored after 144. |
-| 146 | v93 candidate | 876046e (branch exp/v93) | v90 + gold weight 0.3 (was 0.1): Nyx earns 2.7x our camp gold on rows. Unopposed 1253 -> 1228 rounds. Testing vs Nyx. |
+| 146 | v93 candidate | 876046e (branch exp/v93) | v90 + gold weight 0.3 (was 0.1): Nyx earns 2.7x our camp gold on rows. Unopposed 1253 -> 1228 rounds. vs Nyx: 2221 / 3412 (v90 2488 / 3990; worse on 8 of 10 maps). Rejected. |
+| 147 | v90 | 38fff25 | v90 restored after 146. Live. |
