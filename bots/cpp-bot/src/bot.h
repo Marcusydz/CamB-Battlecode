@@ -73,6 +73,8 @@ private:
     int shop_gold = 150;
     double gold_weight = 0.15;  // set from GOLD_W in setup
     double eta_w = 1.0;  // set from ETA_W in setup
+    double gem_weight = 1.0;
+    bool altar_blocked = false;  // every altar side is a camp tile (boss_battle): bank nothing, farm gold
     bool has_mid = false;  // a monolith group worth 200+ gems  // casters drafted before us
     bool scarce = false;  // few gems outside monoliths
     int target = -1;  // index into groups, -1 = none

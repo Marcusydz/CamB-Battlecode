@@ -322,6 +322,17 @@ void Bot::setup() {
         eta_w = 1.0;
         gold_weight = 0.0;
     }
+    // boss_battle (week-2 patch): the only altar's only free side is a monolith tile, so nobody can bank
+    // until the 20000-HP monolith dies and games end on the gold tiebreak. Farm gold then, never walk to bank.
+    {
+        bitboard camp_mask;
+        for (const auto& g : groups) camp_mask |= g.mask;
+        if (!altar_approach.is_empty() && (altar_approach & ~camp_mask).is_empty()) {
+            altar_blocked = true;
+            gold_weight = 1.0;
+            gem_weight = 0.0;
+        }
+    }
     int ordinary_gems = 0;
     for (const auto& g : groups)
         if (!g.monolith) ordinary_gems += g.gems;
@@ -1514,7 +1525,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
             clear = g.health / (dps * std::max(need, others + 1));
         }
         const double gold_w = gold_weight;
-        const double value = (g.gems + gold_w * g.gold) / std::max(need, others + 1);
+        const double value = (gem_weight * g.gems + gold_w * g.gold) / std::max(need, others + 1);
         double cost = eta_w * eta + wait + clear + CAPTURE_TIME + altar_weight * g.altar_dist + 1;
         double score_bonus = 1.0;
         if (need > 1) {
@@ -1667,7 +1678,7 @@ void Bot::turn() {
     }
 
     // Bank immediately if that wins the game, or at the very end.
-    if (gems > 0 && (cambc::global_submitted_gems(team::ally) + gems >= cambc::constants::winning_gems || now > 1940)) {
+    if (gems > 0 && !altar_blocked && (cambc::global_submitted_gems(team::ally) + gems >= cambc::constants::winning_gems || now > 1940)) {
         tribute();
         return;
     }
@@ -1765,7 +1776,7 @@ void Bot::turn() {
         target_dist = std::max(0, target_dist - 1);
     }
 
-    if (gems > 0) {
+    if (gems > 0 && !altar_blocked) {
         const int altar_dist = altar_field.get(pos);
         const bool prism = kind == CT::prism;
         const int cap = prism ? PRISM_GEM_CAP : GEM_CAP;
