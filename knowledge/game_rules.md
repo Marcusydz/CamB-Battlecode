@@ -12,3 +12,4 @@
 - Shared memory: only bytes 0-7 usable.
 - Local testing: Linux x64 cambc 2.2.5 runs OLD rules. The arm64 cambc 3.0.1 under qemu runs the new rules (Claude's setup).
 - Unranked tests: `cambc match-groups create TEAM_ID --maps a,b,c,d,e` plays our SUBMITTED bot; results are deterministic for a given pair of bots.
+- Patch 1.0.1 (2026-10-20 19:05 UTC): Heart of Ruin strength per shard 5 -> 4, focus per shard 15 -> 12 (near 100% top-ladder pick rate). Bots that stop compiling after a patch now get a 24-hour grace period, then auto-lose ranked games.
