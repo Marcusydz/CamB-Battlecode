@@ -4,8 +4,8 @@ Updated 2026-10-20 17:00 UTC by Claude.
 
 ## Live and accepted bot
 - Accepted branch: `top-team-study`. Bot source: `bots/cpp-bot` (C++). Version map: `VERSIONS.md`.
-- Live on the ladder: official **97** (internal v71), code of commit `0f825d6`. Best so far vs Nyx: 2879 (elk 864-360 W, CW 579, gold_rush 556, lanes 482, corners 398).
-- Latest review-ready release: **official 68**, commit `070fd7a`, record `releases/official-68.md`.
+- Live on the ladder: official **107** = same source as official **97** (internal v71), code of commit `0f825d6`. Best so far vs Nyx: 2879 (elk 864-360 W, CW 579, gold_rush 556, lanes 482, corners 398).
+- Latest review-ready release: **official 97** (v71), commit `4dd9930` (= `0f825d6`), record `releases/official-97.md`. Previous: official 68.
   (GitHub tags/releases can't be created from Claude's session; release records are files.)
 
 ## Benchmarks of official 68 vs Nyx (5-game unranked groups; our gems vs theirs)
