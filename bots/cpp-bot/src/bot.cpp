@@ -5,6 +5,7 @@
 // and the others avoid that group. Switches that were tested and rejected in Python (and were
 // off in v16) are not ported; see TODO.md and bots/my-bot/README.md for their results.
 #include "bot.h"
+#include "draft.h"
 #include "camp_waiting_area.h"
 #include <algorithm>
 #include <cstdio>
@@ -314,7 +315,7 @@ void Bot::setup() {
         if (g.monolith && g.gems >= 200) has_mid = true;
     gold_weight = GOLD_W;
     eta_w = ETA_W;
-    caster_power = !(width == 40 && height == 40);
+    caster_power = !is_broken_curve();  // was every 40x40 map, which froze shortcut and interlock too
     soft_back = caster_power;
     engage_ratio = caster_power ? ENGAGE_RATIO : 0.8;
     {
@@ -338,7 +339,7 @@ void Bot::setup() {
     if (width == 31 && height == 31 && cambc::map::walls().count() == 0) gold_weight = GOLD_RUSH_GOLD_W;
     // broken_curve (40x40; interlock is 40x40 too): v42's choice (walk weight 1, gold 0) beat Nyx 1013-901,
     // the walk weight 3 version lost 609-1050 there while gaining 90-200 gems on the other test maps.
-    if (width == 40 && height == 40) {
+    if (!caster_power) {
         eta_w = 1.0;
         gold_weight = 0.0;
     }

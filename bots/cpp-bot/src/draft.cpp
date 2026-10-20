@@ -70,6 +70,11 @@ static constexpr std::array<MapDraft, 4> FISH_MAP{{
 constexpr int DEFAULT_LIST = 4;
 constexpr int POST_PATCH_LIST = 16;  // every map except 40x40  // maps not in the table (new or unseen ones)
 
+bool is_broken_curve() {
+    // (wall count, not camps: camp groups are not known yet during the draft)
+    return cambc::map::width() == 40 && cambc::map::height() == 40 && cambc::map::walls().count() == 274;
+}
+
 static int choose_list() {
     if (DRAFT >= 0) return DRAFT;
     const int w = cambc::map::width(), h = cambc::map::height();
@@ -79,8 +84,9 @@ static int choose_list() {
             if (m.w == w && m.h == h && m.walls == walls) return m.list;
         return 7;
     }
-    // broken_curve and interlock (40x40) keep the old lists: we beat Nyx on broken_curve with list 4.
-    if (w == 40 && h == 40) {
+    // broken_curve and interlock keep the old lists: we beat Nyx on broken_curve with list 4.
+    // (shortcut is 40x40 too: it gets the post-patch list.)
+    if (w == 40 && h == 40 && (is_broken_curve() || walls == 76)) {
         for (const auto& m : PER_MAP)
             if (m.w == w && m.h == h && m.walls == walls) return m.list;
         return DEFAULT_LIST;
