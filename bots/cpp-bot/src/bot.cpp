@@ -21,10 +21,11 @@ static std::pair<double, double> camp_stats(cambc::camp_type t) {
     switch (t) {
     case cambc::camp_type::wolf: return {1350, 20};
     case cambc::camp_type::elk: return {2400, 60};
-    case cambc::camp_type::gem_cluster: return {500, 0};
-    case cambc::camp_type::gold_cluster: return {500, 0};
+    case cambc::camp_type::gem_cluster: return {120, 0};   // week-2 patch: 500 -> 120
+    case cambc::camp_type::gold_cluster: return {120, 0};
     case cambc::camp_type::monolith: return {20000, 200};
     }
+    if (static_cast<int>(t) == 5) return {5000, 120};  // golem (week-2 patch; not in our SDK's enum yet)
     return {1500, 50};
 }
 
@@ -51,11 +52,11 @@ constexpr double GOLD_W = 0.15;  // camp value per gold, in gems
 constexpr double GOLD_RUSH_GOLD_W = 0.15;  // 0.5 was worse vs Fish (644 vs 828 gems)
 constexpr int MID_AOE_ONLY = 0;  // mid squad: only Stellar/Prism (1) or any caster (0)
 constexpr int DEATH_AVOID = 0;  // rounds to avoid camps near where enemies killed us  // turns next to a target group without fighting it before dropping it
-constexpr int MONO_KITE = 1;            // 1: casters take monoliths on every map (ladder #1 takes rows' 448-gem middle with Stellar and Prism)
-constexpr int MID_SQUAD = 2;            // >0: the first N casters in our draft farm the biggest monolith once strong enough (ladder #1: Stellar + Prism on rows)
+constexpr int MONO_KITE = 0;            // 1: casters take monoliths on every map (ladder #1 takes rows' 448-gem middle with Stellar and Prism)
+constexpr int MID_SQUAD = 0;            // >0: the first N casters in our draft farm the biggest monolith once strong enough (ladder #1: Stellar + Prism on rows)
 constexpr int KITER_BUILD = 1;          // 1: casters (never hit by camps) buy a monster emblem of focus, then power focus only, like ladder #1's Stellar and Prism
 constexpr double MONO_FOCUS = 200;      // casters take monoliths only with at least this much focus
-constexpr int KITE = 3;                 // casters fight attacking camps from spell range (4) only, outside camp range (3): ladder #1's Stellar takes ~0 camp damage. 2: only without a melee ally next to the camps. 3: only monoliths
+constexpr int KITE = 0;                 // 0 since the week-2 patch (elk range 4, monolith 5: nothing is out of reach from 4). casters fight attacking camps from spell range (4) only, outside camp range (3): ladder #1's Stellar takes ~0 camp damage. 2: only without a melee ally next to the camps. 3: only monoliths
 constexpr int REPLAN_EVERY = 3;
 constexpr int MAX_WAIT = 0;             // >0: also pick a camp that respawns up to this many rounds after we arrive, and wait beside it
 constexpr int PLAN_RADIUS = 50;         // max path length considered when choosing camps
@@ -87,6 +88,7 @@ constexpr int PRISM_EARLY_BANK = 0;
 constexpr bool SOLO_CAMP_FULL = true;   // single-camp groups deal full damage (no 60% "dies progressively" discount)
 constexpr double SPREAD = 0.25;          // score factor for a camp an ally already took (<1 spreads out; >1 packs up like ladder #1)
 constexpr int PACK = 0;
+constexpr int SQUAD = 3;               // >1: champions move in squads of this size, following the first member's camp
 constexpr int PACK_RANGE = 30;          // follow only if the leader's camp is this close (path length)                 // 1: everyone farms the camp the highest-priority ally claimed (ladder #1 moves as a pack of 3-5)
 constexpr double COMMIT = 1.5;          // keep the current target unless another scores this much more
 constexpr bool SPREAD_LOWER_ONLY = true;  // the "someone else is on it" penalty only counts higher-priority allies
@@ -334,6 +336,14 @@ void Bot::claim(int group) {
     const std::uint8_t value = group < 0 ? 0 : static_cast<std::uint8_t>(groups[group].idx + 1);
     auto data = claims();
     if (data[mem_slot] != value) cambc::shared_memory.write(mem_slot, std::span{&value, 1});
+}
+
+// Shared memory has only room for the claims: a slot with a claim counts as a squad member.
+std::array<bool, 8> Bot::squad_alive(int) const {
+    const auto c = claims();
+    std::array<bool, 8> out{};
+    for (int i = 0; i < 8; ++i) out[i] = c[i] != 0 || i == mem_slot;
+    return out;
 }
 
 // ------------------------------------------------------------------ knowledge
@@ -1415,6 +1425,28 @@ int Bot::choose_group(int now, const distance_field& my_field) {
             && min_dist(my_field, *mid) < UNREACHED && !enemy_near(mid->center, MONOLITH_CLEAR, 2, now)) {
             need = 1;
             return mid->idx;
+        }
+    }
+    if (SQUAD > 1) {
+        // Squads of SQUAD: champions ranked by memory slot (alive ones only); each squad's first
+        // member picks camps, the rest go to its camp (Nyx and Fish kill our lone champions in a round).
+        const auto alive = squad_alive(now);
+        std::vector<int> slots;
+        for (int i = 0; i < 8; ++i)
+            if (alive[i]) slots.push_back(i);
+        const auto it = std::find(slots.begin(), slots.end(), mem_slot);
+        if (it != slots.end()) {
+            const int rank = static_cast<int>(it - slots.begin());
+            const int lead = slots[rank - rank % SQUAD];
+            if (lead != mem_slot && c[lead] && c[lead] - 1 < static_cast<int>(groups.size())) {
+                const auto& g = groups[c[lead] - 1];
+                const int dist = min_dist(my_field, g);
+                if (!(g.state == 3 || now < g.avoid_until || dist >= UNREACHED || dist > PACK_RANGE
+                      || g.available_at > now + dist || (g.monolith && !kiter))) {
+                    need = 1;
+                    return g.idx;  // follow the squad leader's camp
+                }
+            }
         }
     }
     if (PACK && mem_slot > 0) {

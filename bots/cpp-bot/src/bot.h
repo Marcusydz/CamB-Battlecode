@@ -89,6 +89,7 @@ private:
 
     // shared memory
     std::array<std::uint8_t, 8> claims() const;
+    std::array<bool, 8> squad_alive(int now) const;
     void claim(int group);
 
     void update_groups(int now, cambc::vec2 pos);
