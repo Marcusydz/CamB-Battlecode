@@ -119,8 +119,8 @@ constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spen
 static bool caster_power = true;
 static double engage_ratio = ENGAGE_RATIO;
 static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
-constexpr double SOFT_BACK_HP = 0.6;
-constexpr int SOFT_BACK_GEMS = 20;      // back off (no recall) while carrying fewer gems than this     // disengage without recalling when at least this healthy and carrying < 10 gems
+constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
+constexpr int SOFT_BACK_GEMS = 20;       // ... and carrying fewer gems than this (was 10)
 
 
 static int chebyshev(vec2 a, vec2 b) {
