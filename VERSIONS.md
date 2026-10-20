@@ -36,4 +36,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 73 | v59 candidate | ec0506f (branch exp/v59) | enemy power +30% per Varg/Willow: vs Nyx results identical to 68 (no effect). Rejected |
 | 74 | v56 | 070fd7a (same bot source as 68) | v56 restored after 73. |
 | 75 | v60 candidate | d402440 (branch exp/v60) | Nyx's draft (HoR, Ren, Stellar, Ryth, Tavi) except 40x40: vs Nyx elk 0, CW 189, gold_rush 605, lanes 118, corners 269; total 1181. Rejected |
-| 76 | v56 | 070fd7a (same bot source as 68) | v56 restored after 75. Live. |
+| 76 | v56 | 070fd7a (same bot source as 68) | v56 restored after 75. |
+| 77 | v61 candidate | 5b17798 (branch exp/v61) | treasure emblem first except 40x40: vs Nyx elk 510-642 (lost), CW 262, gold_rush 627, lanes 319, corners 358; total 2076 vs 2412. Rejected |
+| 78 | v56 | 070fd7a (same bot source as 68) | v56 restored after 77. Live. |

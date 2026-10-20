@@ -38,4 +38,7 @@ Format: date - change - evidence - conclusion. Opponent results are 5-game unran
 - Fight power counted focus at 0.25 for everyone, so focus-stacking casters (Nyx: Ren, Stellar, Cassi & Issac) looked weak. Counting casters' focus fully (v53, official 66) won elk_arena 828-324 (first elk win) and took the 5-map total from 1756 to 2351.
 - Backing off without recalling when healthy with < 10 gems (v54, official 67): 2369. ENGAGE_RATIO 1.0 (v56, official 68): 2412. Both keep 40x40 maps unchanged.
 - Rejected: gold weight 0.3/0.6/1.0 (slower unopposed, gold_rush never finishes).
+- Rejected vs Nyx (5-map totals vs v56's 2412): ENGAGE_RATIO 1.3 1630 (elk lost 0-1008); solo farming, no squads 1844; Nyx's draft (HoR, Ren, Stellar, Ryth, Tavi) 1181; treasure emblem first 2076; +30% per enemy Varg/Willow no effect (Nyx drafts neither).
+- Nyx's items: every champion has durability + treasure emblems, then stacks power emblems (17-42 on gold_rush/elk). Our Willow earns 0-285 gold and dies most, yet dropping her (draft change) lost badly.
+- elk_arena vs Nyx swings with small code changes (828-324 win to 0-1008 loss); judge on several maps.
 
