@@ -86,4 +86,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 123 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 122. |
 | 124 | diag-fight2 | 30723c5 (branch exp/diag-fight) | Diagnostic: fight log plus chosen action and hits per fight turn. Not a candidate. |
 | 125 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 124. |
-| 126 | v83 candidate | ca03f50 (branch exp/v83) | Engage: if the focus target is out of reach after moving, hit whoever is in reach (except 40x40). diag-fight2: ~80% of engage turns hit nothing. Testing vs Nyx. |
+| 126 | v83 candidate | ca03f50 (branch exp/v83) | Engage: if the focus target is out of reach after moving, hit whoever is in reach (except 40x40). diag-fight2: ~80% of engage turns hit nothing. vs Nyx: elk 468-684 (v78 864-360 W), CW 348, lanes 335, gold_rush 550, corners 398 (2099 vs 2822); stampede 640-640 tie (v78 0-960, 12 kills), contest 0, hooks 22, swirl 15, fragment 50. Rejected |
+| 127 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 126. Live. |
