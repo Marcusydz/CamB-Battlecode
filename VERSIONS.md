@@ -108,4 +108,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 145 | v90 | 38fff25 | v90 restored after 144. |
 | 146 | v93 candidate | 876046e (branch exp/v93) | v90 + gold weight 0.3 (was 0.1): Nyx earns 2.7x our camp gold on rows. Unopposed 1253 -> 1228 rounds. vs Nyx: 2221 / 3412 (v90 2488 / 3990; worse on 8 of 10 maps). Rejected. |
 | 147 | v90 | 38fff25 | v90 restored after 146. |
-| 148 | v95 candidate | 163be63 (branch exp/v95) | v90 + DEATH_AVOID 120: after enemy champions kill us, avoid camps within 8 tiles for 120 rounds (corners: 17 deaths in the middle). Local vs v90 ~9-7. Testing vs Nyx. |
+| 148 | v95 candidate | 163be63 (branch exp/v95) | v90 + DEATH_AVOID 120: after enemy champions kill us, avoid camps within 8 tiles for 120 rounds (corners: 17 deaths in the middle). Local vs v90 ~9-7. vs Nyx: 2340 / 3868 (v90 2488 / 3990): lanes +52, corners +63, but CW -108, gold_rush -83, elk 648 vs 720, islands -118. Rejected. |
+| 149 | v90 | 38fff25 | v90 restored after 148. Live. |
