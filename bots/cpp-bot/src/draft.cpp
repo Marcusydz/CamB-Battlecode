@@ -48,7 +48,7 @@ static constexpr std::array<MapDraft, 17> PER_MAP{{
     {40, 40, 76, 4},     // interlock (list 4 farms 602 -> 462 rounds)
     {90, 30, 0, 13},     // lanes
     {50, 50, 98, 7},     // monolith (list 7 farms 412 -> 354 rounds)
-    {31, 31, 0, 12},     // gold_rush (also old packs): no Cassi & Issac
+    {31, 31, 0, 13},     // gold_rush (also old packs): no Cassi & Issac; Ren over Ryth (Ryth died 4x, 92 gems vs Fish)
     {50, 65, 0, 5},      // pilgrimage
     {50, 50, 214, 4},    // rows
     {30, 80, 80, 5},     // rushbait_v2
