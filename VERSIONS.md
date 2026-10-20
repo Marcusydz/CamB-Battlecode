@@ -112,4 +112,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 149 | v90 | 38fff25 | v90 restored after 148. vs Fish (CW, expanse, lanes, gold_rush, islands): 2047 (v85 earlier 1598). |
 | 150 | v96 candidate | f74d23b (branch exp/v96) | v90 + treasure emblem first except elk-type maps and broken_curve (v87 lost only elk). Unopposed 1270 -> 1249, elk identical. vs Nyx: 2494 / 3573 (v90 2488 / 3990). Won rows 1005-991, lanes +155, corners +92; CW -191, islands -206, big_world+ambush -248. Rejected. |
 | 151 | v90 | 38fff25 | v90 restored after 150. |
-| 152 | v100 candidate | 7ab8c86 (branch exp/v100) | v90 + treasure emblem first on rows, lanes, corners only (where v96 beat v90). Other maps identical to v90 locally. Testing vs Nyx. |
+| 152 | v100 candidate | 7ab8c86 (branch exp/v100) | v90 + treasure emblem first on rows, lanes, corners only (where v96 beat v90). Other maps identical to v90 locally. vs Nyx: 2735 / rows WON 1005-991 (v90 2488, rows 960-1003); other maps identical (islands game not played by the group). Accepted; live since this upload. |
+| (152) | v100 | 4d49ece | Accepted onto top-team-study (same source as 7ab8c86). Live as official 152. |
