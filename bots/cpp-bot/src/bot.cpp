@@ -64,7 +64,7 @@ constexpr double GOLD_W = 0.1;   // camp value per gold, in gems (week-2 patch: 
 constexpr double ETA_W = 3.0;    // walking time counts this many times in a camp's cost (Nyx circles nearby small camps as they respawn)
 constexpr double GOLD_RUSH_GOLD_W = 0.0;  // 0.5 was worse vs Fish (644 vs 828 gems)
 constexpr int MID_AOE_ONLY = 0;  // mid squad: only Stellar/Prism (1) or any caster (0)
-constexpr int DEATH_AVOID = 0;  // rounds to avoid camps near where enemies killed us  // turns next to a target group without fighting it before dropping it
+constexpr int DEATH_AVOID = 120;  // rounds to avoid camps near where enemies killed us  // turns next to a target group without fighting it before dropping it
 constexpr int MONO_KITE = 0;            // 1: casters take monoliths on every map (ladder #1 takes rows' 448-gem middle with Stellar and Prism)
 constexpr int MID_SQUAD = 0;            // >0: the first N casters in our draft farm the biggest monolith once strong enough (ladder #1: Stellar + Prism on rows)
 constexpr int KITER_BUILD = 1;          // 1: casters (never hit by camps) buy a monster emblem of focus, then power focus only, like ladder #1's Stellar and Prism
@@ -119,7 +119,8 @@ constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spen
 // focus) look weak: we engaged and lost 1-12 in kills on lanes. Off on 40x40 maps (broken_curve stays as v42).
 static bool caster_power = true;
 static double engage_ratio = ENGAGE_RATIO;
-static bool treasure_first = false;  // treasure emblem opens the build (per map, see setup)
+static bool treasure_first = false;
+static bool death_avoid = false;     // avoid camps where enemy champions killed us (per map, see setup)  // treasure emblem opens the build (per map, see setup)
 static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
 constexpr int SOFT_BACK_GEMS = 20;       // ... and carrying fewer gems than this (was 10)
@@ -331,6 +332,8 @@ void Bot::setup() {
                          || (width == 45 && height == 45 && walls == 204)  // quadrants (419 vs 394)
                          || (width == 31 && height == 31 && walls == 88)   // hooks (44 vs 22)
                          || (width == 45 && height == 30 && walls == 30);  // swirl (45 vs 30)
+        // DEATH_AVOID won these vs Nyx (v103 probe): pilgrimage 873-521 (was 490-1016), corners 487 vs 372.
+        death_avoid = (width == 50 && height == 65 && walls == 0) || (width == 71 && height == 71 && walls == 44);
     }
     engage_ratio = caster_power ? ENGAGE_RATIO : 0.8;
     {
@@ -1674,7 +1677,7 @@ void Bot::turn() {
     waited_on_spawn = false;
 
     if (!me.is_alive()) {
-        if (last_alive && DEATH_AVOID && enemy_near(last_pos, 8, 6, now)) {
+        if (last_alive && DEATH_AVOID && death_avoid && enemy_near(last_pos, 8, 6, now)) {
             // Killed by champions: stay away from camps there for a while (interlock vs Fish: died
             // 13 times walking back into their side for the same camp).
             for (auto& g : groups)
