@@ -42,6 +42,7 @@ constexpr int BUILD = 4;                // 0: v16 (monster, jungle, power streng
 constexpr int GEM_CAP = 60;
 constexpr int CLOSE_GIVEUP = 12;
 constexpr double GOLD_W = 0.15;  // camp value per gold, in gems
+constexpr double GOLD_RUSH_GOLD_W = 0.5;
 constexpr int MID_AOE_ONLY = 0;  // mid squad: only Stellar/Prism (1) or any caster (0)
 constexpr int DEATH_AVOID = 0;  // rounds to avoid camps near where enemies killed us  // turns next to a target group without fighting it before dropping it
 constexpr int MONO_KITE = 1;            // 1: casters take monoliths on every map (ladder #1 takes rows' 448-gem middle with Stellar and Prism)
@@ -283,11 +284,15 @@ void Bot::setup() {
     }
     for (const auto& g : groups)
         if (g.monolith && g.gems >= 200) has_mid = true;
+    gold_weight = GOLD_W;
     // islands (60x60, no walls): v24's settings got 718 gems vs Fish there, v26's 312.
     if (width == 60 && height == 60 && cambc::map::walls().count() == 0) {
         altar_weight = 0.0;
         shop_gold = 300;
     }
+    // gold_rush (31x31, no walls): Fish farms the harmless gold groups around the middle for items
+    // (twice our gold) and clears its three gem groups more often than we clear ours.
+    if (width == 31 && height == 31 && cambc::map::walls().count() == 0) gold_weight = GOLD_RUSH_GOLD_W;
     int ordinary_gems = 0;
     for (const auto& g : groups)
         if (!g.monolith) ordinary_gems += g.gems;
@@ -1215,7 +1220,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
                 continue;  // join the ally already waiting for help, or recently gave up waiting
             clear = g.health / (dps * std::max(need, others + 1));
         }
-        const double gold_w = GOLD_W;
+        const double gold_w = gold_weight;
         const double value = (g.gems + gold_w * g.gold) / std::max(need, others + 1);
         double cost = eta + wait + clear + CAPTURE_TIME + altar_weight * g.altar_dist + 1;
         double score_bonus = 1.0;

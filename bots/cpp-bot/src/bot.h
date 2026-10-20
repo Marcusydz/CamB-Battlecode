@@ -71,6 +71,7 @@ private:
     int kiter_rank = 9;
     double altar_weight = 0.5;
     int shop_gold = 150;
+    double gold_weight = 0.15;  // set from GOLD_W in setup
     bool has_mid = false;  // a monolith group worth 200+ gems  // casters drafted before us
     bool scarce = false;  // few gems outside monoliths
     int target = -1;  // index into groups, -1 = none
