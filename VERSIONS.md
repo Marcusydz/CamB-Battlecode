@@ -14,4 +14,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 51 | v45 | a086d87 | v43 + Codex v44 fixes (SDK unreachable sentinel, waiting band); vs Nyx CW 527, expanse 547, lanes 520, gold_rush 594, broken_curve 1013 (win). |
 | 52 | v46 | 1f4847e | v45 + gold mode when every altar side is a camp tile (boss_battle: only altar is behind the boss, games end on gold). boss_battle gold 36k (v45 ~3k unopposed) vs Nyx 60k, procless 41k. vs Nyx CW 527, expanse 547, lanes 346, gold_rush 594; vs procless CW 332, expanse 747, lanes 458, gold_rush 484. Review-ready release: releases/official-52.md. |
 | 53 | v47 candidate | caa0764 (branch exp/v47) | contest middle camps (CONTEST_FACTOR 1.0): vs Nyx CW 290, expanse 573, lanes 320, gold_rush 506, islands 476; vs procless 207/662/464/357, islands 292. 4-map totals 1689/1690 vs v46 2014/2021: rejected |
-| 54 | v46 | 1f4847e (same bot source as 52) | v46 restored after 53. Live. |
+| 54 | v46 | 1f4847e (same bot source as 52) | v46 restored after 53. |
+| 55 | v48 candidate | 8cf9365 (branch exp/v48) | squad followers wait for helpers: vs procless corridors 110 (v46 44), elk_arena 0 (0), CW 209 (332), lanes 518 (458), gold_rush 484 (484); total 1321 vs 1318, neutral: rejected |
+| 56 | v46 | 1f4847e (same bot source as 52) | v46 restored after 55. Live. |
