@@ -82,4 +82,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 119 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 118. |
 | 120 | diag-fight | 46b5147 (branch exp/diag-fight) | Diagnostic: v78 plus death context and a fight log line per turn near enemies. Not a candidate. |
 | 121 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 120. |
-| 122 | v82 candidate | a330f71 (branch exp/v82) | Commit to a fight for 3 rounds after engaging (down to 0.6x engage ratio), except 40x40. From diag-fight logs: 4v1 fights flipped engage/back-off each turn. Local h2h vs v78: wins both sides on swirl, hooks. Testing vs Nyx. |
+| 122 | v82 candidate | a330f71 (branch exp/v82) | Commit to a fight for 3 rounds after engaging (down to 0.6x engage ratio), except 40x40. vs Nyx: elk 0-1008 (v78 864-360 W), CW 321, lanes 376, gold_rush 567, corners 339 (1603 vs 2822); contest 0, hooks 0 (22), swirl 68 (181), fragment 64 (68), stampede 160 (160). Rejected: committing to fights loses them, elk_arena especially. |
+| 123 | v78 | e5d5b24 (same bot source as 113) | v78 restored after 122. Live. |
