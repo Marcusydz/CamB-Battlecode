@@ -73,7 +73,7 @@ constexpr int REPLAN_EVERY = 3;
 constexpr int MAX_WAIT = 0;             // >0: also pick a camp that respawns up to this many rounds after we arrive, and wait beside it
 constexpr int PLAN_RADIUS = 50;         // max path length considered when choosing camps
 constexpr int LOG_EVERY = 0;           // status line per champion every N rounds (0 disables)
-constexpr double ENGAGE_RATIO = 0.8;    // fight when our side's power is at least this fraction of theirs
+constexpr double ENGAGE_RATIO = 1.0;    // fight when our side's power is at least this fraction of theirs (0.8 on 40x40 maps)
 constexpr double FLEE_RATIO = 0.3;      // carriers run when our power is below this fraction of theirs
 constexpr int HUNT_RADIUS = 10;         // how far we chase a winnable fight
 constexpr bool USE_LOCKS = true;        // buy altar locks and place them on altars we pass
@@ -117,6 +117,7 @@ constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spen
 // Casters deal damage from focus. Counting focus at 0.25 made Nyx (Ren, Stellar, Cassi & Issac stacking
 // focus) look weak: we engaged and lost 1-12 in kills on lanes. Off on 40x40 maps (broken_curve stays as v42).
 static bool caster_power = true;
+static double engage_ratio = ENGAGE_RATIO;
 static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy and carrying < 10 gems
 
@@ -314,6 +315,16 @@ void Bot::setup() {
     eta_w = ETA_W;
     caster_power = !(width == 40 && height == 40);
     soft_back = caster_power;
+    engage_ratio = caster_power ? ENGAGE_RATIO : 0.8;
+    {
+        // elk_arena (all gems in the middle group): v53's full recall won 828-324 vs Nyx, backing off 612-540.
+        int total = 0, top = 0;
+        for (const auto& g : groups) {
+            total += g.gems;
+            top = std::max(top, g.gems);
+        }
+        if (total > 0 && top >= 0.9 * total) soft_back = false;
+    }
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
     // islands (60x60, no walls): v24's settings got 718 gems vs Fish there, v26's 312.
@@ -1003,7 +1014,7 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     const double scale = static_cast<double>(near.size() + hidden) / near.size();
     const double ratio = power(allies) / std::max(enemy_power(near) * scale * scale, 1.0);
     // 2. Winning fight: focus fire (same rule on every ally), finish kills first.
-    if (ratio >= ENGAGE_RATIO && hp_frac > 0.35) {
+    if (ratio >= engage_ratio && hp_frac > 0.35) {
         const double b = burst(me);
         std::vector<cambc::champion> reach;
         for (const auto& e : near)
@@ -1148,7 +1159,7 @@ bool Bot::join_fight(const cambc::champion& me, vec2 pos, int gems, double hp_fr
         if (theirs.empty()) continue;
         for (const auto& b : allies_all)
             if (b.is_alive() && b != me && chebyshev(b.position(), a.position()) <= 5) ours.push_back(b);
-        if (power(ours) < ENGAGE_RATIO * enemy_power(theirs)) continue;
+        if (power(ours) < engage_ratio * enemy_power(theirs)) continue;
         if (d < best_d) {
             best_d = d;
             best = &a;
