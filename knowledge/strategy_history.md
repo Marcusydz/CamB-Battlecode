@@ -33,3 +33,9 @@ Format: date - change - evidence - conclusion. Opponent results are 5-game unran
 - Its gem rate rises through the game while ours stays flat; we rarely die on farm maps (lanes, CW, corners), so the gap there is farming speed, not fights.
 - elk_arena: all 72 gems are in the middle group. procless clears it with all five every 75-120 rounds and banks at its altar 3 tiles away; we lose the early middle fight and never collect a gem (35-42 deaths).
 
+## Nyx again (procless dethroned, Marcus 2026-10-20 13:58)
+- Logging build vs Nyx: 10-32% of champion turns were spent dead; most deaths carried 0 gems.
+- Fight power counted focus at 0.25 for everyone, so focus-stacking casters (Nyx: Ren, Stellar, Cassi & Issac) looked weak. Counting casters' focus fully (v53, official 66) won elk_arena 828-324 (first elk win) and took the 5-map total from 1756 to 2351.
+- Backing off without recalling when healthy with < 10 gems (v54, official 67): 2369. ENGAGE_RATIO 1.0 (v56, official 68): 2412. Both keep 40x40 maps unchanged.
+- Rejected: gold weight 0.3/0.6/1.0 (slower unopposed, gold_rush never finishes).
+
