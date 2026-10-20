@@ -58,4 +58,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 95 | v70 candidate | d30a38a (branch exp/v70) | Unused attack hits an enemy champion in reach at end of every turn (except 40x40): vs Nyx elk 360-792 (lost), CW 547, gold_rush 528, corners 350 (lanes summary missing). Rejected |
 | 96 | v68 | 3fa9d89 (same bot source as 92) | v68 restored after 95 (first try hit the 20 uploads per hour limit). |
 | 97 | v71 | 0f825d6 (submitted 4dd9930, same code, comment fixed after) | Soft back-off while carrying < 20 gems (was 10; except 40x40): vs Nyx elk 864-360 WIN, CW 579, gold_rush 556, lanes 482, corners 398; total 2879 (v68 2773; only gold_rush changed). Accepted. |
-| 98 | v72 candidate | 46d7242 (branch exp/v72) | Soft back-off while carrying < 30 gems (except 40x40). Testing vs Nyx. |
+| 98 | v72 candidate | 46d7242 (branch exp/v72) | Soft back-off while carrying < 30 gems (except 40x40): vs Nyx identical to v71 on all 5 maps (2879). Rejected (no effect) |
+| 99 | v71 | 0f825d6 (same bot source as 97) | v71 restored after 98. Live. |
