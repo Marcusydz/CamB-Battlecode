@@ -79,6 +79,7 @@ private:
     int gather_turns = 0;
     int no_joint_until = 0;
     int stuck = 0;
+    int fight_stuck = 0, reach_fallback = 0;
     int close_turns = 0, close_tgt = -1;
     int next_plan = 0;
     int target_dist = 0;
@@ -95,6 +96,7 @@ private:
     // movement
     cambc::bitboard blocked() const;
     int inner(cambc::vec2 p) const;
+    bool step_static(int g);
     bool step_towards(const cambc::bitboard& goals, bool allow_dash = true);
 
     // combat
@@ -125,5 +127,9 @@ private:
     double camp_dps(const cambc::champion& me) const;
     bool joint_claim_elsewhere(int g, double dps, double health);
     int choose_group(int now, const cambc::distance_field& my_field);
+    int team_plan(int now);
+    void compute_group_fields();
+    std::vector<std::vector<std::uint16_t>> gfields;  // per group: path distance from every tile, row-major
+    int gdist(int g, cambc::vec2 p) const { return gfields[g][p.y * width + p.x]; }
     int min_dist(const cambc::distance_field& field, const GroupInfo& g) const;
 };

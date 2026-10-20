@@ -41,6 +41,11 @@ constexpr int WARD_GAP = 8;
 constexpr int BUILD = 4;                // 0: v16 (monster, jungle, power strength). 1: power main stat, then durability health, then power. 2: power main stat only. 3: monster emblem of main stat, then power main stat. 4: Intercontinental Fish's emblem order per champion
 constexpr int GEM_CAP = 60;
 constexpr int CLOSE_GIVEUP = 12;
+constexpr int REACH_FALLBACK = 1;     // fight: after this many turns unable to reach the target, walk to the nearest reachable harmless camp (0 off)
+constexpr int TEAM_PLAN = 0;          // 1: every champion runs the same greedy camp assignment for the whole team and takes its own share
+constexpr int PLAN_KEEP_CLAIMS = 1;   // allies with a claimed camp are fixed in the team plan
+constexpr int FIELDS_PER_TURN = 1;
+constexpr int PLAN_CHECK = 0;    // group distance fields computed per turn until all exist
 constexpr int HIDDEN_ENEMIES = 1;  // count recently seen, now hidden enemies in fight odds
 constexpr double GOLD_W = 0.15;  // camp value per gold, in gems
 constexpr double GOLD_RUSH_GOLD_W = 0.15;  // 0.5 was worse vs Fish (644 vs 828 gems)
@@ -286,6 +291,8 @@ void Bot::setup() {
     for (const auto& g : groups)
         if (g.monolith && g.gems >= 200) has_mid = true;
     gold_weight = GOLD_W;
+    // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
+    reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
     // islands (60x60, no walls): v24's settings got 718 gems vs Fish there, v26's 312.
     if (width == 60 && height == 60 && cambc::map::walls().count() == 0) {
         altar_weight = 0.0;
@@ -367,6 +374,56 @@ bitboard Bot::blocked() const {
 // Distance from the map border: equal-length paths prefer the interior over the edge.
 int Bot::inner(vec2 p) const {
     return std::min({p.x, p.y, width - 1 - p.x, height - 1 - p.y});
+}
+
+// Walk downhill on a group's static distance field: no search, so long walks cost almost no fuel
+// (a goal search from far away on a 60x60 map cost most of the turn).
+bool Bot::step_static(int g) {
+    auto& me = cambc::self();
+    auto origin = me.position();
+    const auto blk = blocked();
+    int here = gdist(g, origin);
+    if (here <= 0 || here >= 60000) return false;
+    auto pick = [&](const bitboard& options) -> std::optional<vec2> {
+        std::optional<vec2> best;
+        int best_d = 0, best_in = 0;
+        for (auto p : options.positions()) {
+            const int d = gdist(g, p), in = inner(p);
+            if (!best || d < best_d || (d == best_d && in > best_in)) {
+                best = p;
+                best_d = d;
+                best_in = in;
+            }
+        }
+        return best;
+    };
+    bool moved = false;
+    if (here >= 3 && dash_slot && me.can_cast()) {
+        const auto dash = me.abilities()[*dash_slot];
+        if (!dash.is_on_cooldown()) {
+            auto best = pick(around(origin, 2) & ~blk);
+            if (best && gdist(g, *best) <= here - 2) {
+                try {
+                    if (dash.use(*best)) {
+                        moved = true;
+                        origin = *best;
+                        here = gdist(g, *best);
+                    }
+                } catch (const cambc::error&) {
+                }
+            }
+        }
+    }
+    if (me.can_move() && here > 0) {
+        auto best = pick(around(origin, 1) & ~blk);
+        if (best && gdist(g, *best) < here) {
+            try {
+                if (me.move_absolute(*best)) moved = true;
+            } catch (const cambc::error&) {
+            }
+        }
+    }
+    return moved;
 }
 
 // Walk (and dash when it gains two tiles) towards the nearest goal tile.
@@ -510,10 +567,33 @@ void Bot::fight(const cambc::camp& target, const std::vector<cambc::camp>& other
         try_attack(target, others);
         return;
     }
-    const bool moved = step_towards(around(target.position(), me.attack_range()), false);
+    bool moved = step_towards(around(target.position(), me.attack_range()), false);
     if (try_attack(target, others)) return;
     for (const auto& c : others)
         if (try_attack(c, others)) return;
+    fight_stuck = moved ? 0 : fight_stuck + 1;
+    if (!moved && reach_fallback && fight_stuck >= reach_fallback) {
+        // Every tile in reach of the target is taken (an elk walled in by its own group's clusters:
+        // concentrated_wealth, melee champions stood still for 150 rounds). Go for the nearest camp
+        // we can get next to instead.
+        std::vector<const cambc::camp*> order;
+        bool mono = target.kind() == cambc::camp_type::monolith;
+        for (const auto& c : others) {
+            if (c.kind() == cambc::camp_type::monolith) mono = true;  // corridors: walked into monolith range
+            // Only harmless clusters (the ring around the elk); boss_battle got 2.6x slower otherwise.
+            if (c.is_visible() && camp_health(c) > 0 && camp_strength(c) <= 0) order.push_back(&c);
+        }
+        if (mono) order.clear();
+        const auto pos = me.position();
+        std::sort(order.begin(), order.end(), [&](const cambc::camp* a, const cambc::camp* b) {
+            return chebyshev(pos, a->position()) < chebyshev(pos, b->position());
+        });
+        for (std::size_t i = 0; i < order.size() && i < 4 && !moved; ++i)
+            moved = step_towards(around(order[i]->position(), me.attack_range()), false);
+        if (moved)
+            for (const auto& c : others)
+                if (try_attack(c, others)) return;
+    }
     if (!moved) try_spell(target);
 }
 
@@ -1166,6 +1246,156 @@ int Bot::min_dist(const distance_field& field, const GroupInfo& g) const {
     return best;
 }
 
+// Team plan: the same greedy assignment on every ally (deterministic from shared positions), so
+// champions split the camps between them instead of each chasing the best camp for itself
+// (ladder replays: ~60% of our turns were walking, often to camps an ally already took).
+// Returns our group (and sets need) or -1 when we got nothing or the fields are not ready.
+int Bot::team_plan(int now) {
+    // Fuel is counted per instruction (~100k a turn): fixed arrays, no allocation in the loops,
+    // and solo-camp scores computed once instead of every greedy round.
+    if (static_cast<int>(gfields.size()) < static_cast<int>(groups.size())) return -1;
+    constexpr int MAXA = 8;
+    auto& me = cambc::self();
+    struct Ally { std::uint32_t h; vec2 pos; double dps, health; };
+    Ally allies[MAXA];
+    int A = 0;
+    allies[A++] = {handle_of(me), me.position(), camp_dps(me), me.max_health()};
+    for (const auto& a : cambc::vision::champions(team::ally)) {
+        if (A >= MAXA) break;
+        if (a == me || !a.is_alive()) continue;
+        allies[A++] = {handle_of(a), a.position(), std::max(static_cast<double>(a.strength()), 20.0) + 15.0, a.max_health()};
+    }
+    std::sort(allies, allies + A, [](const Ally& x, const Ally& y) { return x.h < y.h; });
+    int my_i = 0;
+    double sum_dps = 0, min_hp = 1e9;
+    for (int i = 0; i < A; ++i) {
+        if (allies[i].h == handle_of(me)) my_i = i;
+        sum_dps += allies[i].dps;
+        min_hp = std::min(min_hp, allies[i].health);
+    }
+    const double my_dps = camp_dps(me), my_hp = me.max_health();
+    struct Cand { int g, need; double value, fixed, health; int dist[MAXA]; std::int8_t order[MAXA]; };
+    std::vector<Cand> cands;
+    cands.reserve(groups.size());
+    for (const auto& g : groups) {
+        if (now < g.avoid_until || (g.state == 2 && now - g.seen_at > 25) || (g.monolith && g.state != 2)
+            || g.available_at > now + 200)
+            continue;
+        // One helper count per camp from the team's average damage (per-ally counts cost too much fuel).
+        // Helper count from our own damage, as choose_group does (casters solo camps from range).
+        const int need = g.state == 2 ? 1
+                         : std::min(helpers_needed(g, my_dps * (kind == CT::varg ? std::min(g.count, 2) : 1), my_hp), A);
+        if (need <= 0) continue;
+        Cand c;
+        c.g = g.idx;
+        c.need = need;
+        c.value = g.gems + gold_weight * g.gold;
+        c.fixed = CAPTURE_TIME + altar_weight * g.altar_dist + 1;
+        c.health = g.state == 2 ? 0 : g.health;
+        const auto& f = gfields[g.idx];
+        for (int i = 0; i < A; ++i) {
+            const int d = f[allies[i].pos.y * width + allies[i].pos.x];
+            // MAX_WAIT 0: only camps alive when we would get there.
+            c.dist[i] = (d >= 60000 || g.available_at > now + d) ? (1 << 20) : d;
+            c.order[i] = static_cast<std::int8_t>(i);
+        }
+        for (int i = 1; i < A; ++i)  // insertion sort: allies nearest first
+            for (int j = i; j > 0 && c.dist[c.order[j]] < c.dist[c.order[j - 1]]; --j) std::swap(c.order[j], c.order[j - 1]);
+        cands.push_back(c);
+    }
+    const int C = static_cast<int>(cands.size());
+    bool assigned[MAXA] = {};
+    std::vector<char> taken(C, 0);
+    if (PLAN_KEEP_CLAIMS) {
+        // Allies keep the camp they already claimed: replanning them away is how the plan made
+        // everyone walk more (expanse: approach 182 vs 116 turns per champion).
+        const auto cl = claims();
+        for (int i = 0; i < A; ++i) {
+            if (i == my_i) continue;
+            const int g = cl[allies[i].h % 8] - 1;
+            if (g < 0) continue;
+            assigned[i] = true;
+            for (int ci = 0; ci < C; ++ci)
+                if (cands[ci].g == g) taken[ci] = 1;
+        }
+    }
+    // Solo camps: score depends only on the ally, so compute once.
+    std::vector<double> solo(static_cast<std::size_t>(C) * A, 0.0);
+    for (int ci = 0; ci < C; ++ci) {
+        const auto& c = cands[ci];
+        if (c.need != 1) continue;
+        for (int i = 0; i < A; ++i)
+            if (c.dist[i] < (1 << 20))
+                solo[ci * A + i] = c.value / (c.dist[i] + c.health / allies[i].dps + c.fixed)
+                                   * (i == my_i && c.g == target ? COMMIT : 1.0);  // hysteresis, as choose_group
+    }
+    for (int round = 0; round < A; ++round) {
+        double best_score = 0;
+        int best_c = -1, best_team[MAXA], best_n = 0;
+        for (int ci = 0; ci < C; ++ci) {
+            if (taken[ci]) continue;
+            const auto& c = cands[ci];
+            if (c.need == 1) {
+                for (int i = 0; i < A; ++i) {
+                    if (assigned[i] || solo[ci * A + i] <= best_score) continue;
+                    best_score = solo[ci * A + i];
+                    best_c = ci;
+                    best_team[0] = i;
+                    best_n = 1;
+                }
+                continue;
+            }
+            // A camp needing several: the nearest free allies go (the leader choice does not matter).
+            int team[MAXA], n = 0, far = 0;
+            double dps = 0;
+            for (int k = 0; k < A && n < c.need; ++k) {
+                const int i = c.order[k];
+                if (assigned[i] || c.dist[i] >= (1 << 20)) continue;
+                team[n++] = i;
+                far = std::max(far, c.dist[i]);
+                dps += allies[i].dps;
+            }
+            if (n < c.need) continue;
+            const double score = c.value / ((far + c.health / dps + c.fixed) * n);
+            if (score > best_score) {
+                best_score = score;
+                best_c = ci;
+                best_n = n;
+                for (int k = 0; k < n; ++k) best_team[k] = team[k];
+            }
+        }
+        if (best_c < 0) break;
+        taken[best_c] = 1;
+        for (int k = 0; k < best_n; ++k) {
+            assigned[best_team[k]] = true;
+            if (best_team[k] == my_i) {
+                need = cands[best_c].need;
+                return cands[best_c].g;
+            }
+        }
+    }
+    return -1;
+}
+
+void Bot::compute_group_fields() {
+    int done = 0;
+    while (static_cast<int>(gfields.size()) < static_cast<int>(groups.size()) && done < FIELDS_PER_TURN) {
+        const auto& g = groups[gfields.size()];
+        distance_field f;
+        bitboard visited;
+        f.compute(static_block & ~g.mask, g.mask, visited);
+        gfields.push_back(f.export_linear_buffer());  // plain array: a host get() costs ~60 fuel
+        if (PLAN_CHECK && gfields.size() == 1) {
+            int bad = 0;
+            for (int y = 0; y < height; y += 3)
+                for (int x = 0; x < width; x += 3)
+                    if (f.get({x, y}) != gdist(0, {x, y})) bad += 1;
+            std::printf("fieldcheck bad=%d size=%zu w=%d h=%d\n", bad, gfields[0].size(), width, height);
+        }
+        done += 1;
+    }
+}
+
 int Bot::choose_group(int now, const distance_field& my_field) {
     auto& me = cambc::self();
     const auto c = claims();
@@ -1330,6 +1560,7 @@ void Bot::turn() {
     const bool at_spawn = spawn.is_set(pos);
     if (at_spawn || kind == CT::tavi) shop();
     update_groups(now, pos);
+    if (TEAM_PLAN) compute_group_fields();
 
     if (heal_slot) try_heal(me);
     const int gems = static_cast<int>(me.gem_count());
@@ -1436,6 +1667,27 @@ void Bot::turn() {
                          && chebyshev(pos, groups[tgt].center) <= 6;
     const bool low_fuel = cambc::fuel_remaining() < LOW_FUEL * TURN_FUEL;
     if ((!valid && !(low_fuel && tgt >= 0)) || (now >= next_plan && !engaged && !low_fuel)) {
+        if (TEAM_PLAN && gfields.size() >= groups.size()) {
+            // Static per-group distance fields: no search from our own position needed.
+            tgt = -1;
+            if (MID_SQUAD && kiter && kind != CT::issac && kiter_rank < MID_SQUAD && me.focus() >= MONO_FOCUS) {
+                const GroupInfo* mid = nullptr;
+                for (const auto& g : groups)
+                    if (g.monolith && g.gems >= 200 && (!mid || g.gems > mid->gems)) mid = &g;
+                if (mid) {
+                    const int d = gdist(mid->idx, pos);
+                    if (mid->state != 3 && now >= mid->avoid_until && mid->available_at <= now + d && d < 60000
+                        && !enemy_near(mid->center, MONOLITH_CLEAR, 2, now)) {
+                        tgt = mid->idx;
+                        need = 1;
+                    }
+                }
+            }
+            if (tgt < 0) tgt = team_plan(now);
+            target = tgt;
+            next_plan = now + REPLAN_EVERY;
+            target_dist = tgt < 0 ? UNREACHED : gdist(tgt, pos);
+        } else {
         distance_field my_field;
         bitboard roots, visited;
         roots.set(pos);
@@ -1450,6 +1702,7 @@ void Bot::turn() {
         target = tgt;
         next_plan = now + REPLAN_EVERY;
         target_dist = tgt < 0 ? UNREACHED : min_dist(my_field, groups[tgt]);
+        }
     } else {
         target_dist = std::max(0, target_dist - 1);
     }
@@ -1562,7 +1815,10 @@ void Bot::turn() {
     // can loop, since closing in to radius 1 resets it (seen: Cassi 300 rounds on big_world).
     int closest = 1 << 20;
     for (auto t : tg.tiles) closest = std::min(closest, chebyshev(pos, t));
-    if (closest <= 5 && close_tgt == tgt && !visible && tg.state != 3) close_turns += 1; else close_turns = 0;
+    // Walking away from it (the path to adjacent tiles goes round a wall) keeps the count: resetting
+    // there flipped the radius back and forth forever (corridors: two champions 600 rounds).
+    if (close_tgt != tgt || visible || tg.state == 3) close_turns = 0;
+    else if (closest <= 5) close_turns += 1;
     close_tgt = tgt;
     const int radius = visible || (stuck < 2 && close_turns < 3) ? me.attack_range() : 1;
     bitboard approach;
@@ -1582,7 +1838,8 @@ void Bot::turn() {
         act = "unblock";
         return;
     }
-    if (step_towards(approach)) {
+    const bool far_walk = TEAM_PLAN && gfields.size() > static_cast<std::size_t>(tgt) && closest > 8;
+    if (far_walk ? step_static(tgt) : step_towards(approach)) {
         stuck = 0;
         act = "approach";
         return;
