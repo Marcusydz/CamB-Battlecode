@@ -56,4 +56,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 93 | v69 candidate | d654e51 (branch exp/v69) | Parting shot also when fleeing or at low hp (except 40x40): vs Nyx elk 612-468 WIN, CW 547, gold_rush 450, lanes 482, corners 398; total 2489. Rejected |
 | 94 | v68 | 3fa9d89 (same bot source as 92) | v68 restored after 93. |
 | 95 | v70 candidate | d30a38a (branch exp/v70) | Unused attack hits an enemy champion in reach at end of every turn (except 40x40): vs Nyx elk 360-792 (lost), CW 547, gold_rush 528, corners 350 (lanes summary missing). Rejected |
-| 96 | v68 | 3fa9d89 (same bot source as 92) | v68 restored after 95. Live. |
+| 96 | v68 | 3fa9d89 (same bot source as 92) | v68 restored after 95 (resubmitting: hit the 20 uploads per hour limit). |
