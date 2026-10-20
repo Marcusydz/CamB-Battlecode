@@ -49,4 +49,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 86 | v56 | 070fd7a (same bot source as 68) | v56 restored after 85. |
 | 87 | v65 | 42a42aa | v56 + walk home instead of recalling when hit by an unseen attacker (except 40x40). vs Nyx: elk WIN 792-360, CW 579 (v56 377), gold_rush 445 (583), lanes 341 (412), corners 398 (368); total 2555 vs 2412. Accepted. |
 | 88 | v66 candidate | 61ad076 (branch exp/v66) | LOW_HP 0.5 except 40x40: vs Nyx elk 216-864 (lost), CW 246, gold_rush 583, lanes 529, corners 205; total 1779. Rejected |
-| 89 | v65 | 42a42aa (same bot source as 87) | v65 restored after 88. Live. |
+| 89 | v65 | 42a42aa (same bot source as 87) | v65 restored after 88. |
+| 90 | v67 candidate | 8876b4c (branch exp/v67) | Willow fights only beside two allies, never joins (except 40x40): vs Nyx elk 432-720 (lost), CW 516, gold_rush 445, lanes 280, corners 494; total 2167. Rejected |
+| 91 | v65 | 42a42aa (same bot source as 87) | v65 restored after 90. Live. |
