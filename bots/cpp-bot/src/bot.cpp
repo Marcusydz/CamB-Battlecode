@@ -31,7 +31,7 @@ static std::pair<double, double> camp_stats(cambc::camp_type t) {
 // Tuning parameters (same names and values as my-bot v16).
 constexpr int CAPTURE_TIME = 5;
 constexpr int UNREACHED = 1000000;
-constexpr int SHOP_RECALL_GOLD = 150;   // recall to shop with an empty bag and this much gold
+constexpr int SHOP_RECALL_GOLD = 150;   // recall to shop with an empty bag and this much gold (default of shop_gold)
 constexpr bool BUY_JUNGLE = true;
 constexpr double SUPPORT_BONUS = 0.0;   // enemy power counts this much extra per enemy healer (Willow) or shielder (Varg) in the fight
 constexpr int OUTNUMBER = 2;            // >0: leave when at least this many more enemies were seen near us (last 4 rounds, 8 tiles) than allies within 6
@@ -283,6 +283,11 @@ void Bot::setup() {
     }
     for (const auto& g : groups)
         if (g.monolith && g.gems >= 200) has_mid = true;
+    // islands (60x60, no walls): v24's settings got 718 gems vs Fish there, v26's 312.
+    if (width == 60 && height == 60 && cambc::map::walls().count() == 0) {
+        altar_weight = 0.0;
+        shop_gold = 300;
+    }
     int ordinary_gems = 0;
     for (const auto& g : groups)
         if (!g.monolith) ordinary_gems += g.gems;
@@ -1212,7 +1217,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         }
         const double gold_w = GOLD_W;
         const double value = (g.gems + gold_w * g.gold) / std::max(need, others + 1);
-        double cost = eta + wait + clear + CAPTURE_TIME + ALTAR_WEIGHT * g.altar_dist + 1;
+        double cost = eta + wait + clear + CAPTURE_TIME + altar_weight * g.altar_dist + 1;
         double score_bonus = 1.0;
         if (need > 1) {
             cost += 4 * (need - 1 - std::min(others, need - 1));  // time to gather helpers
@@ -1395,11 +1400,11 @@ void Bot::turn() {
 
     // Spend gold: with an empty bag and enough for a full emblem, recall to shop.
     const bool busy_here = target >= 0 && (groups[target].state == 1 || groups[target].state == 2)
-                           && target_dist <= 7 && me.gold_count() < 2 * SHOP_RECALL_GOLD;
+                           && target_dist <= 7 && me.gold_count() < 2 * shop_gold;
     bool threatened = false;
     for (auto t : threats(now))
         if (chebyshev(pos, t) <= THREAT_RANGE + 2) threatened = true;
-    if (gems == 0 && me.gold_count() >= SHOP_RECALL_GOLD && kind != CT::tavi && !at_spawn && now < 1800
+    if (gems == 0 && me.gold_count() >= shop_gold && kind != CT::tavi && !at_spawn && now < 1800
         && !busy_here && !threatened) {
         claim(-1);
         retreat_and_recall();

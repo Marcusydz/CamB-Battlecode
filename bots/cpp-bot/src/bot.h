@@ -69,6 +69,8 @@ private:
     int mem_slot = 0;
     int team_size = 3;
     int kiter_rank = 9;
+    double altar_weight = 0.5;
+    int shop_gold = 150;
     bool has_mid = false;  // a monolith group worth 200+ gems  // casters drafted before us
     bool scarce = false;  // few gems outside monoliths
     int target = -1;  // index into groups, -1 = none
