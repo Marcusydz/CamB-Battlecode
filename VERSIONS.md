@@ -150,3 +150,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 178 | v109 | 21dddc2 | v109 resubmitted (same source as official 174) to measure it vs the new Nyx on the 4 maps v110 changes. New Nyx vs v110 on 30 maps: 9309 gems (we lose all; elk 0-1008). v109 vs new Nyx: big_world 837 (v110 673), the_farm 11 (v110 77), starfish 163 (159), fragment 42 (48), elk 0. |
 | 179 | v110b candidate | f9cfcd5 (branch exp/v110b) | v109 + engage ratio 0.8 on the_farm (+110 Nyx+Fish) and 1.3 on starfish (+11). Reproduced exactly vs new Nyx and Fish (the_farm 77/302, starfish 159/38); big_world, fragment, split identical to v109. Accepted. |
 | (179) | v110b | 89caeab | Accepted onto top-team-study. Live as official 179. |
+| 180 | v111 probe | a6bc6e7 (branch exp/v111p) | v110b + death avoid on every map but broken_curve, re-probed because the new Nyx (02:30 UTC) hunts us: on elk it kills us 50-0, deaths all near the middle. |
