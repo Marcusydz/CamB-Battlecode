@@ -416,6 +416,17 @@ void Bot::setup() {
             death_avoid = true;
         if (width == 41 && height == 30 && walls == 36) old_contest_map = false;
     }
+    {
+        // Treasure opening flipped again vs Nyx and Fish's ~05:20 bots (v118 probe, Nyx + Fish sum): the_farm +424,
+        // packs +475 and gold_rush +71, elk +288, fracture +279, CW +253, corners +246, big_world +228, islands +220,
+        // shortcut +215, interlock +160, stampede +160, expanse +149, monolith +94, eight +72.
+        const int walls = static_cast<int>(cambc::map::walls().count());
+        static constexpr int FLIP[][3] = {{50, 40, 148}, {31, 31, 0},   {50, 50, 222}, {61, 71, 374}, {61, 61, 210},
+                                          {71, 71, 44},  {100, 100, 636}, {60, 60, 0},  {40, 40, 320}, {40, 40, 76},
+                                          {60, 50, 0},   {80, 80, 224},  {50, 50, 98},  {41, 30, 36}};
+        for (const auto& m : FLIP)
+            if (width == m[0] && height == m[1] && walls == m[2]) treasure_first = !treasure_first;
+    }
     contest_mid = !soft_back || old_contest_map;
     // rows: retreating at 55% health won 1005-972 vs Nyx and +66 vs Fish (v115 probe; worse on most other maps).
     if (width == 50 && height == 50 && static_cast<int>(cambc::map::walls().count()) == 214) low_hp = 0.55;
