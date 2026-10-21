@@ -220,8 +220,14 @@ void Bot::compute_group_fields() {
     }
 }
 
-int Bot::choose_group(int now, const distance_field& my_field) {
+int Bot::choose_group(int now, const distance_field* my_field) {
     auto& me = cambc::self();
+    const auto here = me.position();
+    auto group_dist = [&](const GroupInfo& g) {
+        if (my_field) return min_dist(*my_field, g);
+        const int d = gdist(g.idx, here);
+        return d > plan_cap ? UNREACHED : d;
+    };
     const auto c = claims();
     std::map<int, int> claim_count;
     std::map<int, bool> senior;  // claims by higher-priority (lower slot) allies
@@ -235,8 +241,8 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         const GroupInfo* mid = nullptr;
         for (const auto& g : groups)
             if (g.monolith && g.gems >= 200 && (!mid || g.gems > mid->gems)) mid = &g;
-        if (mid && mid->state != 3 && now >= mid->avoid_until && mid->available_at <= now + min_dist(my_field, *mid)
-            && min_dist(my_field, *mid) < UNREACHED && !enemy_near(mid->center, MONOLITH_CLEAR, 2, now)) {
+        if (mid && mid->state != 3 && now >= mid->avoid_until && mid->available_at <= now + group_dist(*mid)
+            && group_dist(*mid) < UNREACHED && !enemy_near(mid->center, MONOLITH_CLEAR, 2, now)) {
             need = 1;
             return mid->idx;
         }
@@ -254,7 +260,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
             const int lead = slots[rank - rank % squad];
             if (lead != mem_slot && c[lead] && c[lead] - 1 < static_cast<int>(groups.size())) {
                 const auto& g = groups[c[lead] - 1];
-                const int dist = min_dist(my_field, g);
+                const int dist = group_dist(g);
                 if (!(g.state == 3 || now < g.avoid_until || dist >= UNREACHED || dist > PACK_RANGE
                       || g.available_at > now + dist || (g.monolith && !kiter))) {
                     need = 1;
@@ -268,7 +274,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
             const int v = c[i];
             if (!v || v - 1 >= static_cast<int>(groups.size())) continue;
             const auto& g = groups[v - 1];
-            const int dist = min_dist(my_field, g);
+            const int dist = group_dist(g);
             if (g.state == 2 || g.state == 3 || now < g.avoid_until || dist >= UNREACHED || dist > PACK_RANGE
                 || g.available_at > now + dist || (g.monolith && !kiter))
                 break;
@@ -282,7 +288,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
     int best = -1, best_need = 1;
     double best_score = 0.0;
     for (const auto& g : groups) {
-        const int dist = min_dist(my_field, g);
+        const int dist = group_dist(g);
         if (dist >= UNREACHED) continue;
         const int eta = dist;
         if (now < g.avoid_until) continue;
@@ -336,4 +342,17 @@ int Bot::choose_group(int now, const distance_field& my_field) {
     }
     need = best_need;
     return best;
+}
+
+// MAP_FIELDS: the map never changes, so each group's distance map is computed once, from fuel left
+// over at the end of a turn (about one fuel per tile; the first turn has double fuel).
+void Bot::precompute_fields() {
+    const std::uint64_t cost = static_cast<std::uint64_t>(width) * height * 2 + 2000;
+    while (gfields.size() < groups.size() && cambc::fuel_remaining() > FUEL_RESERVE * TURN_FUEL + cost) {
+        const auto& g = groups[gfields.size()];
+        distance_field f;
+        bitboard visited;
+        f.compute(static_block & ~g.mask, g.mask, visited);
+        gfields.push_back(f.export_linear_buffer());
+    }
 }

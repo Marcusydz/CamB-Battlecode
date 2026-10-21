@@ -196,6 +196,15 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
                     target = &e;
                 }
             }
+            if (FOCUS_FIRE) {
+                // The team's focus target, unless we have a kill on someone else.
+                const std::uint8_t tag = focus_tag(now);
+                const bool kill_here = target->health() <= b && chebyshev(target->position(), pos) <= 4;
+                if (tag && !kill_here)
+                    for (const auto& e : reach)
+                        if (handle_of(e) % 255 + 1 == tag) target = &e;
+                set_focus(*target, now);
+            }
             if (HOR_DASH && dash_modifier > 0) {
                 // Heart of Ruin: open with the landing damage and stun on the kill target.
                 std::vector<vec2> at;
@@ -262,8 +271,7 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     }
     // 4. Otherwise trade hits with anything already in range.
     if (hp_frac > 0.45) {
-        std::stable_sort(near.begin(), near.end(),
-                         [](const cambc::champion& a, const cambc::champion& b) { return a.health() < b.health(); });
+        near = sorted_by(near, [](const cambc::champion& e) { return e.health(); });  // weakest first
         for (const auto& e : near) {
             if (me.attack_tiles().is_set(e.position())) {
                 try_spell(e);

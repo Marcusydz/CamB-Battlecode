@@ -99,6 +99,17 @@ void Bot::fight(const cambc::camp& target, const std::vector<cambc::camp>& other
     auto& me = cambc::self();
     if (!target.is_visible()) return;
     if (KITE && kiter && kite(target, others)) return;
+    if (WOLF_KITE && kiter) {
+        // Wolves reach 3 tiles and spells reach 4: hit them from where they cannot hit back.
+        bool wolves_only = true;
+        auto check = [&](const cambc::camp& c) {
+            if (c.is_visible() && camp_health(c) > 0 && camp_strength(c) > 0 && c.kind() != cambc::camp_type::wolf)
+                wolves_only = false;
+        };
+        check(target);
+        for (const auto& c : others) check(c);
+        if (wolves_only && kite(target, others)) return;
+    }
     if (HOR_DASH && dash_modifier > 0) {
         std::vector<vec2> live;
         bool hostile = camp_strength(target) > 0;

@@ -100,6 +100,20 @@ inline const char* kind_name(CT kind) {
     return s.c_str();
 }
 
+// Stable sort by a key read once per element. Never sort SDK unit objects with a comparator that
+// calls their (virtual) accessors: stable_sort calls it on elements in its move buffer.
+template <class T, class Key> std::vector<T> sorted_by(const std::vector<T>& items, Key key) {
+    using K = decltype(key(items[0]));
+    std::vector<std::pair<K, std::size_t>> keys;
+    keys.reserve(items.size());
+    for (std::size_t i = 0; i < items.size(); ++i) keys.emplace_back(key(items[i]), i);
+    std::stable_sort(keys.begin(), keys.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+    std::vector<T> out;
+    out.reserve(items.size());
+    for (const auto& k : keys) out.push_back(items[k.second]);
+    return out;
+}
+
 // Leave a nonempty waiting band beyond the camp's attack range. A radius-five
 // outer boundary disappears completely when a monolith also attacks at range five.
 inline cambc::bitboard camp_waiting_area(cambc::vec2 center, int attack_range) {

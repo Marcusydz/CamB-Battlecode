@@ -5,7 +5,7 @@ Usage: arena.py BOT_A BOT_B [--maps a,b,c] [--jobs 2] [--quiet]
 Prints per-match results and a summary for BOT_A: wins, mean gem margin, mean win round.
 Gem margin = A's tributed gems - B's tributed gems at the end (range -1000..1000ish).
 """
-import argparse, json, os, subprocess, sys, tempfile, time
+import argparse, threading, json, os, subprocess, sys, tempfile, time
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -116,8 +116,24 @@ def main():
             if not o.one_side or i % 2 == 1:
                 jobs.append((b, a, "maps/" + m, tmp))
     t0 = time.time()
+    done = [0]
+    lock = threading.Lock()
+
+    def run_and_report(j):
+        r = run(*j)
+        with lock:
+            done[0] += 1
+            if r:
+                won = r["outcome"] == ("teamA" if r["a"] in {p[0] for p in pairs} else "teamB")
+                mine = 0 if r["a"] in {p[0] for p in pairs} else 1
+                print(f"[{done[0]}/{len(jobs)}] {r['map']} {o.A} as {'AB'[mine]}: {'WIN ' if won else 'loss'} "
+                      f"{r['gems'][mine]}-{r['gems'][1 - mine]}", file=sys.stderr, flush=True)
+            else:
+                print(f"[{done[0]}/{len(jobs)}] {os.path.basename(j[2])}: no result", file=sys.stderr, flush=True)
+        return r
+
     with ThreadPoolExecutor(o.jobs) as ex:
-        results = list(ex.map(lambda j: run(*j), jobs))
+        results = list(ex.map(run_and_report, jobs))
     wins = 0; margin = 0; rounds = []; faults = 0
     names_A = {p[0] for p in pairs}
     results = [r for r in results if r]

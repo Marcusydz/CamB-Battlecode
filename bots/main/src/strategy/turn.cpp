@@ -22,6 +22,7 @@ void Bot::play_turn() {
     const auto r0 = cambc::round_number();
     turn();
     if (WARDS) place_ward();
+    if (MAP_FIELDS && ready) precompute_fields();
     const auto used = start - cambc::fuel_remaining();
     if (cambc::round_number() != r0) {
         overruns += 1;
@@ -80,6 +81,20 @@ void Bot::turn() {
         shop();
         act = "dead";
         return;
+    }
+    if (CANCEL_RECALL && me.is_recalling() && me.health() >= 0.6 * me.max_health()) {
+        // A kill in reach beats going home: cancel (allowed once a turn) and let pvp() take it.
+        const double b = burst(me);
+        const auto tiles = me.attack_tiles();
+        const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
+        for (auto& e : visible_enemies())
+            if (e.is_alive() && tiles.is_set(e.position()) && e.health() <= b && !enemy_spawn.is_set(e.position())) {
+                try {
+                    me.cancel_recall();
+                } catch (const cambc::error&) {
+                }
+                break;
+            }
     }
     if (me.is_recalling() || me.is_submitting_gems() || me.is_teleporting()) {
         act = "channel";
@@ -173,6 +188,27 @@ void Bot::turn() {
     if (OUTNUMBER && outnumbered(me, pos, now)) return;
     if (pvp(me, pos, gems, hp_frac)) return;
     if (JOIN && join_fight(me, pos, gems, hp_frac)) return;
+    if (CONTEST && hp_frac > 0.5 && gems < 30) {
+        // An enemy on a cleared camp is capturing it: any of us in the region resets their timer.
+        const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
+        for (auto& e : visible_enemies()) {
+            if (!e.is_alive() || chebyshev(e.position(), pos) > 6 || enemy_spawn.is_set(e.position())) continue;
+            for (auto& g : groups) {
+                if (g.state != 2 || !g.mask.is_set(e.position())) continue;
+                std::vector<cambc::champion> theirs, ours{me};
+                for (auto& x : visible_enemies())
+                    if (x.is_alive() && chebyshev(x.position(), e.position()) <= 6) theirs.push_back(x);
+                for (const auto& a : cambc::vision::champions(team::ally))
+                    if (a.is_alive() && a != me && chebyshev(a.position(), pos) <= 5) ours.push_back(a);
+                if (power(ours) < engage_ratio * enemy_power(theirs)) continue;
+                claim(-1);
+                if (!g.mask.is_set(pos)) step_towards(g.mask);
+                hit_in_range(me);
+                act = "contest";
+                return;
+            }
+        }
+    }
 
     // Lock any altar we pass (our own lock never blocks us).
     if (USE_LOCKS && cambc::fuel_remaining() > FUEL_RESERVE * TURN_FUEL) place_lock();
@@ -243,17 +279,27 @@ void Bot::turn() {
             target = tgt;
             next_plan = now + REPLAN_EVERY;
             target_dist = tgt < 0 ? UNREACHED : gdist(tgt, pos);
+        } else if (MAP_FIELDS && gfields.size() >= groups.size()) {
+            plan_cap = PLAN_RADIUS;
+            tgt = choose_group(now, nullptr);
+            if (tgt < 0 && !low_fuel) {
+                plan_cap = UNREACHED;  // nothing within PLAN_RADIUS: the whole map
+                tgt = choose_group(now, nullptr);
+            }
+            target = tgt;
+            next_plan = now + REPLAN_EVERY;
+            target_dist = tgt < 0 ? UNREACHED : gdist(tgt, pos);
         } else {
         distance_field my_field;
         bitboard roots, visited;
         roots.set(pos);
         my_field.compute(static_block, roots, visited, PLAN_RADIUS);
-        tgt = choose_group(now, my_field);
+        tgt = choose_group(now, &my_field);
         if (tgt < 0 && !low_fuel) {
             // Nothing within PLAN_RADIUS: search the whole map rather than idle.
             bitboard visited2;
             my_field.compute(static_block, roots, visited2);
-            tgt = choose_group(now, my_field);
+            tgt = choose_group(now, &my_field);
         }
         target = tgt;
         next_plan = now + REPLAN_EVERY;
@@ -345,12 +391,10 @@ void Bot::turn() {
             }
         }
         gather_turns = 0;
-        // Hit the most dangerous camp first, then the weakest.
-        std::stable_sort(camps.begin(), camps.end(), [](const cambc::camp& a, const cambc::camp& b) {
-            const bool sa = camp_strength(a) > 0, sb = camp_strength(b) > 0;
-            if (sa != sb) return sa;
-            return camp_health(a) < camp_health(b);
-        });
+        // Hit the most dangerous camp first, then the weakest. Sort on keys read once: sorting the
+        // camp objects themselves crashed (a virtual health() call on a camp mid-move in stable_sort's
+        // buffer hit the pure virtual base: wasm `unreachable`, elk_arena).
+        camps = sorted_by(camps, [](const cambc::camp& c) { return std::make_pair(camp_strength(c) <= 0, camp_health(c)); });
         std::vector<cambc::camp> rest(camps.begin() + 1, camps.end());
         fight(camps[0], rest);
         close_turns = 0;
@@ -394,7 +438,7 @@ void Bot::turn() {
         act = "unblock";
         return;
     }
-    const bool far_walk = TEAM_PLAN && gfields.size() > static_cast<std::size_t>(tgt) && closest > 8;
+    const bool far_walk = (TEAM_PLAN || MAP_FIELDS) && gfields.size() > static_cast<std::size_t>(tgt) && closest > 8;
     if (far_walk ? step_static(tgt) : step_towards(approach)) {
         stuck = 0;
         act = "approach";

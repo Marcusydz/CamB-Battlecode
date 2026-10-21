@@ -5,7 +5,7 @@ Each entry gives the rule, what the bot does today, and an idea for using it. Li
 to `bots/main/src/bot.cpp` unless another file is named. Effort is a rough guess.
 
 Checked against `bots/main` at v1.0.0. Status after v1.1.0 is in the Status column; details and
-test results are in `docs/versions/v1.1.0.md`.
+test results are in `docs/versions/v1.1.0.md` and `docs/versions/v1.2.0.md`.
 
 ## Summary
 
@@ -18,12 +18,12 @@ test results are in `docs/versions/v1.1.0.md`.
 | 5 | Enemy picks are visible during the draft | Medium | Draft | Not tried |
 | 6 | 1024 bytes of draft memory, computed with 10x fuel | Medium | Setup, team planning | Not tried |
 | 7 | `set_priority` sets turn order inside the team | Small | Stun chains, captures | Stunners first: lost |
-| 8 | Shared memory has free bytes | Medium | Focus fire, tribute alerts | Not tried |
-| 9 | An enemy in a capture region resets the capture | Medium | Denying enemy camps | Not tried |
+| 8 | Shared memory has free bytes | Medium | Focus fire, tribute alerts | Focus fire: lost (v1.2.0) |
+| 9 | An enemy in a capture region resets the capture | Medium | Denying enemy camps | Tested: better margin, same wins; off |
 | 10 | Teleport crystals cross terrain | Medium | Walled maps, escapes | Not tried |
-| 11 | Recall and tribute can be cancelled | Small | Fights that turn | Not tried |
+| 11 | Recall and tribute can be cancelled | Small | Fights that turn | Cancel recall for a kill: level; off |
 | 12 | Camps attack the nearest champion and sleep after 2 rounds | Medium | Camp clearing | Not tried |
-| 13 | Wolves only reach 3 tiles; spells reach 4 | Small | Casters on wolf camps | Not tried |
+| 13 | Wolves only reach 3 tiles; spells reach 4 | Small | Casters on wolf camps | Tested: level; off |
 | 14 | Bushes hide you from anyone outside them | Medium | Gathering, ambushes | Not tried |
 | 15 | Smaller items (Tavi selling, Vendetta resets, spawn heals, tribute bag) | Small each | Various | Not tried |
 

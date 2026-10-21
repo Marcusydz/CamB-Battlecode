@@ -15,7 +15,21 @@ using Item = cambc::item_type;
 std::array<std::uint8_t, 8> Bot::claims() const {
     std::array<std::uint8_t, 8> data{};
     cambc::shared_memory.read(0, std::span{data});
+    if (FOCUS_FIRE) data[FOCUS_ROUND_SLOT] = data[FOCUS_TAG_SLOT] = 0;  // not camp claims
     return data;
+}
+
+// FOCUS_FIRE: slot 5 = round & 255 when set, slot 6 = enemy handle % 255 + 1.
+std::uint8_t Bot::focus_tag(int now) const {
+    std::array<std::uint8_t, 8> data{};
+    cambc::shared_memory.read(0, std::span{data});
+    const int age = (now - data[FOCUS_ROUND_SLOT] + 256) % 256;
+    return age <= 2 ? data[FOCUS_TAG_SLOT] : 0;
+}
+
+void Bot::set_focus(const cambc::champion& e, int now) {
+    const std::uint8_t v[2] = {static_cast<std::uint8_t>(now & 255), static_cast<std::uint8_t>(handle_of(e) % 255 + 1)};
+    cambc::shared_memory.write(FOCUS_ROUND_SLOT, std::span{v, 2});
 }
 
 void Bot::claim(int group) {

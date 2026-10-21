@@ -41,6 +41,9 @@ static constexpr std::array<List, 21> LISTS{{
     {D::prism, D::varg, D::stellar, D::ryth, D::willow, D::ren, D::marcella, D::cassi_and_issac, D::heart_of_ruin, D::tavi, D::vendetta},
 }};
 
+// Ranked ladder, 21 Oct (260 games): Prism first went 8-29 on its maps (elk_arena 0-9 among them);
+// Vesper first 52-28, Heart of Ruin first 58-64. 20 = v1.1.0 (Prism first); 17 = Vesper first; 16 = Heart of Ruin first.
+constexpr int PRISM_MAPS_LIST = 20;
 constexpr int DRAFT = -1;  // >=0: use this list on every map (testing). -1: per-map table below.
 constexpr int FISH_DRAFT = 0;  // 1: Intercontinental Fish's per-map drafts instead of PER_MAP
 
@@ -99,7 +102,7 @@ static int choose_list() {
     // (gold_rush, same fingerprint, +0), shortcut +113, collision +56. It lost 3000+ on the other maps.
     static constexpr int PRISM[][3] = {{50, 50, 222}, {31, 31, 0}, {40, 40, 320}, {41, 41, 84}};
     for (const auto& m : PRISM)
-        if (w == m[0] && h == m[1] && walls == m[2]) return 20;
+        if (w == m[0] && h == m[1] && walls == m[2]) return PRISM_MAPS_LIST;
     static constexpr int VESPER[][3] = {{50, 65, 0},  {80, 80, 224}, {100, 100, 540}, {30, 80, 80},
                                         {60, 60, 0},  {60, 50, 0},   {50, 50, 32},    {50, 50, 98},
                                         {41, 30, 36}, {61, 61, 210}, {50, 50, 214},   {50, 40, 148}};

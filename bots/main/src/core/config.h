@@ -84,13 +84,19 @@ constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spen
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
 constexpr int SOFT_BACK_GEMS = 20;       // ... and carrying fewer gems than this (was 10)
 
-// Rules v1.0.0 did not use (docs/UnusedRules.md). 0 = v1.0.0 behaviour. v1.1.0 turns on the four that won.
+// Rules v1.0.0 did not use (docs/UnusedRules.md). 0 = v1.0.0 behaviour. v1.1.0 turned on the first four that won,
+// v1.2.0 adds MAP_FIELDS (docs/versions/v1.2.0.md).
 constexpr int HOR_SLOT_FIX = 1;   // 1: Heart of Ruin gets its draft slot (it fell into the catch: slot handle % 8, team_size 3)
 constexpr int SQUAD_FIX = 0;      // 1: a live champion without a claim writes 255, so squads still count it
 constexpr int RANGED_RESET = 1;   // 1: ranged champions that moved cast their attack reset, then attack
 constexpr int MOVE_RETRY = 1;     // 1: a step blocked by a hidden unit tries the next best tiles (the failed step is free)
 constexpr int HOR_DASH = 1;       // 1: Heart of Ruin lands its damaging, stunning dash on enemies and camps
 constexpr int PRIORITY = 0;       // 1: champions with a stun act first within our team
+constexpr int MAP_FIELDS = 1;     // 1: precompute every camp group's distance map from spare fuel, then plan by lookup instead of a search
+constexpr int CANCEL_RECALL = 0;  // 1: cancel a recall (when healthy) to take a kill in attack range
+constexpr int WOLF_KITE = 0;      // 1: casters fight wolf-only groups from 4 tiles, outside wolf range 3
+constexpr int FOCUS_FIRE = 0;     // 1: shared memory slots 5-6 hold the team's focus target; engaging allies prefer it
+constexpr int CONTEST = 0;        // 1: walk into a camp region an enemy is capturing (resets their 5-round timer) when we'd win the fight
 
 // Per-map settings: defaults here, set for the current map in Bot::apply_map_settings().
 // Casters deal damage from focus. Counting focus at 0.25 made Nyx (Ren, Stellar, Cassi & Issac stacking

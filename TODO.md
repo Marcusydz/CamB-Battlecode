@@ -10,6 +10,16 @@ Rules and API references: `docs/GameRules.md`, `docs/BotAPICpp.md`.
 
 Fixed or tried in v1.1.0 (see `docs/versions/v1.1.0.md`): Heart of Ruin's draft slot (fixed),
 hidden blockers (move retry, on), squad membership (`SQUAD_FIX`, lost, off).
+Fixed in v1.2.0: a crash when sorting camps by danger (`sorted_by`, see `docs/versions/v1.2.0.md`).
+
+## Next, from the ladder (21 Oct, 260 ranked games)
+
+1. **Prism first loses: 8–29.** It's drafted first only on elk_arena, packs/gold_rush, shortcut and
+   collision, among our worst maps. Try `PRISM_MAPS_LIST` = 17 (Vesper Vale first, 52–28) or 16 on the
+   ladder; the local test of it was stopped before it finished.
+2. **Other weak maps:** hooks 0–7, starfish 2–8, fragment 4–9.
+3. **Counter-draft:** we win 34% when the enemy drafts Vesper Vale (44 games).
+4. **`CONTEST`** improved the gem margin (+21) but not wins locally; a ladder try could settle it.
 
 ## Rules we don't use yet
 
@@ -18,18 +28,17 @@ hidden blockers (move retry, on), squad membership (`SQUAD_FIX`, lost, off).
   stun-immune).
 - **Draft memory** (1024 bytes, 10x draft fuel, full map) is unused.
 - **`set_priority`:** stunners first lost in v1.1.0 (`PRIORITY`); other orders untested.
-- **Shared memory** slots 5 and 6 are free: focus target, "enemy tributing at altar X".
-- **Contesting enemy captures:** entering the region resets their 5-round timer.
-- Smaller: cancel recall or tribute when a fight turns; hide in bushes while gathering; Tavi
-  selling at full refund to rebuild; casters' 4-range spells outrange wolves (range 3);
-  Vendetta's cooldown reset on camp kills.
+- **Shared memory** slots 5 and 6 are free. Focus fire lost in v1.2.0; "enemy tributing at altar X" untested.
+- Smaller: cancel a tribute when a fight turns; hide in bushes while gathering; Tavi selling at
+  full refund to rebuild; Vendetta's cooldown reset on camp kills. (Wolf kiting and cancelling a
+  recall for a kill tested level in v1.2.0.)
 
 ## Code health
 
 - `Bot::setup()` sets over 15 behaviours per map, some flipped several times by later probe blocks.
   Fold them into one table per map. Many were fitted to a few games against two opponents.
 - About a dozen switches are off (`KITE`, `MID_SQUAD`, `TEAM_PLAN`, `PACK`, `MAX_WAIT`,
-  `MONO_KITE`, ...) but their code is still there.
+  `MONO_KITE`, ...) but their code is still there. `TEAM_PLAN` lost badly in v1.2.0 (92/280).
 - Camp ranges and stats are hard-coded at the top of `bot.cpp`; `camp::attack_range()` and
   `base_stats()` give them directly.
 

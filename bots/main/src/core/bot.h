@@ -104,6 +104,9 @@ private:
     std::array<std::uint8_t, 8> claims() const;
     std::array<bool, 8> squad_alive(int now) const;
     void claim(int group);
+    static constexpr int FOCUS_ROUND_SLOT = 5, FOCUS_TAG_SLOT = 6;  // free: draft slots are 0-4, Issac 7
+    std::uint8_t focus_tag(int now) const;
+    void set_focus(const cambc::champion& e, int now);
 
     void update_groups(int now, cambc::vec2 pos);
 
@@ -141,7 +144,9 @@ private:
     int helpers_needed(const GroupInfo& g, double dps, double health) const;
     double camp_dps(const cambc::champion& me) const;
     bool joint_claim_elsewhere(int g, double dps, double health);
-    int choose_group(int now, const cambc::distance_field& my_field);
+    int choose_group(int now, const cambc::distance_field* my_field);  // nullptr: use the precomputed group fields
+    int plan_cap = 0;  // with precomputed fields: groups farther than this count as unreachable
+    void precompute_fields();
     int team_plan(int now);
     void compute_group_fields();
     std::vector<std::vector<std::uint16_t>> gfields;  // per group: path distance from every tile, row-major
