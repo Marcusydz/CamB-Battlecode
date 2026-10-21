@@ -506,6 +506,7 @@ void Bot::setup() {
             old_contest_map = !old_contest_map;
             contest_mid = !soft_back || old_contest_map;
         }
+        if (width == 45 && height == 35 && walls == 116) treasure_first = !treasure_first;  // split only
     }
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
