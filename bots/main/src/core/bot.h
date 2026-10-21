@@ -1,6 +1,7 @@
 #pragma once
 #include <cambc.h>
 #include <cstdint>
+#include <array>
 #include <map>
 #include <optional>
 #include <string>
@@ -35,6 +36,10 @@ struct Nuke {
     std::uint32_t slot;
     bool aoe, stuns;
 };
+
+// Fight strength of a group of champions (actions/pvp.cpp).
+double power(const std::vector<cambc::champion>& units);
+double enemy_power(const std::vector<cambc::champion>& units);
 
 class Bot {
 public:
@@ -90,6 +95,7 @@ private:
     int target_dist = 0;
 
     void setup();
+    void apply_map_settings();  // strategy/map_settings.cpp
     void turn();
 
     // shared memory

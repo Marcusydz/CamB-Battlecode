@@ -43,6 +43,16 @@ def run(a, b, mp, tmp):
             "round": d["round"], "gems": gems, "faults": faults, "kills": kills}
 
 
+def seed_file(src):
+    """The C++ source file that defines the SEED switch, or None."""
+    for d, _, files in os.walk(os.path.join(src, "src")):
+        for f in files:
+            p = os.path.join(d, f)
+            if f.endswith((".cpp", ".h")) and "\nconstexpr int SEED = " in open(p).read():
+                return p
+    return None
+
+
 def make_seeded(bot, seed):
     """Copy bots/BOT to bots/_sBOT_SEED with SEED set (only if the bot has a SEED param)."""
     import re, shutil
@@ -50,12 +60,12 @@ def make_seeded(bot, seed):
     name = f"_s{bot}_{seed}"
     dst = os.path.join(ROOT, "bots", name)
     path = os.path.join(src, "src", "bot.py")
-    cpp = os.path.join(src, "src", "bot.cpp")
-    if os.path.exists(cpp) and "\nconstexpr int SEED = " in open(cpp).read():
+    cpp = seed_file(src)
+    if cpp:
         if os.path.exists(dst):
             shutil.rmtree(dst)
         shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".cambc"))
-        p = os.path.join(dst, "src", "bot.cpp")
+        p = os.path.join(dst, os.path.relpath(cpp, src))
         text = re.sub(r"\nconstexpr int SEED = [^;]*;", f"\nconstexpr int SEED = {seed};", open(p).read())
         open(p, "w").write(text)
         return name
@@ -96,7 +106,7 @@ def main():
         pairs.append((make_seeded(o.A, k), make_seeded(o.B, 100 + k)))
     # Build C++ bots once up front: parallel matches building the same bot race and fail to link.
     for bot in sorted({x for p in pairs for x in p}):
-        if os.path.exists(os.path.join(ROOT, "bots", bot, "src", "bot.cpp")):
+        if os.path.exists(os.path.join(ROOT, "bots", bot, "src", "main.cpp")):
             subprocess.run(["cambc", "build", bot], cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     jobs = []
     for a, b in pairs:

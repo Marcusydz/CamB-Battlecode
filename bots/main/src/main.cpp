@@ -1,8 +1,8 @@
 // Entry point: draft instance picks from draft.cpp, champions run Bot. A failed turn is logged and still yields.
 #include <cambc.h>
 #include <cstdio>
-#include "bot.h"
-#include "draft.h"
+#include "core/bot.h"
+#include "draft/draft.h"
 
 int main() {
     if (cambc::is_draft()) {
