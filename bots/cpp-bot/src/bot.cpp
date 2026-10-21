@@ -350,7 +350,10 @@ void Bot::setup() {
                       || (width == 60 && height == 50 && walls == 0)      // stampede
                       || (width == 45 && height == 30 && walls == 30)     // swirl
                       || (width == 61 && height == 61 && walls == 210)    // concentrated_wealth
-                      || (width == 51 && height == 40 && walls == 378);   // corridors
+                      || (width == 51 && height == 40 && walls == 378)    // corridors
+                      // v111 probe vs Nyx's 02:30 bot + Fish: monolith +135, islands +116, interlock +111, hooks +44
+                      || (width == 50 && height == 50 && walls == 98) || (width == 60 && height == 60 && walls == 0)
+                      || (width == 40 && height == 40 && walls == 76) || (width == 31 && height == 31 && walls == 88);
         // The pre-v90 mid-game contested-camp penalty won these vs Nyx (v104 probe): starfish 239 vs 63,
         // starvation 208 vs 134, quadrants 444 vs 419, fragment 50 vs 40.
         old_contest_map = (width == 50 && height == 50 && walls == 32) || (width == 80 && height == 80 && walls == 664)
