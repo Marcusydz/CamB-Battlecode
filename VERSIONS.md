@@ -135,4 +135,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 167 | v106 candidate | 6425c18 (branch exp/v106) | v104b + treasure first on big_world, elk_arena, islands, packs/gold_rush, rushbait_v2, CW, expanse. Exactly as probed: Nyx 5818 vs 5284, Fish 4535 vs 3895 on the 10 maps; big_world WIN vs Fish. Accepted. |
 | (167) | v106 | e15c8a2 | Accepted onto top-team-study. Live as official 167. |
 | 168 | v107 probe | a4664b4 (branch exp/v107p) | v106 + death avoid on every map but broken_curve, probed on 30 maps vs Nyx and Fish. Nyx 9128 vs 10690, Fish 8092 vs 8569 overall (elk 0 vs 936, rushbait -361); per-map gains on lanes +273, stampede +160 (first Nyx gems there), swirl +83, CW +7, corridors +4. |
-| 169 | v107 candidate | e01d379 (branch exp/v107) | v106 + death avoid also on lanes, stampede, swirl, CW, corridors. Verifying on those 5 maps plus 5 controls vs Nyx and Fish. |
+| 169 | v107 candidate | e01d379 (branch exp/v107) | v106 + death avoid also on lanes, stampede, swirl, CW, corridors. Reproduced exactly: Nyx+Fish sum +527 on the 5 maps (lanes 563/484, stampede 160 vs Nyx, swirl 91 vs Fish); 5 controls (elk WIN 936-216, rows, big_world, gold_rush, pilgrimage) identical. Accepted. |
+| (169) | v107 | 53c167b | Accepted onto top-team-study. Live as official 169. |
