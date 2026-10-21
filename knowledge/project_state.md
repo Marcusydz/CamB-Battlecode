@@ -1,3 +1,19 @@
+# Project checkpoint
+
+Updated 2026-10-21 by Codex. This checkpoint describes the frozen review, not a claim that the continuously changing LIVE submission is still v208.
+
+- Accepted development branch: `top-team-study`; primary developer/final evaluator Claude. Accepted source at review start: internal **v123**, Cambridge **208**, Git **`d0a2110652b8a6bc1f0c16a334825b394b684284`**, recorded by `54f7c25bca50e700e51671d44c430aed3354914e`.
+- Current user-designated review: **v208/internal123**, branch `codex/review-v208`, pending Claude evaluation. Reports/candidate: `codex_reviews/v208/`. Review PR: https://github.com/Marcusydz/CamB-Battlecode/pull/3 (draft, unmerged); candidate commit `f562fece8de1f3728f49b5c7c6dcb15495e71652`. Prior formal file-manifest release is97/v71 (`releases/official-97.md`); the user's later explicit v123 request selects this review.
+- Latest observed website at final build-log inspection: LIVE220,221 waiting. These are experiments, **not** review designations. Check actual latest state when needed; don't chase higher numbers.
+- Best validated bot: no universally strongest bot established. Team accepted v123 using recorded Nyx/Fish experiments; the Codex mapping candidate is not accepted and regressed locally. Historical single panels are not cross-engine proof.
+- Review result: one confirmed Heart mapping defect; fix68/140 at−47.3 vs unchanged control73/140,+4.3. Separate dash trial38/70,+57.5 vs control28/70,−99.2, experimental. Candidate passive70/70. 490 completed local games, zero engine faults, but fuel events and some caught messages remain.
+- Opponent evidence: 8 pre-existing A-side records, Nyx and exact name Intercontinental Fish; no private sources/no new games. Priorities: combat snowball, full reward/capture/bank throughput, measured fuel budgeting. See dedicated opponent report for IDs, limitations and testable hypotheses.
+- References verified **2026-10-21**, patch1.0.2, official API633 declarations, SDK3.0.4, engine1.0.2 hash in manifest. Read only relevant sections and check freshness first. Root build config2.2.5/Python is stale; use isolated review workspace.
+- Completed earlier review: v44 PR https://github.com/Marcusydz/CamB-Battlecode/pull/2, unmerged handoff; Claude feedback records selective acceptance. A local v51 intermediate review was superseded before publication by the user's v123 request; do not invent a v51 PR or treat it as current.
+- Outstanding: validate correct mapping with explicit squad priorities; inspect dash exceptions/landings; profile fuel suspension; obtain both sides and source-pinned opponent panels; keep broken_curve unchanged as requested. Never merge, submit or activate automatically.
+
+## Prior Claude checkpoint (historical context; not current live-state assertion)
+
 # Project state
 
 Updated 2026-10-20 20:05 UTC by Claude.
