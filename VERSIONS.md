@@ -169,4 +169,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 193 | v115 candidate | c4cff6c (branch exp/v115) | v113b + retreat at 55% health on rows only. All 30 maps: Fish identical to v113b except rows 872 (+66), big_world still WIN 1024-876; vs Nyx rows WIN 1005-972, total 10885; elk 324 this time (Nyx keeps changing). Accepted. |
 | (193) | v115 | ef3cd6f | Accepted onto top-team-study. Live as official 193. |
 | 194 | v116 probe | 0e71002 (branch exp/v116p) | v115 with the old contested-camp rule flipped on every map but broken_curve (off where on, on where off), vs Nyx and Fish. Worse overall (Nyx 10145 vs 10885, Fish 9652 vs 10814); eight +107 (rule off), lanes +35, monolith +28. |
-| 195 | v117 probe | a9ea521 (branch exp/v117p) | v115 with death avoidance flipped on every map but broken_curve, vs Nyx and Fish. |
+| 195 | v117 probe | a9ea521 (branch exp/v117p) | v115 with death avoidance flipped on every map but broken_curve, vs Nyx and Fish. Worse overall (Nyx 9490, Fish 7612); won pilgrimage +417 and lanes +219 (off), starfish +166, fragment +42, reverse_spiral +42 (on), hooks +44 (off). |
+| 196 | v116 candidate | 09dff22 (branch exp/v116) | v115 + death avoidance off on pilgrimage, lanes, hooks and on for starfish, fragment, reverse_spiral; old contest rule off on eight. Verifying on all 30 maps. |
