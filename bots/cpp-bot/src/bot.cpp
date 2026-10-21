@@ -123,6 +123,7 @@ static bool treasure_first = false;   // treasure emblem opens the build (per ma
 static bool death_avoid = false;      // avoid camps where enemy champions killed us (per map, see setup)
 static bool old_contest_map = false;  // the pre-v90 contested-camp rule won here (per map, see setup)
 static bool contest_mid = false;      // mid-game contested-camp penalty: single-herd maps and old_contest_map
+static int squad = SQUAD;             // squad size (per map, see setup)
 static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
 constexpr int SOFT_BACK_GEMS = 20;       // ... and carrying fewer gems than this (was 10)
@@ -376,6 +377,19 @@ void Bot::setup() {
         if (total > 0 && top >= 0.9 * total) soft_back = false;
     }
     contest_mid = !soft_back || old_contest_map;
+    // Squad size per map (v109/v110 probes, Nyx + Fish sum): 2 won starvation +168, interlock +163,
+    // reverse_spiral +52, rushbait_v2 +44; one squad of 5 won split +234, pilgrimage +164, quadrants +127,
+    // fracture +125, expanse +38, shortcut +26.
+    {
+        const int walls = static_cast<int>(cambc::map::walls().count());
+        if ((width == 80 && height == 80 && walls == 664) || (width == 40 && height == 40 && walls == 76)
+            || (width == 30 && height == 30 && walls == 102) || (width == 30 && height == 80 && walls == 80))
+            squad = 2;
+        else if ((width == 45 && height == 35 && walls == 116) || (width == 50 && height == 65 && walls == 0)
+                 || (width == 45 && height == 45 && walls == 204) || (width == 61 && height == 71 && walls == 374)
+                 || (width == 80 && height == 80 && walls == 224) || (width == 40 && height == 40 && walls == 320))
+            squad = 5;
+    }
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
     // islands (60x60, no walls): v24's settings got 718 gems vs Fish there, v26's 312.
@@ -1566,7 +1580,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
             return mid->idx;
         }
     }
-    if (SQUAD > 1) {
+    if (squad > 1) {
         // Squads of SQUAD: champions ranked by memory slot (alive ones only); each squad's first
         // member picks camps, the rest go to its camp (Nyx and Fish kill our lone champions in a round).
         const auto alive = squad_alive(now);
@@ -1576,7 +1590,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         const auto it = std::find(slots.begin(), slots.end(), mem_slot);
         if (it != slots.end()) {
             const int rank = static_cast<int>(it - slots.begin());
-            const int lead = slots[rank - rank % SQUAD];
+            const int lead = slots[rank - rank % squad];
             if (lead != mem_slot && c[lead] && c[lead] - 1 < static_cast<int>(groups.size())) {
                 const auto& g = groups[c[lead] - 1];
                 const int dist = min_dist(my_field, g);
