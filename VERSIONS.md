@@ -128,4 +128,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 161 | v103 | 50ca47b | v103 restored after 160 (v104 did not repeat its probe: pilgrimage control 564 vs 873). Recheck: v103 repeats exactly (pilgrimage 873-521, starfish 63, starvation 134, quadrants 419, fragment 40), so v104 itself changed pilgrimage (likely per-turn fuel use in the camp-scoring loop). |
 | 162 | v104b candidate | 345b043 (branch exp/v104b) | Same per-map rule as v104 with a precomputed flag (identical loop work). vs Nyx exactly as probed: starfish 239, starvation 208, quadrants 444, fragment 50, pilgrimage 873-521 W. Accepted. |
 | (162) | v104b | 929bfb1 | Accepted onto top-team-study. Live as official 162. |
-| 163 | v105 probe | 18e1b66 (branch exp/v105p) | v104b + gold weight 0.3 via a setup flag on every map except broken_curve, probed on 30 maps. Testing. |
+| 163 | v105 probe | 18e1b66 (branch exp/v105p) | v104b + gold weight 0.3 via a setup flag on every map except broken_curve, probed on 30 maps. Total 10353 vs 13987; won only islands 660, fragment 70, rows 1017, swirl 53. |
+| 164 | v105 candidate | 6669fd0 (branch exp/v105) | v104b + gold weight 0.3 on islands, fragment, rows, swirl. Testing vs Nyx. |
