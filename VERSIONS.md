@@ -168,3 +168,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 192 | v115 probe | 048578d (branch exp/v115p) | v113b + retreat at 55% health (was 40%) on every map but broken_curve, vs Nyx and Fish. Much worse overall (Fish 6923 vs 10748) but rows WON vs Nyx 1005-972 (Fish 872 vs 806); elk still a win (720-504). (A top-teams draft probe, HoR/Ren/Stellar/Ryth/Varg, was dropped before upload: 14% slower unopposed.) |
 | 193 | v115 candidate | c4cff6c (branch exp/v115) | v113b + retreat at 55% health on rows only. All 30 maps: Fish identical to v113b except rows 872 (+66), big_world still WIN 1024-876; vs Nyx rows WIN 1005-972, total 10885; elk 324 this time (Nyx keeps changing). Accepted. |
 | (193) | v115 | ef3cd6f | Accepted onto top-team-study. Live as official 193. |
+| 194 | v116 probe | 0e71002 (branch exp/v116p) | v115 with the old contested-camp rule flipped on every map but broken_curve (off where on, on where off), vs Nyx and Fish. |
