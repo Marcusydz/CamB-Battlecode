@@ -74,6 +74,11 @@ void Bot::setup() {
             reset_slot = slot;
         } else if (ability.is_dash()) {
             dash_slot = slot;
+            if (ability.info())
+                if (const auto* d = std::get_if<cambc::ability_dash>(&*ability.info())) {
+                    dash_modifier = d->modifier;
+                    dash_radius = static_cast<int>(d->radius);
+                }
         } else if (ability.is_shield()) {
             shield_slot = slot;
         } else if (ability.is_heal()) {
@@ -117,6 +122,7 @@ void Bot::setup() {
         case CT::ren: draft_id = 8; break;
         case CT::varg: draft_id = 9; break;
         case CT::tavi: draft_id = 10; break;
+        case CT::heart_of_ruin: draft_id = HOR_SLOT_FIX ? 11 : -1; break;
         }
         auto it = std::find(picks.begin(), picks.end(), draft_id);
         if (it == picks.end()) throw std::runtime_error("not in draft");
@@ -142,6 +148,13 @@ void Bot::setup() {
     gold_weight = GOLD_W;
     eta_w = ETA_W;
     apply_map_settings();
+    if (PRIORITY) {
+        // Stunners first: allies acting after them hit a stunned target.
+        try {
+            me.set_priority(stun_slot ? 2 : 1);
+        } catch (const cambc::error&) {
+        }
+    }
     int ordinary_gems = 0;
     for (const auto& g : groups)
         if (!g.monolith) ordinary_gems += g.gems;

@@ -46,6 +46,17 @@ template <class T> bool Bot::try_spell(const T& target, bool want_stun) {
 
 template <class T> bool Bot::try_attack(const T& target, const std::vector<T>& others) {
     auto& me = cambc::self();
+    if (RANGED_RESET && !melee && reset_slot && !me.can_attack() && me.can_cast() && target.is_visible()
+        && target.health() > 0 && me.attack_tiles().is_set(target.position())) {
+        // Ranged: walking used the attack. An attack reset gives it back (GameRules, "A champion turn").
+        const auto reset = me.abilities()[*reset_slot];
+        if (!reset.is_on_cooldown()) {
+            try {
+                reset.use();
+            } catch (const cambc::error&) {
+            }
+        }
+    }
     if (!me.can_attack() || !target.is_visible() || target.health() <= 0
         || !me.attack_tiles().is_set(target.position()))
         return false;
@@ -88,6 +99,22 @@ void Bot::fight(const cambc::camp& target, const std::vector<cambc::camp>& other
     auto& me = cambc::self();
     if (!target.is_visible()) return;
     if (KITE && kiter && kite(target, others)) return;
+    if (HOR_DASH && dash_modifier > 0) {
+        std::vector<vec2> live;
+        bool hostile = camp_strength(target) > 0;
+        if (target.is_visible() && camp_health(target) > 0) live.push_back(target.position());
+        for (const auto& c : others)
+            if (c.is_visible() && camp_health(c) > 0) {
+                live.push_back(c.position());
+                if (camp_strength(c) > 0) hostile = true;
+            }
+        if (dash_strike(live, target.position(), hostile ? 1 : 2)) {
+            try_attack(target, others);
+            for (const auto& c : others)
+                if (try_attack(c, others)) break;
+            return;
+        }
+    }
     if (me.attack_tiles().is_set(target.position())) {
         if (camp_strength(target) > 0 && me.health() < 0.9 * me.max_health())
             self_buff(me);  // Varg's shield used to be PvP-only
@@ -176,6 +203,39 @@ bool Bot::kite(const cambc::camp& target, const std::vector<cambc::camp>& others
     }
     if (!step_towards(ring, false)) return false;  // no safe tile reachable: fight normally
     return true;
+}
+
+// Damaging dash (Heart of Ruin): land where it hits the most hostiles (each hit tile is within
+// dash_radius of the landing, so a melee champion can still attack one of them this turn).
+// `want` counts as three hits. Returns true if the dash was cast.
+bool Bot::dash_strike(const std::vector<vec2>& hostiles, std::optional<vec2> want, int min_hits) {
+    auto& me = cambc::self();
+    if (!HOR_DASH || dash_modifier <= 0 || !dash_slot || !me.can_cast() || hostiles.empty()) return false;
+    const auto dash = me.abilities()[*dash_slot];
+    if (dash.is_on_cooldown()) return false;
+    const auto pos = me.position();
+    std::optional<vec2> best;
+    int best_hits = 0, best_score = 0;
+    for (auto p : (around(pos, 2) & ~blocked()).positions()) {
+        if (p == pos) continue;
+        int hits = 0, score = 0;
+        for (auto h : hostiles)
+            if (chebyshev(p, h) <= dash_radius) {
+                hits += 1;
+                score += (want && h == *want) ? 3 : 1;
+            }
+        if (hits >= min_hits && score > best_score) {
+            best = p;
+            best_hits = hits;
+            best_score = score;
+        }
+    }
+    if (!best || best_hits < min_hits) return false;
+    try {
+        return dash.use(*best);
+    } catch (const cambc::error&) {
+        return false;
+    }
 }
 
 // try_spell / try_attack are also used by pvp.cpp and turn.cpp.

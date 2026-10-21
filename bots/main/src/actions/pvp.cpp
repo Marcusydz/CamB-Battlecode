@@ -196,6 +196,12 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
                     target = &e;
                 }
             }
+            if (HOR_DASH && dash_modifier > 0) {
+                // Heart of Ruin: open with the landing damage and stun on the kill target.
+                std::vector<vec2> at;
+                for (const auto& e : near) at.push_back(e.position());
+                dash_strike(at, target->position(), 1);
+            }
             self_buff(me);
             // Stun the most dangerous enemy in reach if it is not the kill target.
             const cambc::champion* dangerous = &near[0];
@@ -430,12 +436,16 @@ bool Bot::retreat_and_recall(bool allow_recall) {
         }
     }
     if (me.can_move()) {
-        auto best = pick((around(pos, 1) & ~blk).positions());
-        if (best && *best != pos) {
+        auto options = around(pos, 1) & ~blk;
+        for (int tries = MOVE_RETRY ? 3 : 1; tries > 0; --tries) {
+            auto best = pick(options.positions());
+            if (!best || *best == pos) break;
             try {
-                me.move_absolute(*best);
+                if (me.move_absolute(*best)) break;
             } catch (const cambc::error&) {
+                break;
             }
+            options.set(*best, false);  // hidden unit there: try the next best tile
         }
     }
     return true;

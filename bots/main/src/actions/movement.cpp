@@ -63,12 +63,17 @@ bool Bot::step_static(int g) {
         }
     }
     if (me.can_move() && here > 0) {
-        auto best = pick(around(origin, 1) & ~blk);
-        if (best && gdist(g, *best) < here) {
+        // A hidden unit makes the step return false without using it: try the next best tile.
+        auto options = around(origin, 1) & ~blk;
+        for (int tries = MOVE_RETRY ? 3 : 1; tries > 0 && !moved; --tries) {
+            auto best = pick(options);
+            if (!best || gdist(g, *best) >= here) break;
             try {
                 if (me.move_absolute(*best)) moved = true;
             } catch (const cambc::error&) {
+                break;
             }
+            options.set(*best, false);
         }
     }
     return moved;
@@ -120,12 +125,17 @@ bool Bot::step_towards(const bitboard& goals, bool allow_dash) {
         }
     }
     if (me.can_move() && here > 0) {
-        auto best = pick(around(origin, 1) & ~blk);
-        if (best && field.get(*best) < here) {
+        // A hidden unit makes the step return false without using it: try the next best tile.
+        auto options = around(origin, 1) & ~blk;
+        for (int tries = MOVE_RETRY ? 3 : 1; tries > 0 && !moved; --tries) {
+            auto best = pick(options);
+            if (!best || field.get(*best) >= here) break;
             try {
                 if (me.move_absolute(*best)) moved = true;
             } catch (const cambc::error&) {
+                break;
             }
+            options.set(*best, false);
         }
     }
     return moved;

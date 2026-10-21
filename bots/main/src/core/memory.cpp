@@ -19,7 +19,9 @@ std::array<std::uint8_t, 8> Bot::claims() const {
 }
 
 void Bot::claim(int group) {
-    const std::uint8_t value = group < 0 ? 0 : static_cast<std::uint8_t>(groups[group].idx + 1);
+    // SQUAD_FIX: 255 = alive without a claim (readers check claims against groups.size()).
+    const std::uint8_t none = SQUAD_FIX && cambc::self().is_alive() ? 255 : 0;
+    const std::uint8_t value = group < 0 ? none : static_cast<std::uint8_t>(groups[group].idx + 1);
     auto data = claims();
     if (data[mem_slot] != value) cambc::shared_memory.write(mem_slot, std::span{&value, 1});
 }

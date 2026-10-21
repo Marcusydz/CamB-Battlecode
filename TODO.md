@@ -5,29 +5,19 @@ Rules and API references: `docs/GameRules.md`, `docs/BotAPICpp.md`.
 
 ## Bugs
 
-1. **Heart of Ruin has no draft slot.** The `draft_id` switch in `Bot::setup()` has no case for
-   `CT::heart_of_ruin`, so it falls into the catch: its shared-memory slot becomes `handle % 8`
-   (can collide with an ally's claim slot or Issac's slot 7) and `team_size` becomes 3. Affects
-   every map using draft list 16 or 18, where Heart of Ruin is the first pick.
-2. **Squad membership drops anyone without a claim.** `squad_alive()` counts a slot as alive only
-   if it holds a claim, so a champion retreating, idle or recalling leaves its squad and squads
-   reshuffle.
-3. **Prism's gem cap is based on a wrong number.** The comment on `PRISM_GEM_CAP` says +0.2 focus
-   per gem; the rules say 1.5 (60 gems = +90 focus on a base of 80). Re-test a higher cap.
-4. **Hidden blockers waste the step.** `step_towards` / `step_static` try one tile; when
-   `move_absolute` returns false (unseen unit in a bush) they don't try the next best tile, though
-   the failed attempt costs nothing.
+1. **Prism's gem cap comment was wrong** (now fixed): the rules give 1.5 focus per gem, not 0.2.
+   A cap of 90 tested level with 60 in v1.1.0; worth retrying with smarter banking.
+
+Fixed or tried in v1.1.0 (see `docs/versions/v1.1.0.md`): Heart of Ruin's draft slot (fixed),
+hidden blockers (move retry, on), squad membership (`SQUAD_FIX`, lost, off).
 
 ## Rules we don't use yet
 
-- **Move, reset, attack for ranged champions.** An attack reset restores the attack allowance, so
-  Vesper Vale, Tavi and Willow can step and still hit. `fight()` steps, then `try_attack` fails.
-- **Heart of Ruin's dash** deals 1.5x focus and stuns in radius 1 on landing; we only use it to walk.
 - **Teleport crystals** (10 gold, 3 tiles over walls) are never bought.
 - **Counter-drafting:** enemy picks are revealed during the draft but never read (e.g. Marcella is
   stun-immune).
 - **Draft memory** (1024 bytes, 10x draft fuel, full map) is unused.
-- **`set_priority`** is unused: order stunners before damage dealers.
+- **`set_priority`:** stunners first lost in v1.1.0 (`PRIORITY`); other orders untested.
 - **Shared memory** slots 5 and 6 are free: focus target, "enemy tributing at altar X".
 - **Contesting enemy captures:** entering the region resets their 5-round timer.
 - Smaller: cancel recall or tribute when a fight turns; hide in bushes while gathering; Tavi

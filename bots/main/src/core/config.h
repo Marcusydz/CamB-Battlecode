@@ -60,7 +60,7 @@ constexpr double CAMP_RISK = 1.5;      // a team may take a camp group whose dam
 constexpr int GATHER_MAX = 12;          // give up waiting for helpers after this many turns
 constexpr double JOIN_BONUS = 1.5;      // score boost for joining a joint target an ally already claimed
 constexpr double HEAL_MIN_USE = 0.6;    // heal only if at least this fraction of the heal lands (or the ally is below half HP)
-constexpr int PRISM_GEM_CAP = 60;       // Prism gains only +0.2 focus per gem carried, so it banks like the others
+constexpr int PRISM_GEM_CAP = 60;       // Prism gains 1.5 focus per carried gem (GameRules); 90 tested level with 60 (v1.1.0)
 constexpr int PRISM_EARLY_BANK = 0;
 constexpr int SPAWN_HOLD = 6;          // >0: stay on spawn while enemies this close would win the fight there (maps with spawn_hold)
 constexpr int SPAWN_HOLD_MAX = 40;     // ... for at most this many turns in a row
@@ -83,6 +83,14 @@ constexpr bool IGNORE_SPAWN_CAMPERS = true;  // enemies inside their own spawn a
 constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spent on each activity (0 disables)
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
 constexpr int SOFT_BACK_GEMS = 20;       // ... and carrying fewer gems than this (was 10)
+
+// Rules v1.0.0 did not use (docs/UnusedRules.md). 0 = v1.0.0 behaviour. v1.1.0 turns on the four that won.
+constexpr int HOR_SLOT_FIX = 1;   // 1: Heart of Ruin gets its draft slot (it fell into the catch: slot handle % 8, team_size 3)
+constexpr int SQUAD_FIX = 0;      // 1: a live champion without a claim writes 255, so squads still count it
+constexpr int RANGED_RESET = 1;   // 1: ranged champions that moved cast their attack reset, then attack
+constexpr int MOVE_RETRY = 1;     // 1: a step blocked by a hidden unit tries the next best tiles (the failed step is free)
+constexpr int HOR_DASH = 1;       // 1: Heart of Ruin lands its damaging, stunning dash on enemies and camps
+constexpr int PRIORITY = 0;       // 1: champions with a stun act first within our team
 
 // Per-map settings: defaults here, set for the current map in Bot::apply_map_settings().
 // Casters deal damage from focus. Counting focus at 0.25 made Nyx (Ren, Stellar, Cassi & Issac stacking

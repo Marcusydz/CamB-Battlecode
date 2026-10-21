@@ -72,6 +72,8 @@ private:
 
     std::vector<Nuke> nukes;  // damage spells, best first
     std::optional<std::uint32_t> stun_slot, reset_slot, dash_slot, shield_slot, heal_slot;
+    double dash_modifier = 0;  // > 0: the dash damages and stuns around its landing tile (Heart of Ruin)
+    int dash_radius = 0;
 
     int mem_slot = 0;
     int team_size = 3;
@@ -116,6 +118,7 @@ private:
     template <class T> bool try_attack(const T& target, const std::vector<T>& others = {});
     void fight(const cambc::camp& target, const std::vector<cambc::camp>& others);
     bool kite(const cambc::camp& target, const std::vector<cambc::camp>& others);
+    bool dash_strike(const std::vector<cambc::vec2>& hostiles, std::optional<cambc::vec2> want, int min_hits);
 
     void shop();
     void place_ward();
