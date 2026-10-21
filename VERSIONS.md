@@ -153,3 +153,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 180 | v111 probe | a6bc6e7 (branch exp/v111p) | v110b + death avoid on every map but broken_curve, re-probed because the new Nyx (02:30 UTC) hunts us: on elk it kills us 50-0, deaths all near the middle. Nyx 9184 vs 9467, Fish 9870 vs 10282 overall; elk unchanged (0); won monolith +135, islands +116, interlock +111, hooks +44. |
 | 181 | v111 candidate | ab6d2d9 (branch exp/v111) | v110b + death avoid also on monolith, islands, interlock, hooks. Reproduced exactly (+406 Nyx+Fish on the 4 maps), gold_rush control identical. Accepted. |
 | (181) | v111 | 6e9540e | Accepted onto top-team-study. Live as official 181. |
+| 182 | v112 probe | b73413d (branch exp/v112p) | v111 + one squad of 5 on every map but broken_curve, re-probed vs the new Nyx. |
