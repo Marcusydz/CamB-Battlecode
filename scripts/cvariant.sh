@@ -1,8 +1,8 @@
 #!/bin/bash
-# Usage: cvariant.sh NAME 'PARAM=value' ...  -> bots/NAME = copy of cpp-bot with constexpr params overridden
+# Usage: cvariant.sh NAME 'PARAM=value' ...  -> bots/NAME = copy of main with constexpr params overridden
 cd "$(dirname "$0")/.."
 N=$1; shift
-SRC=${SRC:-cpp-bot}; rm -rf bots/$N; cp -r bots/$SRC bots/$N; rm -rf bots/$N/.cambc
+SRC=${SRC:-main}; rm -rf bots/$N; cp -r bots/$SRC bots/$N; rm -rf bots/$N/.cambc
 for kv in "$@"; do k=${kv%%=*}; v=${kv#*=}
   f=bots/$N/src/bot.cpp; grep -qE "^constexpr [a-z:_0-9]+ $k = " $f || f=bots/$N/src/draft.cpp
   grep -qE "^constexpr [a-z:_0-9]+ $k = " $f || { echo "no param $k"; exit 1; }
