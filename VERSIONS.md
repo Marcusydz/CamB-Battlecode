@@ -165,3 +165,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | (189) | v113b | 52eb102 | Accepted onto top-team-study. Live as official 189. |
 | 190 | v114 probe | ec326f8 (branch exp/v114p) | v113b + leave when 1 more enemy than allies is near (was 2), every map but broken_curve, vs Nyx and Fish. Worse (Nyx 9766 vs 10906 for v112 at 04:05, Fish 9160 vs 10748; elk 936 to 180). Only ambush looked better on both (+33 Fish, +264 Nyx). Rejected. |
 | 191 | v113b | bdf0de5 | v113b restored after the v114 probe. |
+| 192 | v115 probe | 048578d (branch exp/v115p) | v113b + retreat at 55% health (was 40%) on every map but broken_curve, vs Nyx and Fish. (A top-teams draft probe, HoR/Ren/Stellar/Ryth/Varg, was dropped before upload: 14% slower unopposed.) |
