@@ -137,3 +137,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 168 | v107 probe | a4664b4 (branch exp/v107p) | v106 + death avoid on every map but broken_curve, probed on 30 maps vs Nyx and Fish. Nyx 9128 vs 10690, Fish 8092 vs 8569 overall (elk 0 vs 936, rushbait -361); per-map gains on lanes +273, stampede +160 (first Nyx gems there), swirl +83, CW +7, corridors +4. |
 | 169 | v107 candidate | e01d379 (branch exp/v107) | v106 + death avoid also on lanes, stampede, swirl, CW, corridors. Reproduced exactly: Nyx+Fish sum +527 on the 5 maps (lanes 563/484, stampede 160 vs Nyx, swirl 91 vs Fish); 5 controls (elk WIN 936-216, rows, big_world, gold_rush, pilgrimage) identical. Accepted. |
 | (169) | v107 | 53c167b | Accepted onto top-team-study. Live as official 169. |
+| 170 | v108 probe | 2188fab (branch exp/v108p) | v107 + pre-v90 contested-camp rule on every map but broken_curve, probed on 30 maps vs Nyx and Fish. |
