@@ -223,3 +223,10 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 253 | flip probe f3 | 94af177 (exp/f3) | v133 with the contested-camp rule flipped everywhere. Won the_farm +441 (beat Fish 1004-473), CW +175, expanse +147, fracture +138, pilgrimage +82. |
 | 254 | restore v133 | (top-team-study) | |
 | 255 | v138 (accepted) | d42219a (exp/v138) | v133 + those flips (treasure on yellow_brick_road, packs/gold_rush; death avoid on islands; contest rule on the_farm, CW, expanse, fracture, pilgrimage). Verified: all 9 flipped maps reproduced (+1893), but split moved -904 with no setting changed there (setup code shift); net +989. Beats Fish on the_farm 1004-473. |
+| 256 | split probe a | 5a184f2 (exp/v139a) | v138 + treasure opening flipped on split only: split +543 (Nyx 353->449, Fish 529->976). |
+| 257 | split probe b | 36cad02 (exp/v139b) | v138 + death avoid flipped on split: +415. |
+| 258 | split probe c | 1f32dad (exp/v139c) | v138 + contest rule flipped on split: -69. |
+| 259 | split probe d | b1e8d76 (exp/v139d) | v138 + bank at 30 gems on split: -52. |
+| 260 | split probe e | 87ba28d (exp/v139e) | v138 + wards every 5 tiles on split: +256. |
+| 261 | restore v138 | (top-team-study) | |
+| 262 | v139a (accepted) | 20e8651 (exp/v139a) | v138 + treasure flip on split. Verified on all 35 maps vs Nyx and Fish: only split moved, +543 (Nyx 17389->17485, Fish 15363->15810). |
