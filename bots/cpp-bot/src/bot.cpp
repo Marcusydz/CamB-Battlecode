@@ -368,6 +368,15 @@ void Bot::setup() {
     }
     engage_ratio = caster_power ? ENGAGE_RATIO : 0.8;
     {
+        // Fight threshold per map (v110 probes, Nyx + Fish sum; 1.3 and 0.8 were both worse overall).
+        // Rechecked vs Nyx's 02:30 bot: 0.8 on the_farm +110, 1.3 on starfish +11 (big_world, fragment lost).
+        const int walls = static_cast<int>(cambc::map::walls().count());
+        if (width == 50 && height == 50 && walls == 32)
+            engage_ratio = 1.3;
+        else if (width == 50 && height == 40 && walls == 148)
+            engage_ratio = 0.8;
+    }
+    {
         // elk_arena (all gems in the middle group): v53's full recall won 828-324 vs Nyx, backing off 612-540.
         int total = 0, top = 0;
         for (const auto& g : groups) {
