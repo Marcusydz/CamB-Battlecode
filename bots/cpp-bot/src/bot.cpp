@@ -391,6 +391,18 @@ void Bot::setup() {
         }
         if (total > 0 && top >= 0.9 * total) soft_back = false;
     }
+    {
+        // Treasure opening flipped vs the v106 list (v113 probe; summed over Nyx's 02:30 bot, its older bot and Fish):
+        // off on pilgrimage +175, collision +139, expanse +41, hooks +66; on for the_farm +65, shortcut +87.
+        // Elk keeps treasure: off scored more vs the 02:30 Nyx (576 vs 0) but loses our 936-216 win vs the older one.
+        const int walls = static_cast<int>(cambc::map::walls().count());
+        if ((width == 50 && height == 65 && walls == 0)
+            || (width == 41 && height == 41 && walls == 84) || (width == 80 && height == 80 && walls == 224)
+            || (width == 31 && height == 31 && walls == 88))
+            treasure_first = false;
+        if ((width == 50 && height == 40 && walls == 148) || (width == 40 && height == 40 && walls == 320))
+            treasure_first = true;
+    }
     contest_mid = !soft_back || old_contest_map;
     // Squad size per map (v109/v110 probes, Nyx + Fish sum): 2 won starvation +168, interlock +163,
     // reverse_spiral +52, rushbait_v2 +44; one squad of 5 won split +234, pilgrimage +164, quadrants +127,
