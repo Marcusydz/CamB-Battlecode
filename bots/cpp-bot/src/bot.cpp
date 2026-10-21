@@ -127,6 +127,8 @@ static bool old_contest_map = false;  // the pre-v90 contested-camp rule won her
 static bool contest_mid = false;      // mid-game contested-camp penalty: single-herd maps and old_contest_map
 static int squad = SQUAD;             // squad size (per map, see setup)
 static bool spawn_hold = false;       // see SPAWN_HOLD (per map, see setup)
+static int gem_cap = GEM_CAP;          // bank at this many gems (per map, see setup)
+static int ward_gap = WARD_GAP;        // per map, see setup
 static double low_hp = LOW_HP;        // retreat threshold (per map, see setup)
 static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
@@ -471,6 +473,25 @@ void Bot::setup() {
         const int walls = static_cast<int>(cambc::map::walls().count());
         for (const auto& m : HOLD)
             if (width == m[0] && height == m[1] && walls == m[2]) spawn_hold = true;
+    }
+    {
+        // Probes 226-235 on the maps outside the 30-map set (Nyx + Fish): yellow_brick_road retreat at 55% +462
+        // (beats Nyx), broken_curve fight threshold 1.3 +142, boss_battle treasure flip beats Nyx on tiebreak.
+        const int walls = static_cast<int>(cambc::map::walls().count());
+        if (width == 40 && height == 30) low_hp = 0.55;
+        if (width == 40 && height == 40 && walls == 274) engage_ratio = 1.3;
+        if (width == 50 && height == 41) treasure_first = !treasure_first;
+        // Banking at 30 gems (probe 239, Codex's Fish banking observation) lost 4600 overall but won these:
+        // shortcut +308, reverse_spiral +75, hooks +66.
+        if ((width == 40 && height == 40 && walls == 320) || (width == 30 && height == 30 && walls == 102)
+            || (width == 31 && height == 31 && walls == 88))
+            gem_cap = 30;
+        // Banking at 90 (probe 245) won broken_curve +186. A ward every 5 tiles instead of 8 (probe 246; every 16
+        // lost 6700) won concentrated_wealth +214, yellow_brick_road +135, corridors +117, fracture +78.
+        if (width == 40 && height == 40 && walls == 274) gem_cap = 90;
+        if ((width == 61 && height == 61 && walls == 210) || (width == 40 && height == 30)
+            || (width == 51 && height == 40 && walls == 378) || (width == 61 && height == 71 && walls == 374))
+            ward_gap = 5;
     }
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
@@ -943,7 +964,7 @@ void Bot::place_ward() {
         const auto pos = me.position();
         const auto mine = me.ward_positions();
         for (auto w : mine)
-            if (chebyshev(w, pos) < WARD_GAP) return;
+            if (chebyshev(w, pos) < ward_gap) return;
         if (spawn.is_set(pos)) return;
         const auto tiles = me.ward_placement_tiles() & ~static_block;
         std::optional<vec2> best;
@@ -2010,7 +2031,7 @@ void Bot::turn() {
     if (gems > 0 && !altar_blocked) {
         const int altar_dist = altar_field.get(pos);
         const bool prism = kind == CT::prism;
-        const int cap = prism ? PRISM_GEM_CAP : GEM_CAP;
+        const int cap = prism ? PRISM_GEM_CAP : gem_cap;
         const bool on_the_way = altar_dist <= target_dist && (!prism || gems >= PRISM_EARLY_BANK);
         if (tgt < 0 || gems >= cap || on_the_way) {
             claim(-1);
