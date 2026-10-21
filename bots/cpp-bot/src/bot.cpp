@@ -119,8 +119,10 @@ constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spen
 // focus) look weak: we engaged and lost 1-12 in kills on lanes. Off on 40x40 maps (broken_curve stays as v42).
 static bool caster_power = true;
 static double engage_ratio = ENGAGE_RATIO;
-static bool treasure_first = false;
-static bool death_avoid = false;     // avoid camps where enemy champions killed us (per map, see setup)  // treasure emblem opens the build (per map, see setup)
+static bool treasure_first = false;   // treasure emblem opens the build (per map, see setup)
+static bool death_avoid = false;      // avoid camps where enemy champions killed us (per map, see setup)
+static bool old_contest_map = false;  // the pre-v90 contested-camp rule won here (per map, see setup)
+static bool contest_mid = false;      // mid-game contested-camp penalty: single-herd maps and old_contest_map
 static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
 constexpr int SOFT_BACK_GEMS = 20;       // ... and carrying fewer gems than this (was 10)
@@ -334,6 +336,10 @@ void Bot::setup() {
                          || (width == 45 && height == 30 && walls == 30);  // swirl (45 vs 30)
         // DEATH_AVOID won these vs Nyx (v103 probe): pilgrimage 873-521 (was 490-1016), corners 487 vs 372.
         death_avoid = (width == 50 && height == 65 && walls == 0) || (width == 71 && height == 71 && walls == 44);
+        // The pre-v90 mid-game contested-camp penalty won these vs Nyx (v104 probe): starfish 239 vs 63,
+        // starvation 208 vs 134, quadrants 444 vs 419, fragment 50 vs 40.
+        old_contest_map = (width == 50 && height == 50 && walls == 32) || (width == 80 && height == 80 && walls == 664)
+                          || (width == 45 && height == 45 && walls == 204) || (width == 30 && height == 30 && walls == 24);
     }
     engage_ratio = caster_power ? ENGAGE_RATIO : 0.8;
     {
@@ -345,6 +351,7 @@ void Bot::setup() {
         }
         if (total > 0 && top >= 0.9 * total) soft_back = false;
     }
+    contest_mid = !soft_back || old_contest_map;
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
     // islands (60x60, no walls): v24's settings got 718 gems vs Fish there, v26's 312.
@@ -1614,7 +1621,7 @@ int Bot::choose_group(int now, const distance_field& my_field) {
         if (others && need <= 1 && g.state != 2 && !(MONO_KITE && g.monolith) && (!SPREAD_LOWER_ONLY || senior.count(g.idx)))
             score *= SPREAD;  // someone else is on it
         if (MONO_KITE && g.monolith && others > 0) score *= JOIN_BONUS;  // a second caster halves the long monolith fight
-        if (CONTEST_FACTOR < 1.0 && g.contested && (now < CONTEST_EARLY || (!soft_back && enemy_near(g.center, 8, 10, now))))
+        if (CONTEST_FACTOR < 1.0 && g.contested && (now < CONTEST_EARLY || (contest_mid && enemy_near(g.center, 8, 10, now))))
             score *= CONTEST_FACTOR;  // mid-game penalty only where one herd dominates (elk): elsewhere we ceded the middle
         if (target == g.idx) score *= COMMIT;  // hysteresis
         if (SEED) {
