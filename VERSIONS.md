@@ -129,4 +129,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 162 | v104b candidate | 345b043 (branch exp/v104b) | Same per-map rule as v104 with a precomputed flag (identical loop work). vs Nyx exactly as probed: starfish 239, starvation 208, quadrants 444, fragment 50, pilgrimage 873-521 W. Accepted. |
 | (162) | v104b | 929bfb1 | Accepted onto top-team-study. Live as official 162. |
 | 163 | v105 probe | 18e1b66 (branch exp/v105p) | v104b + gold weight 0.3 via a setup flag on every map except broken_curve, probed on 30 maps. Total 10353 vs 13987; won only islands 660, fragment 70, rows 1017, swirl 53. |
-| 164 | v105 candidate | 6669fd0 (branch exp/v105) | v104b + gold weight 0.3 on islands, fragment, rows, swirl. Testing vs Nyx. |
+| 164 | v105 candidate | 6669fd0 (branch exp/v105) | v104b + gold weight 0.3 on islands, fragment, rows, swirl. Did not reproduce: rows 915-1003 (lost the win), pilgrimage 564 (was 873 W), islands 454, fragment 26, swirl 15. Rejected. |
+| 165 | v104b | 7d9e497 | v104b restored after 164. Live. |
