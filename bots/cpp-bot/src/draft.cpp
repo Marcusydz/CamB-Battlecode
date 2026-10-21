@@ -10,7 +10,7 @@ using List = std::array<D, 11>;
 
 // Candidate lists. 0 is v16's order (Ren, Tavi, Ryth, Stellar, Marcella), chosen by local tests against
 // itself. 1 is what teams rated 1700+ pick on almost every map (690 ladder games, October 2026).
-static constexpr std::array<List, 17> LISTS{{
+static constexpr std::array<List, 18> LISTS{{
     {D::ren, D::tavi, D::ryth, D::stellar, D::marcella, D::varg, D::vendetta, D::vesper_vale, D::prism, D::cassi_and_issac, D::willow},
     {D::cassi_and_issac, D::stellar, D::varg, D::ren, D::ryth, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::stellar, D::cassi_and_issac, D::ren, D::ryth, D::varg, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
@@ -32,6 +32,8 @@ static constexpr std::array<List, 17> LISTS{{
     // 16: after the week-2 patch (nerfs to Stellar, Varg, Ryth, Ren, Cassi & Issac, Tavi; Willow buffed; new Heart of Ruin).
     // Unopposed on cambc 3.0.1 it farmed faster than list 4 on most of the 21 maps.
     {D::heart_of_ruin, D::varg, D::stellar, D::ryth, D::willow, D::ren, D::marcella, D::cassi_and_issac, D::prism, D::tavi, D::vendetta},
+    // 17: patch 1.0.2 nerfed Heart of Ruin (strength 40 -> 30) and buffed Vesper Vale (health 1000, strength 55).
+    {D::vesper_vale, D::varg, D::stellar, D::ryth, D::willow, D::ren, D::marcella, D::cassi_and_issac, D::prism, D::tavi, D::vendetta},
 }};
 
 constexpr int DRAFT = -1;  // >=0: use this list on every map (testing). -1: per-map table below.
@@ -79,6 +81,14 @@ static int choose_list() {
     if (DRAFT >= 0) return DRAFT;
     const int w = cambc::map::width(), h = cambc::map::height();
     const int walls = static_cast<int>(cambc::map::walls().count());
+    // Vesper Vale instead of Heart of Ruin won here after patch 1.0.2 (v121 probe, Nyx + Fish): pilgrimage +365
+    // (beat Nyx 791-543), expanse +287, ambush +238, rushbait_v2 +231, islands +206, stampede +160, starfish +141,
+    // monolith +130, eight +97, CW +82, rows +78 (beat Nyx 1017-991), the_farm +72.
+    static constexpr int VESPER[][3] = {{50, 65, 0},  {80, 80, 224}, {100, 100, 540}, {30, 80, 80},
+                                        {60, 60, 0},  {60, 50, 0},   {50, 50, 32},    {50, 50, 98},
+                                        {41, 30, 36}, {61, 61, 210}, {50, 50, 214},   {50, 40, 148}};
+    for (const auto& m : VESPER)
+        if (w == m[0] && h == m[1] && walls == m[2]) return 17;
     if (FISH_DRAFT) {
         for (const auto& m : FISH_MAP)
             if (m.w == w && m.h == h && m.walls == walls) return m.list;
