@@ -493,6 +493,20 @@ void Bot::setup() {
             || (width == 51 && height == 40 && walls == 378) || (width == 61 && height == 71 && walls == 374))
             ward_gap = 5;
     }
+    {
+        // Flip probes on v133 (251-253, Nyx + Fish): treasure opening flipped won yellow_brick_road +522,
+        // packs/gold_rush +48/+76; death avoidance flipped won islands +264; the contested-camp rule flipped
+        // won the_farm +441 (beat Fish 1004-473), CW +175, expanse +147, fracture +138, pilgrimage +82.
+        const int walls = static_cast<int>(cambc::map::walls().count());
+        if ((width == 40 && height == 30) || (width == 31 && height == 31 && walls == 0)) treasure_first = !treasure_first;
+        if (width == 60 && height == 60 && walls == 0) death_avoid = !death_avoid;
+        if ((width == 50 && height == 40 && walls == 148) || (width == 61 && height == 61 && walls == 210)
+            || (width == 80 && height == 80 && walls == 224) || (width == 61 && height == 71 && walls == 374)
+            || (width == 50 && height == 65 && walls == 0)) {
+            old_contest_map = !old_contest_map;
+            contest_mid = !soft_back || old_contest_map;
+        }
+    }
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
     // islands (60x60, no walls): v24's settings got 718 gems vs Fish there, v26's 312.
