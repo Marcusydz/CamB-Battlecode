@@ -353,7 +353,17 @@ void Bot::setup() {
         // The pre-v90 mid-game contested-camp penalty won these vs Nyx (v104 probe): starfish 239 vs 63,
         // starvation 208 vs 134, quadrants 444 vs 419, fragment 50 vs 40.
         old_contest_map = (width == 50 && height == 50 && walls == 32) || (width == 80 && height == 80 && walls == 664)
-                          || (width == 45 && height == 45 && walls == 204) || (width == 30 && height == 30 && walls == 24);
+                          || (width == 45 && height == 45 && walls == 204) || (width == 30 && height == 30 && walls == 24)
+                          // v108 probe (Nyx + Fish sum): monolith +250, the_farm +155, collision +148, packs +70 and gold_rush +126,
+                          // rushbait_v2 +40, lanes +27, eight +19, interlock +18.
+                          || (width == 50 && height == 50 && walls == 98)     // monolith
+                          || (width == 50 && height == 40 && walls == 148)    // the_farm
+                          || (width == 41 && height == 41 && walls == 84)     // collision
+                          || (width == 31 && height == 31 && walls == 0)      // packs and gold_rush
+                          || (width == 30 && height == 80 && walls == 80)     // rushbait_v2
+                          || (width == 90 && height == 30 && walls == 0)      // lanes
+                          || (width == 41 && height == 30 && walls == 36)     // eight
+                          || (width == 40 && height == 40 && walls == 76);    // interlock
     }
     engage_ratio = caster_power ? ENGAGE_RATIO : 0.8;
     {
