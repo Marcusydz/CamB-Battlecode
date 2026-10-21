@@ -98,6 +98,8 @@ constexpr double JOIN_BONUS = 1.5;      // score boost for joining a joint targe
 constexpr double HEAL_MIN_USE = 0.6;    // heal only if at least this fraction of the heal lands (or the ally is below half HP)
 constexpr int PRISM_GEM_CAP = 60;       // Prism gains only +0.2 focus per gem carried, so it banks like the others
 constexpr int PRISM_EARLY_BANK = 0;
+constexpr int SPAWN_HOLD = 6;          // >0: stay on spawn while enemies this close would win the fight there (maps with spawn_hold)
+constexpr int SPAWN_HOLD_MAX = 40;     // ... for at most this many turns in a row
 constexpr bool SOLO_CAMP_FULL = true;   // single-camp groups deal full damage (no 60% "dies progressively" discount)
 constexpr double SPREAD = 0.25;          // score factor for a camp an ally already took (<1 spreads out; >1 packs up like ladder #1)
 constexpr int PACK = 0;
@@ -124,6 +126,7 @@ static bool death_avoid = false;      // avoid camps where enemy champions kille
 static bool old_contest_map = false;  // the pre-v90 contested-camp rule won here (per map, see setup)
 static bool contest_mid = false;      // mid-game contested-camp penalty: single-herd maps and old_contest_map
 static int squad = SQUAD;             // squad size (per map, see setup)
+static bool spawn_hold = false;       // see SPAWN_HOLD (per map, see setup)
 static double low_hp = LOW_HP;        // retreat threshold (per map, see setup)
 static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
@@ -321,7 +324,9 @@ void Bot::setup() {
         if (g.monolith && g.gems >= 200) has_mid = true;
     gold_weight = GOLD_W;
     eta_w = ETA_W;
-    caster_power = !is_broken_curve();  // was every 40x40 map, which froze shortcut and interlock too
+    // broken_curve kept v42's play (no caster focus in fight estimates, full recalls) until 1.0.2 broke it:
+    // normal play scored Nyx 539 + Fish 853 there vs 464 + 476 (v125 map probes 218-222, Marcus allowed the change).
+    caster_power = true;
     soft_back = caster_power;
     {
         const int walls = static_cast<int>(cambc::map::walls().count());
@@ -457,6 +462,15 @@ void Bot::setup() {
         if ((width == 50 && height == 50 && walls == 222) || (width == 51 && height == 40 && walls == 378)
             || (width == 30 && height == 80 && walls == 80))
             squad = 5;
+    }
+    {
+        // Spawn hold won here vs Nyx + Fish (v126 probe 223): big_world +194, lanes +115, collision +70, CW +61,
+        // packs +54 (gold_rush +12), corridors +52, reverse_spiral +45. It lost 1800 on the other maps.
+        static constexpr int HOLD[][3] = {{100, 100, 636}, {90, 30, 0},  {41, 41, 84}, {61, 61, 210},
+                                          {31, 31, 0},     {51, 40, 378}, {30, 30, 102}};
+        const int walls = static_cast<int>(cambc::map::walls().count());
+        for (const auto& m : HOLD)
+            if (width == m[0] && height == m[1] && walls == m[2]) spawn_hold = true;
     }
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
@@ -1840,6 +1854,31 @@ void Bot::turn() {
         act = "heal";
         return;
     }
+
+    // Spawn camping (1.0.2 ladder: 66 deaths at our spawn on contest, 53 on fragment): enemies waiting
+    // outside our spawn killed champions one at a time as they walked out. Stay on spawn, which heals
+    // fully every turn, and hit what is in range until together we would win the fight.
+    static int hold_turns = 0;
+    if (SPAWN_HOLD && spawn_hold && at_spawn && hold_turns < SPAWN_HOLD_MAX) {
+        const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
+        std::vector<cambc::champion> theirs, ours{me};
+        for (auto& e : visible_enemies())
+            if (e.is_alive() && !enemy_spawn.is_set(e.position()) && chebyshev(e.position(), pos) <= SPAWN_HOLD)
+                theirs.push_back(e);
+        if (!theirs.empty()) {
+            for (const auto& a : cambc::vision::champions(team::ally))
+                if (a.is_alive() && a != me && chebyshev(a.position(), pos) <= 4) ours.push_back(a);
+            if (power(ours) < engage_ratio * enemy_power(theirs)) {
+                hold_turns += 1;
+                claim(-1);
+                self_buff(me);
+                hit_in_range(me);
+                act = "spawn-hold";
+                return;
+            }
+        }
+    }
+    if (!at_spawn) hold_turns = 0;
 
     const double prev_hp = last_hp;
     if (me.health() < prev_hp) hit_round = now;
