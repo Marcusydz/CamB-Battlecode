@@ -1,0 +1,42 @@
+-- The CXX compiler identification is Clang 22.1.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/toolchains/cache/wasi-sdk-33/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /compile-slots/0/tmperk37v2v/.tmpo0sczw/bots/submission/.cambc/build-release
+[0/2] Re-checking globbed directories...
+[1/5] Building CXX object CMakeFiles/bot.dir/compile-slots/0/tmperk37v2v/.tmpo0sczw/bots/submission/src/draft.cpp.obj
+[2/5] Building CXX object CMakeFiles/bot.dir/compile-slots/0/tmperk37v2v/.tmpo0sczw/bots/submission/src/main.cpp.obj
+[3/5] Building CXX object CMakeFiles/bot.dir/compile-slots/0/tmperk37v2v/.tmpo0sczw/bots/submission/src/bot.cpp.obj
+/compile-slots/0/tmperk37v2v/.tmpo0sczw/bots/submission/src/bot.cpp:31:13: warning: enumeration value 'golem' not handled in switch [-Wswitch]
+   31 |     switch (t) {
+      |             ^
+/compile-slots/0/tmperk37v2v/.tmpo0sczw/bots/submission/src/bot.cpp:288:17: warning: enumeration value 'heart_of_ruin' not handled in switch [-Wswitch]
+  288 |         switch (kind) {
+      |                 ^~~~
+/compile-slots/0/tmperk37v2v/.tmpo0sczw/bots/submission/src/bot.cpp:1428:18: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
+ 1428 |         if (KITE && MONO_KITE) return kiter && cambc::self().focus() >= MONO_FOCUS ? 1 : 0;  // casters hit it from out of reach; melee would only die
+      |                  ^  ~~~~~~~~~
+/compile-slots/0/tmperk37v2v/.tmpo0sczw/bots/submission/src/bot.cpp:1428:18: note: use '&' for a bitwise operation
+ 1428 |         if (KITE && MONO_KITE) return kiter && cambc::self().focus() >= MONO_FOCUS ? 1 : 0;  // casters hit it from out of reach; melee would only die
+      |                  ^~
+      |                  &
+/compile-slots/0/tmperk37v2v/.tmpo0sczw/bots/submission/src/bot.cpp:1428:18: note: remove constant to silence this warning
+ 1428 |         if (KITE && MONO_KITE) return kiter && cambc::self().focus() >= MONO_FOCUS ? 1 : 0;  // casters hit it from out of reach; melee would only die
+      |                  ^~~~~~~~~~~~
+3 warnings generated.
+[4/5] Linking CXX executable bot.wasm
+-- The CXX compiler identification is Clang 22.1.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/toolchains/cache/wasi-sdk-33/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /compile-slots/0/tmperk37v2v/.tmpo0sczw/bots/submission/.cambc/build
+injected 0 checks into 0 functions
+ 
