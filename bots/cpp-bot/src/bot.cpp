@@ -404,6 +404,18 @@ void Bot::setup() {
         if ((width == 50 && height == 40 && walls == 148) || (width == 40 && height == 40 && walls == 320))
             treasure_first = true;
     }
+    {
+        // Flip probes vs v115 (official 194/195). Rechecked against v115 after Nyx and Fish changed bots ~05:20 UTC
+        // (Nyx + Fish sum): starfish +83, hooks +44, pilgrimage +30, fragment +16, eight +11, lanes +7, reverse_spiral +6.
+        const int walls = static_cast<int>(cambc::map::walls().count());
+        if ((width == 50 && height == 65 && walls == 0) || (width == 90 && height == 30 && walls == 0)
+            || (width == 31 && height == 31 && walls == 88))
+            death_avoid = false;
+        if ((width == 50 && height == 50 && walls == 32) || (width == 30 && height == 30 && walls == 24)
+            || (width == 30 && height == 30 && walls == 102))
+            death_avoid = true;
+        if (width == 41 && height == 30 && walls == 36) old_contest_map = false;
+    }
     contest_mid = !soft_back || old_contest_map;
     // rows: retreating at 55% health won 1005-972 vs Nyx and +66 vs Fish (v115 probe; worse on most other maps).
     if (width == 50 && height == 50 && static_cast<int>(cambc::map::walls().count()) == 214) low_hp = 0.55;
