@@ -9,7 +9,7 @@ version downloaded from the competition site.
 | File | What it is |
 | --- | --- |
 | `src/main.cpp` | Entry point. The draft instance runs `play_draft()`, champions run `Bot`. A failed turn is logged and still yields. |
-| `src/draft/` | Draft preference lists and per-map defaults, adjusted for revealed enemy picks and contested camp rewards. |
+| `src/draft/` | Draft preference lists plus map-fit, team-role, matchup, and enemy-synergy scoring for each legal pick. |
 | `src/core/bot.h` | The `Bot` class and `GroupInfo` (what we know about each camp group). |
 | `src/core/config.h` | Every tuning switch (`constexpr`, overridden by `scripts/cvariant.sh`) and the per-map settings' defaults. |
 | `src/core/util.h` | Small shared helpers: camp tables, distances, safe vision queries, the camp waiting ring. |
@@ -37,9 +37,11 @@ by relative path.
   (counted 3x), clear time, capture time and altar distance. Claims go in shared memory (one byte
   per draft slot) so allies spread out, or follow their squad leader's camp (squads of 2, 3 or 5
   depending on the map).
-- **Adaptive strategy:** the draft counters revealed enemy picks and values fight-ready champions
-  more on maps where camp gems are close to both spawns. In play, the same map profile and the
-  submitted-gem lead shift camp choice, engagement thresholds, carrier targeting and banking.
+- **Adaptive strategy:** the draft keeps its tested map rankings as a fallback, then scores map
+  geometry, missing team roles, ally synergies, revealed enemy matchups, and disruption of the
+  enemy's revealed composition. Since mirror picks are allowed, it cannot deny an opponent a
+  champion. In play, map geometry and submitted-gem leads shift camp choice, engagement thresholds,
+  carrier targeting and banking.
 - **Fights:** compares our power (health x damage) against the visible enemies, scaled up for
   enemies seen recently but now hidden. Engages and focus-fires when winning, backs off or recalls
   when losing, leaves early when outnumbered, joins nearby allies' winnable fights, interrupts

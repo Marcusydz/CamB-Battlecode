@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <cstdio>
 #include <cstdlib>
 #include <vector>
 #include "draft.h"
@@ -125,10 +126,17 @@ static int choose_list() {
     return vendetta ? 18 : POST_PATCH_LIST;
 }
 
-static int map_contested_gem_share() {
+struct MapProfile {
+    double contested = 0.0;
+    double wall_density = 0.0;
+    double gem_concentration = 0.0;
+    double open = 0.0;
+};
+
+static MapProfile map_profile() {
     const auto ally_spawn = cambc::map::spawn_region(cambc::team::ally).positions();
     const auto enemy_spawn = cambc::map::spawn_region(cambc::team::enemy).positions();
-    int total = 0, contested = 0;
+    double total = 0.0, contested = 0.0, largest_group = 0.0;
     for (const auto& group : cambc::map::camp_groups()) {
         const auto tiles = group.spawn_tiles().positions();
         int ally_dist = 1 << 20, enemy_dist = 1 << 20;
@@ -138,60 +146,166 @@ static int map_contested_gem_share() {
         for (const auto e : enemy_spawn)
             for (const auto tile : tiles)
                 enemy_dist = std::min(enemy_dist, std::max(std::abs(e.x - tile.x), std::abs(e.y - tile.y)));
-        const int gems = static_cast<int>(group.gem_value());
+        const double gems = static_cast<double>(group.gem_value());
         total += gems;
         if (std::abs(ally_dist - enemy_dist) <= 6) contested += gems;
+        largest_group = std::max(largest_group, gems);
     }
-    return total ? 100 * contested / total : 0;
+    const double area = static_cast<double>(cambc::map::width()) * cambc::map::height();
+    const double walls = area ? cambc::map::walls().count() / area : 0.0;
+    // Lots of walls and elongated maps tend to make safe routes and ranged coverage more useful.
+    const double aspect = static_cast<double>(std::max(cambc::map::width(), cambc::map::height())) /
+                          std::max(1, std::min(cambc::map::width(), cambc::map::height()));
+    const double openness = std::clamp(1.0 - walls * 5.0 - (aspect - 1.0) * 0.12, 0.0, 1.0);
+    return {total ? contested / total : 0.0, walls, total ? largest_group / total : 0.0, openness};
 }
 
-static double counter_bonus(D pick, const std::vector<D>& enemies) {
-    double bonus = 0.0;
-    for (const auto enemy : enemies) {
+enum Trait : unsigned {
+    ranged = 1u << 0, front_line = 1u << 1, burst = 1u << 2, area = 1u << 3,
+    control = 1u << 4, sustain = 1u << 5, mobile = 1u << 6, economy = 1u << 7,
+};
+
+static unsigned traits(D c) {
+    switch (c) {
+    case D::ryth: return front_line | area | control | sustain;
+    case D::vesper_vale: return ranged | mobile | economy;
+    case D::vendetta: return front_line | mobile | burst;
+    case D::cassi_and_issac: return ranged | front_line | burst | control;
+    case D::stellar: return ranged | burst | area;
+    case D::prism: return ranged | burst | area | control;
+    case D::marcella: return front_line | burst | sustain;
+    case D::willow: return ranged | sustain;
+    case D::ren: return front_line | mobile | control;
+    case D::varg: return front_line | area | sustain;
+    case D::tavi: return ranged | burst | control | economy;
+    case D::heart_of_ruin: return front_line | burst | control | sustain | mobile;
+    }
+    return 0;
+}
+
+static const char* champion_name(D c) {
+    switch (c) {
+    case D::ryth: return "Ryth";
+    case D::vesper_vale: return "Vesper Vale";
+    case D::vendetta: return "Vendetta";
+    case D::cassi_and_issac: return "Cassi & Issac";
+    case D::stellar: return "Stellar";
+    case D::prism: return "Prism";
+    case D::marcella: return "Marcella";
+    case D::willow: return "Willow";
+    case D::ren: return "Ren";
+    case D::varg: return "Varg";
+    case D::tavi: return "Tavi";
+    case D::heart_of_ruin: return "Heart of Ruin";
+    }
+    return "unknown";
+}
+
+struct DraftScore {
+    double map = 0.0;
+    double synergy = 0.0;
+    double matchup = 0.0;
+    double disruption = 0.0;
+};
+
+static DraftScore evaluate(D pick, const std::vector<D>& allies, const std::vector<D>& enemies,
+                           const MapProfile& map) {
+    const unsigned t = traits(pick);
+    int front_count = 0, ranged_count = 0, burst_count = 0, area_count = 0, control_count = 0;
+    int enemy_ranged = 0, enemy_sustain = 0;
+    bool ally_front = false, ally_ranged = false, ally_area = false, ally_control = false;
+    for (D c : allies) {
+        const unsigned ct = traits(c);
+        front_count += (ct & front_line) != 0;
+        ranged_count += (ct & ranged) != 0;
+        burst_count += (ct & burst) != 0;
+        area_count += (ct & area) != 0;
+        control_count += (ct & control) != 0;
+        ally_front |= (ct & front_line) != 0;
+        ally_ranged |= (ct & ranged) != 0;
+        ally_area |= (ct & area) != 0;
+        ally_control |= (ct & control) != 0;
+    }
+    for (D c : enemies) {
+        const unsigned ct = traits(c);
+        enemy_ranged += (ct & ranged) != 0;
+        enemy_sustain += (ct & sustain) != 0;
+    }
+
+    DraftScore s;
+    // Match the existing map ranking with broad geometry-derived needs.
+    s.map += map.contested * ((t & front_line) ? 0.75 : 0.0);
+    s.map += map.contested * ((t & control) ? 0.55 : 0.0);
+    s.map += map.gem_concentration * ((t & area) ? 0.65 : 0.0);
+    s.map += (1.0 - map.contested) * ((t & economy) ? 0.7 : 0.0);
+    s.map += map.open * ((t & ranged) ? 0.35 : 0.0);
+    s.map -= map.wall_density * 1.5 * ((t & ranged) ? 1.0 : 0.0);
+    if (pick == D::vesper_vale) s.map += (1.0 - map.contested) * 0.45;
+    if (pick == D::cassi_and_issac) s.map -= map.contested * 0.25; // two linked bodies risk losing bags together
+
+    // Reward missing jobs, useful pairings, and rounded compositions; discourage stacking one role.
+    if ((t & front_line) && !ally_front) s.synergy += 0.65;
+    if ((t & ranged) && !ally_ranged) s.synergy += 0.45;
+    if ((t & area) && !ally_area) s.synergy += 0.35;
+    if ((t & control) && !ally_control) s.synergy += 0.4;
+    if ((t & front_line) && ranged_count > 0) s.synergy += 0.15;
+    if ((t & ranged) && front_count > 0) s.synergy += 0.15;
+    if ((t & sustain) && front_count > 0) s.synergy += 0.25;
+    if (pick == D::willow && front_count > 0) s.synergy += 0.4;
+    if ((t & front_line) && front_count >= 2) s.synergy -= 0.45 * (front_count - 1);
+    if ((t & burst) && burst_count >= 2 && map.contested < 0.35) s.synergy -= 0.2 * burst_count;
+    if ((t & area) && area_count >= 2 && map.gem_concentration < 0.35) s.synergy -= 0.2 * area_count;
+    if ((t & control) && control_count >= 2) s.synergy -= 0.15 * control_count;
+
+    // Specific, explainable interactions from the game rules.
+    for (D enemy : enemies) {
         if (enemy == D::marcella) {
-            // Marcella ignores stuns, so prefer direct damage and reliable basic attacks.
-            if (pick == D::vesper_vale) bonus += 2.2;
-            if (pick == D::vendetta) bonus += 1.8;
-            if (pick == D::stellar) bonus += 1.2;
-            if (pick == D::ryth || pick == D::prism) bonus -= 1.2;
-            if (pick == D::ren || pick == D::tavi) bonus -= 0.8;
+            if ((t & ranged) || pick == D::vendetta) s.matchup += 0.38;
+            if (t & control) s.matchup -= 0.22; // her stun immunity lowers the value of control
         } else if (enemy == D::cassi_and_issac) {
-            // The linked pair loses both bodies when either one dies; burst and area damage help.
-            if (pick == D::tavi) bonus += 2.4;
-            if (pick == D::prism) bonus += 2.0;
-            if (pick == D::stellar) bonus += 1.6;
-            if (pick == D::ren) bonus += 0.8;
-        } else if (enemy == D::willow || enemy == D::varg) {
-            // Front-loaded damage pressures healing and shields before they can extend a fight.
-            if (pick == D::prism || pick == D::tavi) bonus += 1.8;
-            if (pick == D::stellar || pick == D::vendetta) bonus += 1.1;
+            if ((t & burst) || (t & area)) s.matchup += 0.48; // either linked body dying removes both
+        } else if (enemy == D::willow) {
+            if (t & burst) s.matchup += 0.28; // burst pressures healing windows
+        } else if (enemy == D::varg) {
+            if (t & burst) s.matchup += 0.2;
         }
     }
-    return bonus;
+    s.matchup = std::clamp(s.matchup, -1.0, 1.0);
+
+    // Champion selection is mirrored across teams, so we cannot deny a specific pick.
+    // Disrupt the revealed plan instead: dive/control into a ranged back line and burst into sustain.
+    if (enemy_ranged >= 2 && (t & (mobile | control))) s.disruption += 0.45;
+    if (enemy_sustain >= 2 && (t & burst)) s.disruption += 0.35;
+    if (enemy_ranged >= 3 && (t & front_line)) s.disruption += 0.2;
+    s.disruption = std::min(s.disruption, 0.7);
+    return s;
 }
 
 void play_draft() {
     static const int list = choose_list();
-    static const int contested_share = map_contested_gem_share();
+    static const MapProfile map = map_profile();
     const auto chosen = cambc::draft::current_draft(cambc::team::ally);
     const auto enemies = cambc::draft::current_draft(cambc::team::enemy);
     D best = LISTS[list][0];
     double best_score = -1e9;
+    DraftScore best_parts;
     for (std::size_t rank = 0; rank < LISTS[list].size(); ++rank) {
         const D pick = LISTS[list][rank];
         if (std::find(chosen.begin(), chosen.end(), pick) != chosen.end()) continue;
-        double score = static_cast<double>(LISTS[list].size() - rank) + counter_bonus(pick, enemies);
-        if (contested_share >= 45) {
-            // On maps where most rewards are exposed to both teams, increase the value of
-            // champions that can hold or finish a fight.
-            if (pick == D::vesper_vale || pick == D::vendetta || pick == D::varg || pick == D::ryth)
-                score += 1.0;
-            if (pick == D::willow) score -= 0.5;
-        }
+        const auto parts = evaluate(pick, chosen, enemies, map);
+        // Keep the established, locally tested map order as the stable fallback signal.
+        const double score = static_cast<double>(LISTS[list].size() - rank) * 0.28 +
+                             parts.map * 1.25 + parts.synergy * 1.15 +
+                             parts.matchup * 2.0 + parts.disruption * 1.25;
         if (score > best_score) {
             best_score = score;
             best = pick;
+            best_parts = parts;
         }
     }
+    std::printf("draft %dx%d c%.2f w%.3f g%.2f pick=%s score=%.2f map=%.2f team=%.2f matchup=%.2f disrupt=%.2f\n",
+                cambc::map::width(), cambc::map::height(), map.contested, map.wall_density,
+                map.gem_concentration, champion_name(best), best_score, best_parts.map,
+                best_parts.synergy, best_parts.matchup, best_parts.disruption);
     cambc::draft::pick(best);
 }
