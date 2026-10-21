@@ -427,6 +427,15 @@ void Bot::setup() {
         for (const auto& m : FLIP)
             if (width == m[0] && height == m[1] && walls == m[2]) treasure_first = !treasure_first;
     }
+    {
+        // Old contest rule flipped vs the ~05:20 rivals (v119 probe, Nyx + Fish sum): starvation +144, lanes +116,
+        // the_farm +106, eight +93, rushbait_v2 +77, monolith +74, CW +64.
+        const int walls = static_cast<int>(cambc::map::walls().count());
+        static constexpr int FLIP[][3] = {{80, 80, 664}, {90, 30, 0}, {50, 40, 148}, {41, 30, 36},
+                                          {30, 80, 80},  {50, 50, 98}, {61, 61, 210}};
+        for (const auto& m : FLIP)
+            if (width == m[0] && height == m[1] && walls == m[2]) old_contest_map = !old_contest_map;
+    }
     contest_mid = !soft_back || old_contest_map;
     // rows: retreating at 55% health won 1005-972 vs Nyx and +66 vs Fish (v115 probe; worse on most other maps).
     if (width == 50 && height == 50 && static_cast<int>(cambc::map::walls().count()) == 214) low_hp = 0.55;
