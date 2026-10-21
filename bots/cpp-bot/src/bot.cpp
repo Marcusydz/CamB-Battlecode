@@ -333,7 +333,15 @@ void Bot::setup() {
                          || (width == 50 && height == 50 && walls == 98)   // monolith (455 vs 368)
                          || (width == 45 && height == 45 && walls == 204)  // quadrants (419 vs 394)
                          || (width == 31 && height == 31 && walls == 88)   // hooks (44 vs 22)
-                         || (width == 45 && height == 30 && walls == 30);  // swirl (45 vs 30)
+                         || (width == 45 && height == 30 && walls == 30)   // swirl (45 vs 30)
+                         // v106 probe vs the changed Nyx and Fish (sum of both):
+                         || (width == 100 && height == 100 && walls == 636)  // big_world (won 1024-876 vs Fish)
+                         || (width == 50 && height == 50 && walls == 222)    // elk_arena (936-216 vs Nyx, was 612-468)
+                         || (width == 60 && height == 60 && walls == 0)      // islands (+178)
+                         || (width == 31 && height == 31 && walls == 0)      // packs and gold_rush (+120, +22)
+                         || (width == 30 && height == 80 && walls == 80)     // rushbait_v2 (+95)
+                         || (width == 61 && height == 61 && walls == 210)    // concentrated_wealth (+40)
+                         || (width == 80 && height == 80 && walls == 224);   // expanse (+26)
         // DEATH_AVOID won these vs Nyx (v103 probe): pilgrimage 873-521 (was 490-1016), corners 487 vs 372.
         death_avoid = (width == 50 && height == 65 && walls == 0) || (width == 71 && height == 71 && walls == 44);
         // The pre-v90 mid-game contested-camp penalty won these vs Nyx (v104 probe): starfish 239 vs 63,
