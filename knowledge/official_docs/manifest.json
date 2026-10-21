@@ -1,0 +1,23 @@
+{
+  "verifiedUTCDate": "2026-10-21",
+  "engineVersion": "1.0.2",
+  "sdkVersion": "3.0.4",
+  "apiDeclarationCount": 633,
+  "sources": {
+    "rules": "https://2026a.battlecode.co.uk/game/docs/agents",
+    "api": "https://2026a.battlecode.co.uk/game/api",
+    "patch": "https://2026a.battlecode.co.uk/game/patch-notes/e251fa42-fb2a-4d9b-ab8c-2e044f21d599",
+    "sdk": "Official cambc 3.0.4: cambc init isolated workspace (PyPI package cambc)"
+  },
+  "retrievalNotes": "GameRules official Markdown export; API is expanded rendered C++ article text, not the downloadable Markdown export. SDK files are exact downloaded official headers with supplied license notices. No credentials or cookies archived.",
+  "files": {
+    "BotAPICpp-rendered-2026-10-21.txt": "29f7b9f94d14612222b4f88145c69c126ccc9c483a287036fabd42624b8efeff",
+    "GameRules-2026-10-21.md": "98999b86cde9a28a7c5099ee66dd215efee5a3493cde2e65317b08289f75e0a2",
+    "patch-1.0.2.txt": "7685050c3755028eb3aa6e9f94681ba35413ee62fb66eb68cb7caad193974582",
+    "sdk-3.0.4/LICENSE-LLVM.txt": "8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee",
+    "sdk-3.0.4/THIRD_PARTY.txt": "3da082e429fc5c970e3ebada40905f683e661d9f9ad625586984a29ad516edc4",
+    "sdk-3.0.4/cambc.h": "7dc004cf4c80f0e43f3133e819ddf575cfc0509438d9d910bfbfe16ec8afc0be",
+    "sdk-3.0.4/imports.h": "888992693268c34659bd72058e214d90c09a0024c2ab1f651cee00c6d3dea502",
+    "sdk-3.0.4/wasm_simd128.h": "254cb9207bb773a6b88d9a11ae8c8e2dd869675142d6f686a59a41d46af10196"
+  }
+}
