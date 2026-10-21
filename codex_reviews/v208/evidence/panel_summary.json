@@ -1,0 +1,42 @@
+{
+  "mapping-v208": {
+    "n": 140,
+    "wins": 68,
+    "meanMargin": -47.27142857142857,
+    "faults": 0,
+    "loggedErrors": 0,
+    "fuelExhausted": 1070
+  },
+  "control-v208": {
+    "n": 140,
+    "wins": 73,
+    "meanMargin": 4.257142857142857,
+    "faults": 0,
+    "loggedErrors": 0,
+    "fuelExhausted": 1033
+  },
+  "dash-trial": {
+    "n": 70,
+    "wins": 38,
+    "meanMargin": 57.542857142857144,
+    "faults": 0,
+    "loggedErrors": 5,
+    "fuelExhausted": 610
+  },
+  "dash-control": {
+    "n": 70,
+    "wins": 28,
+    "meanMargin": -99.21428571428571,
+    "faults": 0,
+    "loggedErrors": 3,
+    "fuelExhausted": 579
+  },
+  "passive": {
+    "n": 70,
+    "wins": 70,
+    "meanMargin": 909.6428571428571,
+    "faults": 0,
+    "loggedErrors": 0,
+    "fuelExhausted": 348
+  }
+}
