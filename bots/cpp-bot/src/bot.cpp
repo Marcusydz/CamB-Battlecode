@@ -451,7 +451,12 @@ void Bot::setup() {
                  || (width == 45 && height == 45 && walls == 204) || (width == 61 && height == 71 && walls == 374)
                  || (width == 80 && height == 80 && walls == 224) || (width == 40 && height == 40 && walls == 320))
             squad = 5;
-        if (width == 50 && height == 50 && walls == 214) squad = 5;  // rows: +60 in the v112 re-probe
+        // v120 probe vs the ~05:20 rivals: squads of 3 on quadrants +326 and rows (beat Nyx 1003-982);
+        // one squad of 5 on elk +288, corridors +224, rushbait_v2 +83.
+        if ((width == 45 && height == 45 && walls == 204) || (width == 50 && height == 50 && walls == 214)) squad = 3;
+        if ((width == 50 && height == 50 && walls == 222) || (width == 51 && height == 40 && walls == 378)
+            || (width == 30 && height == 80 && walls == 80))
+            squad = 5;
     }
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
