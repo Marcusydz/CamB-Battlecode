@@ -190,3 +190,14 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 210 | elk probe 1 | 04886c5 (branch exp/elk1) | v123 with fight threshold 1.5 on elk_arena only, vs Nyx and Fish on elk. No result (runner stopped before its games were saved). |
 | 211 | v125 (accepted) | 28e7d3d (branch exp/v125) | v123 + Prism first (list 20) on elk_arena, packs/gold_rush, shortcut, collision. Verified: identical to the probe there (+816, elk_arena beats Nyx 1044-252), all other maps unchanged. |
 | 212 | elk probe 1 | ca9220a (branch exp/elk1) | v125 with fight threshold 1.5 on elk_arena only. |
+| 213 | elk probe 1 | fa70862 (branch exp/elk1) | v125 + fight threshold 1.5 on elk_arena. Elk vs Nyx 972-324 (v125 1044-252), Fish 0. Rejected. |
+| 214 | elk probe 2 | 0b7114f (exp/elk2) | v125 + death avoidance on elk_arena. Nyx 504-792 loss. Rejected. |
+| 215 | elk probe 3 | 352761c (exp/elk3) | v125 + retreat at 60% health on elk_arena. Nyx 288-720. Rejected. |
+| 216 | elk probe 4 | dd3b9ff (exp/elk4) | v125 + back off without recalling on elk_arena. Nyx 72-1008. Rejected. |
+| 217 | elk probe 5 | 6008532 (exp/elk5) | v125 + treasure opening flipped on elk_arena. Nyx 1008-144 (about equal), Fish 0. Not kept. |
+| 218 | map probe 1 | c610829 (exp/mv1) | v125 + broken_curve normal play and post-patch draft; elkring Prism draft. broken_curve Nyx 527 Fish 718 (was 464/476); elkring 631/275 (was 495/385). |
+| 219 | map probe 2 | b5f518c (exp/mv2) | v125 + broken_curve normal play (old draft); elkring Vesper. broken_curve Nyx 539 Fish 853 (best, +452); elkring 506/275. |
+| 220 | map probe 3 | 32d093e (exp/mv3) | broken_curve post-patch draft only; elkring treasure first. broken_curve 378/620; elkring 187/352. |
+| 221 | map probe 4 | 98c2f86 (exp/mv4) | broken_curve Prism draft + normal play; elkring death avoidance. broken_curve 525/760; elkring 429/396. |
+| 222 | map probe 5 | 2a45960 (exp/mv5) | broken_curve Prism draft, old play; elkring squad 5. broken_curve 355/501; elkring 502/165. |
+| 223 | v126 probe | 1c5bbbc (exp/v126p) | v125 + stay on spawn while enemies within 6 would win the fight (max 40 turns), all maps; vs ladder spawn camping (66 deaths at our spawn on contest). Testing on 30 maps. |
