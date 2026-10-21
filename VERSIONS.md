@@ -156,4 +156,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 182 | v112 probe | b73413d (branch exp/v112p) | v111 + one squad of 5 on every map but broken_curve, re-probed vs the new Nyx. Worse (Nyx 8748 vs 9790, Fish 9018 vs 10365); only rows won (+60). Rejected for now. |
 | 183 | v111 | ecccf32 | v111 restored after the v112 probe. |
 | 184 | v112 contest probe | 0868a36 (branch exp/v112c) | v111 + pre-v90 contested-camp rule on every map but broken_curve, re-probed vs the new Nyx. Worse overall; won split +230 (994-1004 vs Fish, nearly a win), corridors +124, expanse +107. |
-| 185 | v112 candidate | 4d4828f (branch exp/v112) | v111 + old contest rule on split, corridors, expanse + one squad of 5 on rows. Verifying. |
+| 185 | v112 candidate | 4d4828f (branch exp/v112) | v111 + old contest rule on split, corridors, expanse + one squad of 5 on rows. Reproduced exactly (+521 Nyx+Fish; split 994-1004 vs Fish), gold_rush control identical. Accepted. |
+| (185) | v112 | 5116784 | Accepted onto top-team-study. Live as official 185. |
