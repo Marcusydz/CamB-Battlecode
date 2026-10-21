@@ -222,4 +222,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 252 | flip probe f2 | 81d6636 (exp/f2) | v133 with death avoidance flipped everywhere. Won islands +264, yellow_brick_road +117. |
 | 253 | flip probe f3 | 94af177 (exp/f3) | v133 with the contested-camp rule flipped everywhere. Won the_farm +441 (beat Fish 1004-473), CW +175, expanse +147, fracture +138, pilgrimage +82. |
 | 254 | restore v133 | (top-team-study) | |
-| 255 | v138 candidate | d42219a (exp/v138) | v133 + those flips (treasure on yellow_brick_road, packs/gold_rush; death avoid on islands; contest rule on the_farm, CW, expanse, fracture, pilgrimage). Verifying on 35 maps. |
+| 255 | v138 (accepted) | d42219a (exp/v138) | v133 + those flips (treasure on yellow_brick_road, packs/gold_rush; death avoid on islands; contest rule on the_farm, CW, expanse, fracture, pilgrimage). Verified: all 9 flipped maps reproduced (+1893), but split moved -904 with no setting changed there (setup code shift); net +989. Beats Fish on the_farm 1004-473. |
