@@ -163,4 +163,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 188 | v112 | 74fe109 | v112 restored; vs Nyx (pre-02:30 bot again ~04:00): elk 936-216 WIN, pilgrimage 697-777, rows 960, gold_rush 567, split 449. |
 | 189 | v113b candidate | 665b08a (branch exp/v113b) | v112 + treasure opening off on pilgrimage, collision, expanse, hooks and on for the_farm, shortcut (each positive summed over both Nyx bots + Fish); elk keeps treasure (keeps the 936-216 win vs the older Nyx). Fish games identical to the probe; elk won vs Nyx again; other Nyx games moved again (split 449 to 519, gold_rush 567 to 660, the_farm 245 to 453), so Nyx is changing its bot repeatedly. Accepted. |
 | (189) | v113b | 52eb102 | Accepted onto top-team-study. Live as official 189. |
-| 190 | v114 probe | ec326f8 (branch exp/v114p) | v113b + leave when 1 more enemy than allies is near (was 2), every map but broken_curve, vs Nyx and Fish. |
+| 190 | v114 probe | ec326f8 (branch exp/v114p) | v113b + leave when 1 more enemy than allies is near (was 2), every map but broken_curve, vs Nyx and Fish. Worse (Nyx 9766 vs 10906 for v112 at 04:05, Fish 9160 vs 10748; elk 936 to 180). Only ambush looked better on both (+33 Fish, +264 Nyx). Rejected. |
+| 191 | v113b | bdf0de5 | v113b restored after the v114 probe. |
