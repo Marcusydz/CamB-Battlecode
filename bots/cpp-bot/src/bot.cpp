@@ -343,7 +343,13 @@ void Bot::setup() {
                          || (width == 61 && height == 61 && walls == 210)    // concentrated_wealth (+40)
                          || (width == 80 && height == 80 && walls == 224);   // expanse (+26)
         // DEATH_AVOID won these vs Nyx (v103 probe): pilgrimage 873-521 (was 490-1016), corners 487 vs 372.
-        death_avoid = (width == 50 && height == 65 && walls == 0) || (width == 71 && height == 71 && walls == 44);
+        // Death avoidance won on these vs Nyx + Fish (v107 probe): lanes +273, stampede +160, swirl +83, CW, corridors.
+        death_avoid = (width == 50 && height == 65 && walls == 0) || (width == 71 && height == 71 && walls == 44)  // pilgrimage, corners
+                      || (width == 90 && height == 30 && walls == 0)      // lanes
+                      || (width == 60 && height == 50 && walls == 0)      // stampede
+                      || (width == 45 && height == 30 && walls == 30)     // swirl
+                      || (width == 61 && height == 61 && walls == 210)    // concentrated_wealth
+                      || (width == 51 && height == 40 && walls == 378);   // corridors
         // The pre-v90 mid-game contested-camp penalty won these vs Nyx (v104 probe): starfish 239 vs 63,
         // starvation 208 vs 134, quadrants 444 vs 419, fragment 50 vs 40.
         old_contest_map = (width == 50 && height == 50 && walls == 32) || (width == 80 && height == 80 && walls == 664)
