@@ -1,0 +1,13 @@
+A:
+DRAFT_PROBE kind=12 slot=0 team_size=5 picks=5 handle=0
+DRAFT_PROBE kind=10 slot=1 team_size=5 picks=5 handle=1
+DRAFT_PROBE kind=5 slot=2 team_size=5 picks=5 handle=2
+DRAFT_PROBE kind=0 slot=3 team_size=5 picks=5 handle=3
+DRAFT_PROBE kind=8 slot=4 team_size=5 picks=5 handle=4
+
+B:
+DRAFT_PROBE kind=12 slot=5 team_size=3 picks=5 handle=5
+DRAFT_PROBE kind=10 slot=1 team_size=5 picks=5 handle=6
+DRAFT_PROBE kind=5 slot=2 team_size=5 picks=5 handle=7
+DRAFT_PROBE kind=0 slot=3 team_size=5 picks=5 handle=8
+DRAFT_PROBE kind=8 slot=4 team_size=5 picks=5 handle=9
