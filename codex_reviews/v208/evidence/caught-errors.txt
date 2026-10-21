@@ -1,0 +1,8 @@
+dash-trial 00corners side a (_scandidate_11201): error r852: engine error 97: Unit is not in vision.
+dash-trial 00interlock side b (_scandidate_11201): error r1319: engine error 5: Invalid metadata, alignment, overlap or argument.
+dash-trial 00interlock side b (_s_dash-trial_11101): error r1028: engine error 5: Invalid metadata, alignment, overlap or argument.
+dash-trial 00quadrants side a (_scandidate_11201): error r682: engine error 97: Unit is not in vision.
+dash-trial 01concentrated-wealth side b (_scandidate_11201): error r430: engine error 97: Unit is not in vision.
+dash-control 00interlock side b (_scandidate_11201): error r1319: engine error 5: Invalid metadata, alignment, overlap or argument.
+dash-control 00interlock side b (_s_control-fixed_11101): error r1028: engine error 5: Invalid metadata, alignment, overlap or argument.
+dash-control 01concentrated-wealth side b (_scandidate_11201): error r430: engine error 97: Unit is not in vision.
