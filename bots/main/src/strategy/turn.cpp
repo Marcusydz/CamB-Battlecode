@@ -15,6 +15,16 @@ using cambc::distance_field;
 using CT = cambc::champion_type;
 using Item = cambc::item_type;
 
+void Bot::update_match_state(int now) {
+    const int ours = static_cast<int>(cambc::global_submitted_gems(team::ally));
+    const int theirs = static_cast<int>(cambc::global_submitted_gems(team::enemy));
+    match_lead = ours - theirs;
+    // Ignore tiny early swings. A meaningful lead should make us protect carried gems;
+    // a deficit should make us value reachable fights and enemy carriers more highly.
+    match_ahead = now >= 200 && match_lead >= 60;
+    match_behind = now >= 200 && match_lead <= -60;
+}
+
 // ------------------------------------------------------------------ turn
 void Bot::play_turn() {
     act = "?";
@@ -57,6 +67,7 @@ void Bot::turn() {
     auto& me = cambc::self();
     if (!ready) setup();
     const int now = static_cast<int>(cambc::round_number());
+    update_match_state(now);
     const bool was_waiting_on_spawn = waited_on_spawn;
     waited_on_spawn = false;
 
@@ -312,7 +323,8 @@ void Bot::turn() {
     if (gems > 0 && !altar_blocked) {
         const int altar_dist = altar_field.get(pos);
         const bool prism = kind == CT::prism;
-        const int cap = prism ? PRISM_GEM_CAP : gem_cap;
+        const int base_cap = prism ? PRISM_GEM_CAP : gem_cap;
+        const int cap = match_ahead ? std::min(base_cap, 40) : base_cap;
         const bool on_the_way = altar_dist <= target_dist && (!prism || gems >= PRISM_EARLY_BANK);
         if (tgt < 0 || gems >= cap || on_the_way) {
             claim(-1);

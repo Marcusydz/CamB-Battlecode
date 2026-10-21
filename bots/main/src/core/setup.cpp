@@ -3,6 +3,7 @@
 #include "config.h"
 #include "util.h"
 #include <algorithm>
+#include <cstdlib>
 #include <cstdio>
 #include <stdexcept>
 #include <tuple>
@@ -66,6 +67,17 @@ void Bot::setup() {
         g.altar_dist = best;
         g.contested = mine + CONTEST_MARGIN > theirs;
     }
+    int total_gems = 0, contested_gems = 0;
+    for (const auto& g : groups) {
+        total_gems += g.gems;
+        const int mine = min_dist(home_field, g), theirs = min_dist(enemy_field, g);
+        if (mine < UNREACHED && theirs < UNREACHED && std::abs(mine - theirs) <= 6)
+            contested_gems += g.gems;
+    }
+    contested_gem_share = total_gems ? static_cast<double>(contested_gems) / total_gems : 0.0;
+    // Camps carrying a large share of the map's rewards near both sides create a natural
+    // fighting lane. On other maps, the team can spend more turns safely farming its half.
+    fight_heavy_map = contested_gem_share >= 0.45;
 
     // Ability roles per slot.
     for (const auto& ability : me.abilities()) {

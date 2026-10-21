@@ -326,8 +326,13 @@ int Bot::choose_group(int now, const distance_field* my_field) {
         if (others && need <= 1 && g.state != 2 && !(MONO_KITE && g.monolith) && (!SPREAD_LOWER_ONLY || senior.count(g.idx)))
             score *= SPREAD;  // someone else is on it
         if (MONO_KITE && g.monolith && others > 0) score *= JOIN_BONUS;  // a second caster halves the long monolith fight
-        if (CONTEST_FACTOR < 1.0 && g.contested && (now < CONTEST_EARLY || (contest_mid && enemy_near(g.center, 8, 10, now))))
+        if (CONTEST_FACTOR < 1.0 && !fight_heavy_map && !match_behind && g.contested
+            && (now < CONTEST_EARLY || (contest_mid && enemy_near(g.center, 8, 10, now))))
             score *= CONTEST_FACTOR;  // mid-game penalty only where one herd dominates (elk): elsewhere we ceded the middle
+        if (g.contested && fight_heavy_map) score *= 1.10;
+        if (g.contested && !fight_heavy_map && !match_behind) score *= 0.90;
+        if (g.contested && match_behind) score *= 1.12;  // pursue exposed rewards when we need to catch up
+        if (g.contested && match_ahead) score *= 0.85;    // secure the lead through safer camps
         if (target == g.idx) score *= COMMIT;  // hysteresis
         if (SEED) {
             const std::uint64_t h = (static_cast<std::uint64_t>(SEED) * 1000003 + g.idx * 7919 + mem_slot * 104729

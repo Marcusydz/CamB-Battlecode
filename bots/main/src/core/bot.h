@@ -86,6 +86,10 @@ private:
     bool altar_blocked = false;  // every altar side is a camp tile (boss_battle): bank nothing, farm gold
     bool has_mid = false;  // a monolith group worth 200+ gems  // casters drafted before us
     bool scarce = false;  // few gems outside monoliths
+    double contested_gem_share = 0.0; // fraction of map gems in groups close to both teams
+    bool fight_heavy_map = false;
+    bool match_ahead = false, match_behind = false;
+    int match_lead = 0;
     int target = -1;  // index into groups, -1 = none
     int need = 1;
     int gather_turns = 0;
@@ -98,6 +102,7 @@ private:
 
     void setup();
     void apply_map_settings();  // strategy/map_settings.cpp
+    void update_match_state(int now);
     void turn();
 
     // shared memory

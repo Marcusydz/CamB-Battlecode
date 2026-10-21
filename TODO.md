@@ -20,12 +20,12 @@ Fixed in v1.2.0: a crash when sorting camps by danger (`sorted_by`, see `docs/ve
 2. **Other weak maps:** hooks 0–7, starfish 2–8, fragment 4–9.
 3. **Counter-draft:** we win 34% when the enemy drafts Vesper Vale (44 games).
 4. **`CONTEST`** improved the gem margin (+21) but not wins locally; a ladder try could settle it.
+5. **v1.3.0 adaptive strategy:** compare ladder results against the fixed v1.2.0 draft and check whether
+   map profiles, enemy counters, and score-aware behavior help across different opponents.
 
 ## Rules we don't use yet
 
 - **Teleport crystals** (10 gold, 3 tiles over walls) are never bought.
-- **Counter-drafting:** enemy picks are revealed during the draft but never read (e.g. Marcella is
-  stun-immune).
 - **Draft memory** (1024 bytes, 10x draft fuel, full map) is unused.
 - **`set_priority`:** stunners first lost in v1.1.0 (`PRIORITY`); other orders untested.
 - **Shared memory** slots 5 and 6 are free. Focus fire lost in v1.2.0; "enemy tributing at altar X" untested.

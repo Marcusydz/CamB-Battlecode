@@ -176,8 +176,12 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     }
     const double scale = static_cast<double>(near.size() + hidden) / near.size();
     const double ratio = power(allies) / std::max(enemy_power(near) * scale * scale, 1.0);
+    double fight_threshold = engage_ratio;
+    if (!fight_heavy_map) fight_threshold *= 1.05;
+    if (match_behind) fight_threshold *= 0.90;
+    if (match_ahead && gems > 0) fight_threshold *= 1.12;
     // 2. Winning fight: focus fire (same rule on every ally), finish kills first.
-    if (ratio >= engage_ratio && hp_frac > 0.35) {
+    if (ratio >= fight_threshold && hp_frac > 0.35) {
         const double b = burst(me);
         std::vector<cambc::champion> reach;
         for (const auto& e : near)
@@ -185,7 +189,8 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
         if (!reach.empty()) {
             auto key = [&](const cambc::champion& e) {
                 const bool killable = e.health() <= b && chebyshev(e.position(), pos) <= 4;
-                return std::make_tuple(!killable, e.health() / (1.0 + 0.03 * e.gem_count()), handle_of(e));
+                const double carrier_weight = match_behind ? 0.08 : 0.05;
+                return std::make_tuple(!killable, e.health() / (1.0 + carrier_weight * e.gem_count()), handle_of(e));
             };
             const cambc::champion* target = &reach[0];
             auto best_key = key(reach[0]);
@@ -321,7 +326,8 @@ bool Bot::outnumbered(const cambc::champion& me, vec2 pos, int now) {
 // Ladder replays: top teams kill with 3-5 champions and we die to 2-3 at a time. Help an ally who is
 // fighting nearby when the two (or more) of us would win, instead of farming next to the fight.
 bool Bot::join_fight(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
-    if (gems >= 30 || hp_frac < 0.6) return false;
+    const int join_bag_limit = match_behind ? 45 : (match_ahead ? 20 : 30);
+    if (gems >= join_bag_limit || hp_frac < 0.6) return false;
     std::vector<cambc::champion> enemies;
     const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
     for (auto& e : visible_enemies())
@@ -340,7 +346,8 @@ bool Bot::join_fight(const cambc::champion& me, vec2 pos, int gems, double hp_fr
         if (theirs.empty()) continue;
         for (const auto& b : allies_all)
             if (b.is_alive() && b != me && chebyshev(b.position(), a.position()) <= 5) ours.push_back(b);
-        if (power(ours) < engage_ratio * enemy_power(theirs)) continue;
+        const double join_threshold = engage_ratio * (match_behind ? 0.92 : (fight_heavy_map ? 1.0 : 1.05));
+        if (power(ours) < join_threshold * enemy_power(theirs)) continue;
         if (d < best_d) {
             best_d = d;
             best = &a;

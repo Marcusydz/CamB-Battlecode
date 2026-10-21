@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <cstdlib>
+#include <vector>
 #include "draft.h"
 
 using D = cambc::champion_draft;
@@ -123,13 +125,73 @@ static int choose_list() {
     return vendetta ? 18 : POST_PATCH_LIST;
 }
 
-void play_draft() {
-    static const int list = choose_list();
-    const auto chosen = cambc::draft::current_draft(cambc::team::ally);
-    for (auto pick : LISTS[list]) {
-        if (std::find(chosen.begin(), chosen.end(), pick) == chosen.end()) {
-            cambc::draft::pick(pick);
-            return;
+static int map_contested_gem_share() {
+    const auto ally_spawn = cambc::map::spawn_region(cambc::team::ally).positions();
+    const auto enemy_spawn = cambc::map::spawn_region(cambc::team::enemy).positions();
+    int total = 0, contested = 0;
+    for (const auto& group : cambc::map::camp_groups()) {
+        const auto tiles = group.spawn_tiles().positions();
+        int ally_dist = 1 << 20, enemy_dist = 1 << 20;
+        for (const auto a : ally_spawn)
+            for (const auto tile : tiles)
+                ally_dist = std::min(ally_dist, std::max(std::abs(a.x - tile.x), std::abs(a.y - tile.y)));
+        for (const auto e : enemy_spawn)
+            for (const auto tile : tiles)
+                enemy_dist = std::min(enemy_dist, std::max(std::abs(e.x - tile.x), std::abs(e.y - tile.y)));
+        const int gems = static_cast<int>(group.gem_value());
+        total += gems;
+        if (std::abs(ally_dist - enemy_dist) <= 6) contested += gems;
+    }
+    return total ? 100 * contested / total : 0;
+}
+
+static double counter_bonus(D pick, const std::vector<D>& enemies) {
+    double bonus = 0.0;
+    for (const auto enemy : enemies) {
+        if (enemy == D::marcella) {
+            // Marcella ignores stuns, so prefer direct damage and reliable basic attacks.
+            if (pick == D::vesper_vale) bonus += 2.2;
+            if (pick == D::vendetta) bonus += 1.8;
+            if (pick == D::stellar) bonus += 1.2;
+            if (pick == D::ryth || pick == D::prism) bonus -= 1.2;
+            if (pick == D::ren || pick == D::tavi) bonus -= 0.8;
+        } else if (enemy == D::cassi_and_issac) {
+            // The linked pair loses both bodies when either one dies; burst and area damage help.
+            if (pick == D::tavi) bonus += 2.4;
+            if (pick == D::prism) bonus += 2.0;
+            if (pick == D::stellar) bonus += 1.6;
+            if (pick == D::ren) bonus += 0.8;
+        } else if (enemy == D::willow || enemy == D::varg) {
+            // Front-loaded damage pressures healing and shields before they can extend a fight.
+            if (pick == D::prism || pick == D::tavi) bonus += 1.8;
+            if (pick == D::stellar || pick == D::vendetta) bonus += 1.1;
         }
     }
+    return bonus;
+}
+
+void play_draft() {
+    static const int list = choose_list();
+    static const int contested_share = map_contested_gem_share();
+    const auto chosen = cambc::draft::current_draft(cambc::team::ally);
+    const auto enemies = cambc::draft::current_draft(cambc::team::enemy);
+    D best = LISTS[list][0];
+    double best_score = -1e9;
+    for (std::size_t rank = 0; rank < LISTS[list].size(); ++rank) {
+        const D pick = LISTS[list][rank];
+        if (std::find(chosen.begin(), chosen.end(), pick) != chosen.end()) continue;
+        double score = static_cast<double>(LISTS[list].size() - rank) + counter_bonus(pick, enemies);
+        if (contested_share >= 45) {
+            // On maps where most rewards are exposed to both teams, increase the value of
+            // champions that can hold or finish a fight.
+            if (pick == D::vesper_vale || pick == D::vendetta || pick == D::varg || pick == D::ryth)
+                score += 1.0;
+            if (pick == D::willow) score -= 0.5;
+        }
+        if (score > best_score) {
+            best_score = score;
+            best = pick;
+        }
+    }
+    cambc::draft::pick(best);
 }

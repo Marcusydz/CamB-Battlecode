@@ -221,4 +221,11 @@ void Bot::apply_map_settings() {
             gem_weight = 0.0;
         }
     }
+    // Geometry-based default: when most camp gems sit in the contested half, favour a
+    // tighter group and accept fights at a slightly more favorable power estimate. The
+    // existing map-specific probes above still set exceptions for known maps.
+    if (fight_heavy_map) {
+        squad = std::max(squad, 3);
+        engage_ratio = std::max(0.85, engage_ratio * 0.93);
+    }
 }
