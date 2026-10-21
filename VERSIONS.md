@@ -132,4 +132,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 164 | v105 candidate | 6669fd0 (branch exp/v105) | v104b + gold weight 0.3 on islands, fragment, rows, swirl. Did not reproduce: rows 915-1003 (lost the win), pilgrimage 564 (was 873 W), islands 454, fragment 26, swirl 15. Rejected. |
 | 165 | v104b | 7d9e497 | v104b restored after 164. Baselines (new Nyx): 10156 vs Nyx, 7929 vs Fish on 30 maps. |
 | 166 | v106 probe | 1a348c7 (branch exp/v106p) | v104b + treasure first on every map but broken_curve, probed on 30 maps vs Nyx and Fish. Nyx 9940 vs 10156, Fish 8478 vs 7929; won big_world 1024-876 vs Fish (first Fish win), elk 936 vs Nyx; per-map gains on islands, packs, rushbait_v2, CW, expanse, gold_rush; losses on corridors, ambush, fracture, interlock. |
-| 167 | v106 candidate | 6425c18 (branch exp/v106) | v104b + treasure first on big_world, elk_arena, islands, packs/gold_rush, rushbait_v2, CW, expanse. Testing vs Nyx and Fish. |
+| 167 | v106 candidate | 6425c18 (branch exp/v106) | v104b + treasure first on big_world, elk_arena, islands, packs/gold_rush, rushbait_v2, CW, expanse. Exactly as probed: Nyx 5818 vs 5284, Fish 4535 vs 3895 on the 10 maps; big_world WIN vs Fish. Accepted. |
+| (167) | v106 | e15c8a2 | Accepted onto top-team-study. Live as official 167. |
