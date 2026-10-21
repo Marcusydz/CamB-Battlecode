@@ -124,6 +124,7 @@ static bool death_avoid = false;      // avoid camps where enemy champions kille
 static bool old_contest_map = false;  // the pre-v90 contested-camp rule won here (per map, see setup)
 static bool contest_mid = false;      // mid-game contested-camp penalty: single-herd maps and old_contest_map
 static int squad = SQUAD;             // squad size (per map, see setup)
+static double low_hp = LOW_HP;        // retreat threshold (per map, see setup)
 static bool soft_back = true;            // see SOFT_BACK_HP; off on 40x40 maps
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
 constexpr int SOFT_BACK_GEMS = 20;       // ... and carrying fewer gems than this (was 10)
@@ -404,6 +405,8 @@ void Bot::setup() {
             treasure_first = true;
     }
     contest_mid = !soft_back || old_contest_map;
+    // rows: retreating at 55% health won 1005-972 vs Nyx and +66 vs Fish (v115 probe; worse on most other maps).
+    if (width == 50 && height == 50 && static_cast<int>(cambc::map::walls().count()) == 214) low_hp = 0.55;
     // Squad size per map (v109/v110 probes, Nyx + Fish sum): 2 won starvation +168, interlock +163,
     // reverse_spiral +52, rushbait_v2 +44; one squad of 5 won split +234, pilgrimage +164, quadrants +127,
     // fracture +125, expanse +38, shortcut +26.
@@ -1807,7 +1810,7 @@ void Bot::turn() {
     last_alive = true;
     last_pos = pos;
     // Survival.
-    if (!at_spawn && hp_frac < (LOW_HP + (gems >= 30 ? LOW_HP_GEMS : 0.0))) {
+    if (!at_spawn && hp_frac < (low_hp + (gems >= 30 ? LOW_HP_GEMS : 0.0))) {
         if (me.health() < prev_hp) {
             // Being hit right now: running rarely escapes a chaser, so first take
             // whatever is in range (a kill resets the chaser problem entirely).
