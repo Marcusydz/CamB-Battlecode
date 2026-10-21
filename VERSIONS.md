@@ -218,3 +218,8 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 248 | v136 probe | ec1c5d6 (exp/v136p) | v133 + Heart mapping fix with the default squad on the 4 squad-tuned maps. Still worse there (-1164: corridors -555, reverse_spiral -213, fracture -204, starvation -192). The fix stays out. |
 | 249 | v137 probe | 928fb77 (exp/v137p) | v133 with a kit-aware fight estimate (3-turn damage from each kit, shields, heals). About -6900 (elk -1044, split -819); thresholds were tuned for the old estimate. Rejected as is. |
 | 250 | restore v133 | (top-team-study) | |
+| 251 | flip probe f1 | cf5b3eb (exp/f1) | v133 with the treasure opening flipped on every map. Won yellow_brick_road +522, CW +144, gold_rush +76, packs +48. |
+| 252 | flip probe f2 | 81d6636 (exp/f2) | v133 with death avoidance flipped everywhere. Won islands +264, yellow_brick_road +117. |
+| 253 | flip probe f3 | 94af177 (exp/f3) | v133 with the contested-camp rule flipped everywhere. Won the_farm +441 (beat Fish 1004-473), CW +175, expanse +147, fracture +138, pilgrimage +82. |
+| 254 | restore v133 | (top-team-study) | |
+| 255 | v138 candidate | d42219a (exp/v138) | v133 + those flips (treasure on yellow_brick_road, packs/gold_rush; death avoid on islands; contest rule on the_farm, CW, expanse, fracture, pilgrimage). Verifying on 35 maps. |
