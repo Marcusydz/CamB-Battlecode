@@ -367,7 +367,10 @@ void Bot::setup() {
                           || (width == 30 && height == 80 && walls == 80)     // rushbait_v2
                           || (width == 90 && height == 30 && walls == 0)      // lanes
                           || (width == 41 && height == 30 && walls == 36)     // eight
-                          || (width == 40 && height == 40 && walls == 76);    // interlock
+                          || (width == 40 && height == 40 && walls == 76)     // interlock
+                          // v112 re-probe vs Nyx's 02:30 bot + Fish: split +230, corridors +124, expanse +107
+                          || (width == 45 && height == 35 && walls == 116) || (width == 51 && height == 40 && walls == 378)
+                          || (width == 80 && height == 80 && walls == 224);
     }
     engage_ratio = caster_power ? ENGAGE_RATIO : 0.8;
     {
@@ -401,6 +404,7 @@ void Bot::setup() {
                  || (width == 45 && height == 45 && walls == 204) || (width == 61 && height == 71 && walls == 374)
                  || (width == 80 && height == 80 && walls == 224) || (width == 40 && height == 40 && walls == 320))
             squad = 5;
+        if (width == 50 && height == 50 && walls == 214) squad = 5;  // rows: +60 in the v112 re-probe
     }
     // boss_battle (50x41): the reach fallback made it 2.6x slower (960 -> 2500 rounds unopposed).
     reach_fallback = (width == 50 && height == 41) ? 0 : REACH_FALLBACK;
