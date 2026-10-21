@@ -29,3 +29,12 @@ Incorporated into the accepted version v133 (official 247; verified on 35 maps, 
 (30 on shortcut, reverse_spiral, hooks; 90 on broken_curve) and ward spacing 5 on CW, yellow_brick_road, corridors,
 fracture. Unresolved: the burst/CC engagement model, the Heart mapping fix with re-tuned squads, and contest (0
 gems vs both: they hold the single middle altar and bank 200 at a time).
+
+## Follow-up tests (after v133)
+
+- Heart mapping fix with the default squad size on the 4 squad-tuned maps (probe 248): still -1164 there. With the
+  bug, Heart plays as if first in a 3-champion team, and that tests better on those maps. The fix stays out (REJECT
+  for now); worth revisiting if squad logic is rewritten.
+- Kit-aware fight estimate, P1 (probe 249): 3-turn damage per kit (basic attacks, resets, damaging spells assumed
+  ready), shields (Varg, Heart) and Willow heals in health. About -6900 overall, elk_arena 1044 -> 0 vs Nyx. The
+  engage thresholds were tuned for the old estimate, so this needs re-tuning together with the thresholds (DEFER).

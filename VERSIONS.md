@@ -215,3 +215,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 245 | v134 probe | 4c835f3 (exp/v134p) | v127 banking at 90 gems. About -3500; won shortcut +228, broken_curve +186, the_farm +172 (Fish game missing). |
 | 246 | v135 probe | aabc125 (exp/v135p) | v127 with a ward every 5 tiles. About -4500; won concentrated_wealth +214, yellow_brick_road +135, corridors +117, fracture +78. |
 | 247 | v133 (accepted) | 9d7a6b2 (exp/v133) | v127 + yellow_brick_road retreat 55%, broken_curve fight 1.3 and bank 90, boss_battle treasure flip, bank 30 on shortcut/reverse_spiral/hooks, ward every 5 on CW/yellow_brick_road/corridors/fracture. Verified on 35 maps: +1157 vs v127 (shortcut +308, broken_curve +266, CW +214, corridors +117), no map worse. Beats Nyx on elk_arena, rows, pilgrimage, boss_battle, yellow_brick_road (1019-468). |
+| 248 | v136 probe | ec1c5d6 (exp/v136p) | v133 + Heart mapping fix with the default squad on the 4 squad-tuned maps. Still worse there (-1164: corridors -555, reverse_spiral -213, fracture -204, starvation -192). The fix stays out. |
+| 249 | v137 probe | 928fb77 (exp/v137p) | v133 with a kit-aware fight estimate (3-turn damage from each kit, shields, heals). About -6900 (elk -1044, split -819); thresholds were tuned for the old estimate. Rejected as is. |
+| 250 | restore v133 | (top-team-study) | |
