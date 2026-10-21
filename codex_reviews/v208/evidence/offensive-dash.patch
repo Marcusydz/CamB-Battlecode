@@ -1,0 +1,26 @@
+--- a/bots/candidate/src/bot.cpp
++++ b/bots/candidate/src/bot.cpp
+@@ -685,6 +685,23 @@
+     const auto tpos = target.position();
+     if (chebyshev(pos, tpos) > 4) return false;
+     const auto abilities = me.abilities();
++    // Review experiment: Heart's dash also deals damage and stuns on landing.
++    if (kind == CT::heart_of_ruin && dash_slot) {
++        const auto& dash = abilities[*dash_slot];
++        if (!dash.is_on_cooldown() && dash.info()
++            && std::holds_alternative<cambc::ability_dash>(*dash.info())) {
++            const auto info = std::get<cambc::ability_dash>(*dash.info());
++            if (info.modifier > 0 && chebyshev(pos, tpos) <= info.range + info.radius) {
++                auto landing = around(pos, static_cast<int>(info.range)) & around(tpos, static_cast<int>(info.radius)) & ~blocked();
++                landing.set(pos, false);
++                auto options = landing.positions();
++                std::stable_sort(options.begin(), options.end(), [&](vec2 a, vec2 b) {
++                    return std::make_pair(chebyshev(a,pos),home_field.get(a)) < std::make_pair(chebyshev(b,pos),home_field.get(b));
++                });
++                for (auto p : options) {try {if (dash.use(p)) return true;} catch (const cambc::error&) {}}
++            }
++        }
++    }
+     std::vector<std::uint32_t> order;
+     if (want_stun && stun_slot) order.push_back(*stun_slot);
+     for (const auto& n : nukes)

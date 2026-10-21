@@ -1,0 +1,10 @@
+--- a/bots/candidate/src/bot.cpp
++++ b/bots/candidate/src/bot.cpp
+@@ -297,6 +297,7 @@
+         case CT::ren: draft_id = 8; break;
+         case CT::varg: draft_id = 9; break;
+         case CT::tavi: draft_id = 10; break;
++        case CT::heart_of_ruin: draft_id = static_cast<int>(cambc::champion_draft::heart_of_ruin); break;
+         }
+         auto it = std::find(picks.begin(), picks.end(), draft_id);
+         if (it == picks.end()) throw std::runtime_error("not in draft");

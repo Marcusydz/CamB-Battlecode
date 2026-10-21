@@ -1,0 +1,4907 @@
+{
+  "planned": 140,
+  "completed": 140,
+  "failed": 0,
+  "results": [
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00ambush",
+      "outcome": "teamA",
+      "round": 1636,
+      "gems": [
+        1027,
+        887
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        4,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 140,
+      "won": true,
+      "fuelExhausted": [
+        25,
+        11
+      ],
+      "statisticsSha256": "d80220536078eaa24bd728ef2591b592fe69c8a3df322f7d18d37bdeb54beee0"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00ambush",
+      "outcome": "teamA",
+      "round": 1563,
+      "gems": [
+        1047,
+        909
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        8,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -138,
+      "won": false,
+      "fuelExhausted": [
+        13,
+        13
+      ],
+      "statisticsSha256": "a5183a3e2e3e1b466eee6b1125dad9b2cf66177a54bf0843bba37f7fd5635070"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00collision",
+      "outcome": "teamB",
+      "round": 1632,
+      "gems": [
+        96,
+        1019
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        3,
+        24
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -923,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "461b7c13cb59b87a57be15d65dab47ebdbb1e2fac83d9d0b246ddf7e6c0160a1"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00collision",
+      "outcome": "teamA",
+      "round": 1617,
+      "gems": [
+        1003,
+        282
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        23,
+        6
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -721,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "5d64ab3f699a074e5726fb52cce7f0f5722c9c7a1536f428693b1c70b88b984e"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00contest",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        400,
+        0
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        17,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 400,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "664df3eb3dd85a84ec3c45efbe96ec9ef30f3bc0c2207cebf6a62a460a8e43fd"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00contest",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        200,
+        200
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        27,
+        19
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 0,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "b578001c23fa55dde47bf8309dbd7704f5b0edeacff0874f7c171f57428f5cf1"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00corners",
+      "outcome": "teamA",
+      "round": 1608,
+      "gems": [
+        1001,
+        850
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        13,
+        14
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 151,
+      "won": true,
+      "fuelExhausted": [
+        3,
+        5
+      ],
+      "statisticsSha256": "3f5e0c5e609340cb0a3cbfd366476bb22a497a64c6c9d89fd0817e61ab933dbb"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00corners",
+      "outcome": "teamA",
+      "round": 1440,
+      "gems": [
+        1027,
+        655
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        15,
+        10
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -372,
+      "won": false,
+      "fuelExhausted": [
+        3,
+        3
+      ],
+      "statisticsSha256": "5a4b047993e1d0fce6220de9ff38e04dde7332faad0bf6d714d1923ae92ecbe1"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00eight",
+      "outcome": "teamB",
+      "round": 1532,
+      "gems": [
+        847,
+        1004
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        28,
+        30
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -157,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "19548c5a0bd1d12e9813bf66ad6874d0a9ce8aee098b7f9614e4db70d71e2069"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00eight",
+      "outcome": "teamA",
+      "round": 1377,
+      "gems": [
+        1004,
+        449
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        27,
+        12
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -555,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "9f239ba9155f1ce30a9aacdeda4eefc9657de7668e60ed3df25742227f47e7f3"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00elkring",
+      "outcome": "teamB",
+      "round": 1144,
+      "gems": [
+        847,
+        1001
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        9,
+        17
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -154,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "1c3a27f1d8e4fb72cc9fb9694ae6c32cfe30d41b176b77da928abb5801194e77"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00elkring",
+      "outcome": "teamB",
+      "round": 1211,
+      "gems": [
+        979,
+        1001
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        9,
+        18
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 22,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "742861fce77968e20076da5946ac3e0692e6f2ddc92797187165a2b001a5bf58"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00expanse",
+      "outcome": "teamA",
+      "round": 1389,
+      "gems": [
+        1039,
+        903
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        8,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 136,
+      "won": true,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "d573d5970545e8c7d3a41318e0d675ab7179c8a5c756849ab8735804decacaf9"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00expanse",
+      "outcome": "teamB",
+      "round": 1495,
+      "gems": [
+        905,
+        1014
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        4,
+        7
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 109,
+      "won": true,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "dae2960b2e55988856ffcbf2cdb5ef4796f1b8207b2f30f39e1cbcc96c7e5fe8"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00fragment",
+      "outcome": "teamA",
+      "round": 1586,
+      "gems": [
+        1004,
+        40
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        37,
+        3
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 964,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "00e5adc378e1cc4ffa5f00e72e310475a7cd12e3ed10e1293983869ab9d15632"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00fragment",
+      "outcome": "teamA",
+      "round": 1740,
+      "gems": [
+        1022,
+        40
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        38,
+        2
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -982,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "7b6e5d15de7e1d6d5b7850b9ff3735480c1c8a467d7d7eff676b0884b0bd4896"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00interlock",
+      "outcome": "teamA",
+      "round": 1297,
+      "gems": [
+        1030,
+        127
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        25,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 903,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "aa3c860266aaeb2ae776bf9c6a67da6700944a5684d8ff709f33242d87a5da0d"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00interlock",
+      "outcome": "teamA",
+      "round": 1327,
+      "gems": [
+        1016,
+        71
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        33,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -945,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "c89412919a0d12536d33ac8972170ac2c41cd893d8852ccdba6553d02514f185"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00lanes",
+      "outcome": "teamA",
+      "round": 1427,
+      "gems": [
+        1024,
+        673
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        15,
+        8
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 351,
+      "won": true,
+      "fuelExhausted": [
+        6,
+        5
+      ],
+      "statisticsSha256": "7c2f48754a05bec73b6b1ae1ba1714a8ad79333a977a9764a8faea2b0dd0953d"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00lanes",
+      "outcome": "teamA",
+      "round": 1426,
+      "gems": [
+        1002,
+        625
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        11,
+        17
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -377,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        10
+      ],
+      "statisticsSha256": "3c2fd06c8e5c90a6e857291b556725daf1eb53e941b659bb37ac815565be2486"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00monolith",
+      "outcome": "teamB",
+      "round": 1664,
+      "gems": [
+        802,
+        1020
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        20,
+        22
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -218,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "19b0599cd76e077f8f30058faf3df4f920d99388f81ac40e27788630496a2281"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00monolith",
+      "outcome": "teamA",
+      "round": 1857,
+      "gems": [
+        1041,
+        991
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        28,
+        26
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -50,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "4bc9bd35317e8e1311215946ee733812036eb50fbca3d3f7c9cbb8446d2873c7"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00packs",
+      "outcome": "teamA",
+      "round": 1354,
+      "gems": [
+        1007,
+        68
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        24,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 939,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "670ceb76c36aa45209d483cea37a8d3a0c0b1cd6f510354dfb5491e8dda86b94"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00packs",
+      "outcome": "teamA",
+      "round": 1425,
+      "gems": [
+        1012,
+        64
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        29,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -948,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "5f383db2170c55463e318a538fd6abde1b3830f5461673d50d3777934c5eea1c"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00pilgrimage",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        798,
+        549
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        25,
+        19
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 249,
+      "won": true,
+      "fuelExhausted": [
+        16,
+        22
+      ],
+      "statisticsSha256": "a9e7504eb830d35fcf136bb94f5b33d0b1ca72111482a4ca3832f600bff20955"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00pilgrimage",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        710,
+        446
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        26,
+        22
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -264,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        11
+      ],
+      "statisticsSha256": "db7b8baa2a061f808da7c07bc2ca4a16575db1c85237e1bcc0de7a7454a425c7"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00quadrants",
+      "outcome": "teamA",
+      "round": 667,
+      "gems": [
+        1023,
+        527
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        5,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 496,
+      "won": true,
+      "fuelExhausted": [
+        4,
+        4
+      ],
+      "statisticsSha256": "5701e669362383ed93075af3c2f9eccf3520c74865693a3feaf2c6344dcd5150"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00quadrants",
+      "outcome": "teamA",
+      "round": 720,
+      "gems": [
+        1020,
+        493
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        7,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -527,
+      "won": false,
+      "fuelExhausted": [
+        4,
+        11
+      ],
+      "statisticsSha256": "0f694601534c63442d9204a57e2339b7af65d4e28e50826a4e425294775fb6ae"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00reverse-spiral",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        688,
+        325
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        14,
+        3
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 363,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "e066bae8e617a35a66d1159017985211b0acca288635990c120ef0127cc8d6e8"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00reverse-spiral",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        524,
+        506
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        5,
+        14
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -18,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "8efff367dd155bf865ed11fc4f8d65ea8b6d5108eb7ba66640497131fea05d69"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00rows",
+      "outcome": "teamB",
+      "round": 1538,
+      "gems": [
+        998,
+        1017
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -19,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "1ff6a0083a858cb5b405d76e1faed48fba4ca6b630ab9f6e5db5cf2e3277c625"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00rows",
+      "outcome": "teamB",
+      "round": 1502,
+      "gems": [
+        946,
+        1008
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 62,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "fb022e38e84bb7825c5b9f933bcb9c1409f87a5863eb3b9e02cffdc814a910e1"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00rushbait-v2",
+      "outcome": "teamA",
+      "round": 1260,
+      "gems": [
+        1021,
+        926
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        1,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 95,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "1ae75999b3a052a4423cfe28a1c437fc8e65781219732c882cc76d5433bdb354"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00rushbait-v2",
+      "outcome": "teamB",
+      "round": 1234,
+      "gems": [
+        870,
+        1004
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        2
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 134,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "097635238c21ccaa30046636cd4281a761fc54616830b2d2950178418b4677a4"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00split",
+      "outcome": "teamA",
+      "round": 959,
+      "gems": [
+        1001,
+        989
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        7,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 12,
+      "won": true,
+      "fuelExhausted": [
+        3,
+        2
+      ],
+      "statisticsSha256": "2d9354b52994a3de46f6e4efee2599275dc7eb8978565bab27f57c0c76853cc5"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00split",
+      "outcome": "teamB",
+      "round": 953,
+      "gems": [
+        917,
+        1021
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        6,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 104,
+      "won": true,
+      "fuelExhausted": [
+        4,
+        3
+      ],
+      "statisticsSha256": "3b75de5c35854b6071c564f0d0bf78c0099af5d603305dd35411e3827b529fbb"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00stampede",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        320,
+        160
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        23,
+        19
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 160,
+      "won": true,
+      "fuelExhausted": [
+        15,
+        16
+      ],
+      "statisticsSha256": "b62ea070cde807e60c46ec001c3eea95aa785ecc122fc7e9c05b39f4f4e493b9"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00stampede",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        480,
+        160
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        19,
+        24
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -320,
+      "won": false,
+      "fuelExhausted": [
+        11,
+        31
+      ],
+      "statisticsSha256": "f9eba8bc5b5655a762874573dce181f83969cceea393a2b3351751474824fbd9"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "00swirl",
+      "outcome": "teamA",
+      "round": 1159,
+      "gems": [
+        1046,
+        76
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        37,
+        7
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 970,
+      "won": true,
+      "fuelExhausted": [
+        2,
+        2
+      ],
+      "statisticsSha256": "788fc771ba63e584939ad8d181da77892cbe686ccbab240b3a9f7d6460380e27"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "00swirl",
+      "outcome": "teamB",
+      "round": 1803,
+      "gems": [
+        804,
+        1013
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        29,
+        38
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 209,
+      "won": true,
+      "fuelExhausted": [
+        2,
+        2
+      ],
+      "statisticsSha256": "ca40591152d60017021e22ce03280b7638ce056456db21d8a6e503ac7f4e3892"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01big-world",
+      "outcome": "teamA",
+      "round": 1303,
+      "gems": [
+        1012,
+        930
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        1,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 82,
+      "won": true,
+      "fuelExhausted": [
+        8,
+        8
+      ],
+      "statisticsSha256": "b5a4eb47e592f98eafb992a8fa0edaf1b91911340a87286c098262728cbc860e"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01big-world",
+      "outcome": "teamB",
+      "round": 1407,
+      "gems": [
+        956,
+        1010
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        1,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 54,
+      "won": true,
+      "fuelExhausted": [
+        9,
+        11
+      ],
+      "statisticsSha256": "6dc6c1239f3075c26191c23472f67d8a266f7c59896e74e5a09b4ae60818c63f"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01boss-battle",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        0,
+        0
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 0,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "1fdb8da916f7f81f7a3a8f01696670fdf4fa89a762d0ef96ddb9541fa4242cd7"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01boss-battle",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        0,
+        0
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        1,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 0,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "0df8e7648c9e0a29b6b85dda454e568f2da580b6627930265f1375da59e3ec07"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01broken-curve",
+      "outcome": "teamB",
+      "round": 1688,
+      "gems": [
+        849,
+        1008
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        18,
+        9
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -159,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "a1a99b8911c67ff58232445b38716a6a4e54071cc00773890da37e0edfc22754"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01broken-curve",
+      "outcome": "teamB",
+      "round": 1643,
+      "gems": [
+        929,
+        1035
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        18,
+        17
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 106,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "21a8e8bbea1169825108cd3a20a630d42fcf53cc433ebe1248021d29b63fd15f"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01concentrated-wealth",
+      "outcome": "teamA",
+      "round": 1445,
+      "gems": [
+        1029,
+        747
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        7,
+        3
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 282,
+      "won": true,
+      "fuelExhausted": [
+        7,
+        20
+      ],
+      "statisticsSha256": "07272bfe8d070006023de2ac517843beaee75622a114d619d55756edaaedca8d"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01concentrated-wealth",
+      "outcome": "teamA",
+      "round": 1642,
+      "gems": [
+        1001,
+        935
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        8,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -66,
+      "won": false,
+      "fuelExhausted": [
+        32,
+        6
+      ],
+      "statisticsSha256": "f9a3f5a243baff5ef89bf95497bab7cb433aaa08a13968d5e2c206b880829ebd"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01corridors",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        864,
+        452
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        5,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 412,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "a5c8556690dddf2ced5827a2ef0e102c57c072ca13997be778e4d85ed48bb145"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01corridors",
+      "outcome": "teamA",
+      "round": 1784,
+      "gems": [
+        1024,
+        244
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        6,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -780,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "c81f0f43dbe60fb98ca95ceebaafa3ae304572068cec8c398ba8fa7c4d359ce4"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01elk-arena",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        732,
+        528
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        55,
+        32
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 204,
+      "won": true,
+      "fuelExhausted": [
+        1,
+        1
+      ],
+      "statisticsSha256": "017d3e007574a2634d3ac2b2240ef203d3d9e68754181136f161f187ba0b9904"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01elk-arena",
+      "outcome": "teamA",
+      "round": 1805,
+      "gems": [
+        1008,
+        192
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        48,
+        27
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -816,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        2
+      ],
+      "statisticsSha256": "825da8f468ec6ee0a2303cdc33452f8bb225c52c86a8204ea405b444fd465c58"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01fracture",
+      "outcome": "teamA",
+      "round": 1464,
+      "gems": [
+        1037,
+        754
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 283,
+      "won": true,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "4a114161cfd9e0bedd189aad0bd5932877fe6fcb13e8f0bacadc3705a2924cdd"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01fracture",
+      "outcome": "teamA",
+      "round": 1874,
+      "gems": [
+        1004,
+        696
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        1,
+        2
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -308,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "7e6cfc03c2e0e8161d32917f2ddcec8cd76e3118558332c12b3d63918ba55ee9"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01gold-rush",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        814,
+        649
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        20,
+        8
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 165,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "cf9babfb3447684bf010c98245f614f52dcfdf449bf73198b6754a6f154e5c4e"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01gold-rush",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        726,
+        754
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        15,
+        7
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 28,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "7fbb4aad82dc94054c72d0439dfa021938b240732f9a395659818cf6ab684818"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01hooks",
+      "outcome": "teamA",
+      "round": 1261,
+      "gems": [
+        1001,
+        44
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        25,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 957,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "13996c527698de74142dec4dbb1d7bafce3f46e30eafb374e55080f20481810b"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01hooks",
+      "outcome": "teamA",
+      "round": 1487,
+      "gems": [
+        1001,
+        143
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        33,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -858,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "d8147d85cb72b3a66423af032bf908cabfd9e49b6cc556ee8760294184e52f91"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01islands",
+      "outcome": "teamB",
+      "round": 1355,
+      "gems": [
+        558,
+        1007
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        7,
+        8
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -449,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        7
+      ],
+      "statisticsSha256": "725325c5c65f78fe4ff79999bdeb61dda23f6308d187d9f05d8ec8a27d0b9cac"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01islands",
+      "outcome": "teamA",
+      "round": 1504,
+      "gems": [
+        1010,
+        978
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        12,
+        9
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -32,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "d19fc6c839068e330a75ef89ab07cfc895cc8d2fc8012d0892350c2214364b4b"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01shortcut",
+      "outcome": "teamA",
+      "round": 1904,
+      "gems": [
+        1011,
+        506
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        4,
+        2
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 505,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        1
+      ],
+      "statisticsSha256": "b7c3b3c4ba1178ba05208d674623979982a7f9d935cc181a6a620de7f52954b3"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01shortcut",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        925,
+        484
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        8,
+        6
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -441,
+      "won": false,
+      "fuelExhausted": [
+        1,
+        0
+      ],
+      "statisticsSha256": "1d914c0c07d45ba688d8377e0b4f89087da2907230c90141fa9ff37dc896a104"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01starfish",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        288,
+        999
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        21,
+        36
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -711,
+      "won": false,
+      "fuelExhausted": [
+        1,
+        0
+      ],
+      "statisticsSha256": "eb7d4d9b060dfff8d9532bdc4586263cafac6f1aa086fcd7bae241e6607c942d"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01starfish",
+      "outcome": "teamA",
+      "round": 1984,
+      "gems": [
+        1074,
+        623
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        35,
+        21
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -451,
+      "won": false,
+      "fuelExhausted": [
+        1,
+        0
+      ],
+      "statisticsSha256": "363d5b7fefcc9ceb20983b51f4147ca7d3f4c41fe7f9b4e031294303f80c88fe"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01starvation",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        500,
+        400
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        16,
+        20
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 100,
+      "won": true,
+      "fuelExhausted": [
+        15,
+        27
+      ],
+      "statisticsSha256": "8cb6e3a1104f04374cc85e2d9a5b0cf01559403fa348bce7d529101b7407825e"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01starvation",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        272,
+        656
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        9,
+        21
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 384,
+      "won": true,
+      "fuelExhausted": [
+        14,
+        8
+      ],
+      "statisticsSha256": "941aeba728853921dad2b0c7cf92361c9abef8379046395282604b971e185932"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01the-farm",
+      "outcome": "teamA",
+      "round": 1232,
+      "gems": [
+        1002,
+        542
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        8,
+        3
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 460,
+      "won": true,
+      "fuelExhausted": [
+        3,
+        3
+      ],
+      "statisticsSha256": "e0fa4749ce70094e2ffb8679a1c66e7fa56802e2a947087341573b5915e40a8c"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01the-farm",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        789,
+        411
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        9,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -378,
+      "won": false,
+      "fuelExhausted": [
+        3,
+        3
+      ],
+      "statisticsSha256": "66d9b0b29e0e103cb6588429437c29fa61261296d095e23deab8e53399897c22"
+    },
+    {
+      "a": "_scandidate_10101",
+      "b": "_s_cambridge-v208_10201",
+      "map": "01yellow-brick-road",
+      "outcome": "teamA",
+      "round": 944,
+      "gems": [
+        1015,
+        253
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        11,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 762,
+      "won": true,
+      "fuelExhausted": [
+        7,
+        6
+      ],
+      "statisticsSha256": "ec4c115ed3adc79fade80f4d24250752c12131783677a682a39fdfee5ebc0491"
+    },
+    {
+      "a": "_s_cambridge-v208_10201",
+      "b": "_scandidate_10101",
+      "map": "01yellow-brick-road",
+      "outcome": "teamA",
+      "round": 1156,
+      "gems": [
+        1027,
+        582
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        20,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -445,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "0afc9aeb93bf876ba2698a462848d214df4f3fd604faf408e3bab22cef31381b"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00ambush",
+      "outcome": "teamA",
+      "round": 1468,
+      "gems": [
+        1028,
+        894
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        5,
+        3
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 134,
+      "won": true,
+      "fuelExhausted": [
+        7,
+        11
+      ],
+      "statisticsSha256": "b8027e9d4a2afc29f4a8bf5cd611a2ea059bea66a9f7a64f37c734ecca46a243"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00ambush",
+      "outcome": "teamA",
+      "round": 1671,
+      "gems": [
+        1028,
+        765
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        8,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -263,
+      "won": false,
+      "fuelExhausted": [
+        12,
+        22
+      ],
+      "statisticsSha256": "dc5c91d550165ff13cc3d764d6ddbbe56cae2647cab92cc2b593f5423d6fccb6"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00collision",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        989,
+        204
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        22,
+        9
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 785,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "522b07fb819591cb87cef386d76dd2859dee2920be478bb9e960cd99e7173f59"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00collision",
+      "outcome": "teamA",
+      "round": 1958,
+      "gems": [
+        1004,
+        154
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        28,
+        8
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -850,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "0876f909ccc5dcbb33458364d512a1aa5f342e40e4b383e83ac97d24b87d829d"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00contest",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        200,
+        200
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        20,
+        13
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 0,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "b2876898c92d87145ba977dfee692ba9c4b9becc471776e217ceaec4fc655ef9"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00contest",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        600,
+        0
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        23,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -600,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "fdefb2506b5c962f5619bb4f18793e872722115b701299b38aacc59db1d660d7"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00corners",
+      "outcome": "teamA",
+      "round": 1219,
+      "gems": [
+        1013,
+        667
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        12,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 346,
+      "won": true,
+      "fuelExhausted": [
+        3,
+        5
+      ],
+      "statisticsSha256": "5997e767c23a04e46529246c56303e73843fe8af2fecfb0056b5ec1790fb8fd7"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00corners",
+      "outcome": "teamA",
+      "round": 1141,
+      "gems": [
+        1006,
+        576
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        13,
+        7
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -430,
+      "won": false,
+      "fuelExhausted": [
+        3,
+        3
+      ],
+      "statisticsSha256": "23c24468914ee02f597614765c11e116d4e02ec3f9068fa95c4dcc9c46116ea8"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00eight",
+      "outcome": "teamA",
+      "round": 1244,
+      "gems": [
+        1057,
+        342
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        23,
+        16
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 715,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "c6b8e8600747574a6bee8227f411cef708e9e9d4229c741ce9ebc07be983eaf2"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00eight",
+      "outcome": "teamA",
+      "round": 978,
+      "gems": [
+        1021,
+        148
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        23,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -873,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "e94f7f9d8d72c629da8e48e5300f04e95cf82da355d0f0f64ebde6d01d749b8f"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00elkring",
+      "outcome": "teamA",
+      "round": 1114,
+      "gems": [
+        1031,
+        663
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        23,
+        8
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 368,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "ff535260ec9884ed5546e477aa0ec431b19160a964d8c0d39f3fb549ac856a27"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00elkring",
+      "outcome": "teamA",
+      "round": 1185,
+      "gems": [
+        1016,
+        414
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        21,
+        14
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -602,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "c0c68b6490e0c8525a7942ce7438556145df43e709a2e0419ce88e9f713efc13"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00expanse",
+      "outcome": "teamB",
+      "round": 1252,
+      "gems": [
+        696,
+        1001
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        5,
+        7
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -305,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "4c05348d26c768040276d52952bc88ea26ccffa74365d156dcf8ba2b9cb8b928"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00expanse",
+      "outcome": "teamA",
+      "round": 1426,
+      "gems": [
+        1012,
+        879
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        6,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -133,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "7f14e82845ec1585da7c559660c21499eeed9d8efc84fa76e8b243eae9d66be7"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00fragment",
+      "outcome": "teamA",
+      "round": 1612,
+      "gems": [
+        1001,
+        72
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        35,
+        3
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 929,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "5f3bb1ff9f2435289d98f4a42d96a35ea2ff89bb678c8c806a0c80324c2a1f11"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00fragment",
+      "outcome": "teamA",
+      "round": 1715,
+      "gems": [
+        1016,
+        48
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        31,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -968,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "c48208222ef2e73b94fd9bae31a6f1a31e40f617c9bda127506f97af4c37b489"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00interlock",
+      "outcome": "teamA",
+      "round": 1878,
+      "gems": [
+        1009,
+        532
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        35,
+        23
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 477,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "1334b3eb854bb61fc3d96726fd00ab069fc1fc3acf47abb47188e2ea5c5a3561"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00interlock",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        981,
+        437
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        40,
+        18
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -544,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "80b6923ad5e8fd1f51f3b83f2c0c3b1e5f5e443000bc25cd31bcc2507ad37f24"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00lanes",
+      "outcome": "teamA",
+      "round": 1375,
+      "gems": [
+        1004,
+        679
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        10,
+        11
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 325,
+      "won": true,
+      "fuelExhausted": [
+        5,
+        7
+      ],
+      "statisticsSha256": "112e846951b440fc0ab24569832257869347927fc804a52122f2598e53ee1e5f"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00lanes",
+      "outcome": "teamB",
+      "round": 1447,
+      "gems": [
+        946,
+        1010
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        13,
+        15
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 64,
+      "won": true,
+      "fuelExhausted": [
+        5,
+        6
+      ],
+      "statisticsSha256": "56e6991dff54cb76977bd721a8c966ba81c233ee038fbb819e3698df4d9bce8b"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00monolith",
+      "outcome": "teamB",
+      "round": 1481,
+      "gems": [
+        609,
+        1006
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        11,
+        20
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -397,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "6a4f2f5aeaf9b89a6c61f162f4bfdc033258589c2e3f58c3e107aeadaef086d3"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00monolith",
+      "outcome": "teamB",
+      "round": 1597,
+      "gems": [
+        840,
+        1009
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        17,
+        21
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 169,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "13799aa1601acdb28914f4430f34dda4c64036e5923130e1cf5d92550de9daab"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00packs",
+      "outcome": "teamB",
+      "round": 1493,
+      "gems": [
+        216,
+        1020
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        6,
+        23
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -804,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "c4eae36c019f0a6720314f4fc57f978d579e39a8d6e572d9bcd0fa7eb7df0457"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00packs",
+      "outcome": "teamA",
+      "round": 1654,
+      "gems": [
+        1026,
+        130
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        27,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -896,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "a855a5dae95dfd32cd1ac84d67452dd9a990b0e655f2f5990457e2a68d793aea"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00pilgrimage",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        547,
+        373
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        24,
+        25
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 174,
+      "won": true,
+      "fuelExhausted": [
+        9,
+        13
+      ],
+      "statisticsSha256": "4b69f7649b7753c0a0ca7b529e55240eed2b88478fc95c1c0119e42a85f44fa7"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00pilgrimage",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        577,
+        401
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        25,
+        19
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -176,
+      "won": false,
+      "fuelExhausted": [
+        7,
+        7
+      ],
+      "statisticsSha256": "2e21daa2792e4f4bd76222dfd5df6a00a750a86b844abc845c18e6ab84d77405"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00quadrants",
+      "outcome": "teamB",
+      "round": 857,
+      "gems": [
+        914,
+        1003
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        5,
+        6
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -89,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        9
+      ],
+      "statisticsSha256": "5345d2e5e1d4061cea79914265b80594b351373c44284cce648d4cc0f0de315b"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00quadrants",
+      "outcome": "teamA",
+      "round": 976,
+      "gems": [
+        1003,
+        817
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        9,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -186,
+      "won": false,
+      "fuelExhausted": [
+        4,
+        8
+      ],
+      "statisticsSha256": "38382bb9829f477b709df5d245d3c15d2df024320073e77c92e2d521fe582951"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00reverse-spiral",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        341,
+        823
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        3,
+        13
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -482,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "6b5aafff2795b7f781d853a9016f663b0cc98746853f638384aa33eb07fc120c"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00reverse-spiral",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        545,
+        538
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        3,
+        13
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -7,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "f16df70c8fd3f1bc998dacac07185aa5e33a9e203d3719ec806b062203c9263c"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00rows",
+      "outcome": "teamA",
+      "round": 1477,
+      "gems": [
+        1005,
+        941
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 64,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "26cb98a2e2ea01d3bb638d8c249abd5bd53524182c6ece3f933023d80528ca9b"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00rows",
+      "outcome": "teamB",
+      "round": 1591,
+      "gems": [
+        991,
+        1010
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 19,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "4998b883288a76d3e903d011ec4642a1bde36bf5d2ebcbaa30662441abc549bd"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00rushbait-v2",
+      "outcome": "teamB",
+      "round": 1161,
+      "gems": [
+        901,
+        1026
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -125,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "fa6e0af44670bf9fd9f00e89db2d8755083260999440d925dc0092fe41be7d96"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00rushbait-v2",
+      "outcome": "teamB",
+      "round": 1186,
+      "gems": [
+        820,
+        1010
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 190,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "1119281f1101bef71d54848364cd33ec75657fe36a2c0ada73d28d03658fcd42"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00split",
+      "outcome": "teamB",
+      "round": 903,
+      "gems": [
+        929,
+        1020
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        8,
+        7
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -91,
+      "won": false,
+      "fuelExhausted": [
+        3,
+        2
+      ],
+      "statisticsSha256": "51e58c4d05c70605c7eec72668da9fe9d9f6499fc7b5f24e943fa665e15ead49"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00split",
+      "outcome": "teamA",
+      "round": 786,
+      "gems": [
+        1017,
+        690
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        6,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -327,
+      "won": false,
+      "fuelExhausted": [
+        3,
+        3
+      ],
+      "statisticsSha256": "59fc079e19abb18d4c738eeacea858e122c3bd1205a9fc92438c96ee50819e38"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00stampede",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        320,
+        640
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        11,
+        40
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -320,
+      "won": false,
+      "fuelExhausted": [
+        17,
+        43
+      ],
+      "statisticsSha256": "5a43657a9a06bb3a224aa482d3032824d70b73506a9d7a343f24348594770ab9"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00stampede",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        0,
+        320
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        27,
+        14
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 320,
+      "won": true,
+      "fuelExhausted": [
+        16,
+        4
+      ],
+      "statisticsSha256": "2763073eadfd9bbca7969077de8bc3d27d0ac151470f9687d88bd8c7dadd14d2"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "00swirl",
+      "outcome": "teamA",
+      "round": 1766,
+      "gems": [
+        1018,
+        975
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        25,
+        35
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 43,
+      "won": true,
+      "fuelExhausted": [
+        2,
+        2
+      ],
+      "statisticsSha256": "f31eecc070e99e84d3a479be822f87fd65ef90d664dac88c845b647ae1cb9e7f"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "00swirl",
+      "outcome": "teamA",
+      "round": 1725,
+      "gems": [
+        1013,
+        881
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        35,
+        31
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -132,
+      "won": false,
+      "fuelExhausted": [
+        2,
+        2
+      ],
+      "statisticsSha256": "920bad8994b5491b0b673314c8142e4468ea97cb602915df5c5f9bf9803a82b5"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01big-world",
+      "outcome": "teamA",
+      "round": 1349,
+      "gems": [
+        1020,
+        993
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        3
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 27,
+      "won": true,
+      "fuelExhausted": [
+        10,
+        13
+      ],
+      "statisticsSha256": "8aae8b1f3c9ef7cceddbd635383553884240cded0d9ee68963c9955c7fbe3b12"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01big-world",
+      "outcome": "teamB",
+      "round": 1305,
+      "gems": [
+        811,
+        1013
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        2
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 202,
+      "won": true,
+      "fuelExhausted": [
+        8,
+        8
+      ],
+      "statisticsSha256": "4436f3e25a69c6617ee8685c317fe6a7e769e6911661b0d956540bc6cdb81abf"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01boss-battle",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        0,
+        0
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        2,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 0,
+      "won": true,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "6a9d04272a08734e908df3a72cafea562a272434e5f9b8f8f12f75e5b2c009ff"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01boss-battle",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        0,
+        0
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        2,
+        2
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 0,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "e1f8d129ca388a76175a7abaea2a322cb15829b3ca3b51092505670c76a40667"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01broken-curve",
+      "outcome": "teamA",
+      "round": 1784,
+      "gems": [
+        1000,
+        732
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        24,
+        13
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 268,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "a266bc86ea1eacaaa522316b741f2babd67a57a9e7f5549d379a4996c668df5e"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01broken-curve",
+      "outcome": "teamB",
+      "round": 1391,
+      "gems": [
+        738,
+        1009
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        13,
+        13
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 271,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "45581f9beb55153d57a41bc2b445e189f864bf22deaff089c817d594c5cf735e"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01concentrated-wealth",
+      "outcome": "teamB",
+      "round": 1567,
+      "gems": [
+        797,
+        1016
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        4,
+        6
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -219,
+      "won": false,
+      "fuelExhausted": [
+        10,
+        16
+      ],
+      "statisticsSha256": "565adad18a97a512549a6c6cabeae30ab32c9d662382cfc7c3d796dcd14053ad"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01concentrated-wealth",
+      "outcome": "teamA",
+      "round": 1241,
+      "gems": [
+        1000,
+        263
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        5,
+        2
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -737,
+      "won": false,
+      "fuelExhausted": [
+        15,
+        0
+      ],
+      "statisticsSha256": "8f02f3b8453f89b85a3e8c7bc5533391d8f80b780b9bec41564e7209a7e13933"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01corridors",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        944,
+        528
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        8,
+        3
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 416,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "e1e04719873a16af295063a1d5add8a4fd60e59b3a05b050042ec04874e0d21f"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01corridors",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        876,
+        544
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        11,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -332,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "c58aecc6bf170e81b2b52901d0687571adf9143dc0225a80787c43bef0de7268"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01elk-arena",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        672,
+        552
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        45,
+        42
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 120,
+      "won": true,
+      "fuelExhausted": [
+        2,
+        1
+      ],
+      "statisticsSha256": "de118e35cd73bceb4d288adbe8c67e214b8cab243ffecb086759ea212152af56"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01elk-arena",
+      "outcome": "teamA",
+      "round": 1741,
+      "gems": [
+        1044,
+        180
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        52,
+        31
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -864,
+      "won": false,
+      "fuelExhausted": [
+        1,
+        2
+      ],
+      "statisticsSha256": "3c7ea54aecd7def20e0b80416a926aea65a23162b4b4ea94ee99a9567066c902"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01fracture",
+      "outcome": "teamA",
+      "round": 1360,
+      "gems": [
+        1018,
+        392
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        3,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 626,
+      "won": true,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "0d09fcc3a6e5a6d7828fea7632fbcbfe8e441ef1e5572156a5138133caf8097e"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01fracture",
+      "outcome": "teamA",
+      "round": 1965,
+      "gems": [
+        1003,
+        444
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        4,
+        0
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -559,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "8e7bc198110890200bb785a04fb723dbb346da02c947c5b87fc4bd7c228f1e79"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01gold-rush",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        726,
+        770
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        9,
+        12
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -44,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "1c8e3a0dc1ac1c46287f3ba2d88968c6895cf3d77553a440fcc86568efc209d3"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01gold-rush",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        770,
+        748
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        15,
+        7
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -22,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "69c9a0ec74c940e2283c9fdc695910300cfd24b3325f3e18685fabf0eb50e606"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01hooks",
+      "outcome": "teamA",
+      "round": 1840,
+      "gems": [
+        1012,
+        297
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        38,
+        18
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 715,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "b3e56a14db7f59362aed50d8731bb933a5ba446f107d7a2fd435b8a35c5e9f63"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01hooks",
+      "outcome": "teamA",
+      "round": 1399,
+      "gems": [
+        1001,
+        0
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        30,
+        3
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -1001,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "6bd84cf5b8f283f15801e0af2968ae1554102365901d1a22314b5ba8d396100d"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01islands",
+      "outcome": "teamB",
+      "round": 1280,
+      "gems": [
+        686,
+        1013
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        9,
+        9
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -327,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "5f5f2561018641b707b27110ab5711180a625c766e5a8c6915092abe582dc23f"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01islands",
+      "outcome": "teamA",
+      "round": 1458,
+      "gems": [
+        1003,
+        866
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        13,
+        11
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -137,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        5
+      ],
+      "statisticsSha256": "b0661a2b7c0c394521814130f059f2c5a5a5ddb2460809680835a833a88709f6"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01shortcut",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        626,
+        877
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        5,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -251,
+      "won": false,
+      "fuelExhausted": [
+        0,
+        1
+      ],
+      "statisticsSha256": "6a7ceb0985811964a511add51c440b50cfed51b1a5fab0cf1dffb4ab6b5d8050"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01shortcut",
+      "outcome": "teamB",
+      "round": 1553,
+      "gems": [
+        280,
+        1011
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        2,
+        3
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 731,
+      "won": true,
+      "fuelExhausted": [
+        0,
+        0
+      ],
+      "statisticsSha256": "1741a5a7206dfe566f942fcbb63b6b292557ad4483fb50fd4a4f6366cac454b3"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01starfish",
+      "outcome": "teamA",
+      "round": 1656,
+      "gems": [
+        1051,
+        138
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        32,
+        21
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 913,
+      "won": true,
+      "fuelExhausted": [
+        1,
+        0
+      ],
+      "statisticsSha256": "821b6e442b195b96d438db0c2b921b1bc3882a33358e1d501ae028e168bbda67"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01starfish",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        615,
+        940
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        20,
+        33
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 325,
+      "won": true,
+      "fuelExhausted": [
+        2,
+        10
+      ],
+      "statisticsSha256": "adc6ae87d0e7a70a3b4b6cbe2a30dd1f337c6b4b6c98b39bc3e0f1773d300464"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01starvation",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        596,
+        332
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        18,
+        16
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 264,
+      "won": true,
+      "fuelExhausted": [
+        15,
+        9
+      ],
+      "statisticsSha256": "f509354fb2d8e98532b952c28117522b15c76a60143e8f5aa48784a62636bf95"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01starvation",
+      "outcome": "teamA",
+      "round": 2000,
+      "gems": [
+        732,
+        232
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        20,
+        9
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -500,
+      "won": false,
+      "fuelExhausted": [
+        7,
+        11
+      ],
+      "statisticsSha256": "57833ec095fc5775c56fb5d490f6947647eccc9ad2e3de5578a62c11f41e0488"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01the-farm",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        80,
+        425
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        2,
+        4
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": -345,
+      "won": false,
+      "fuelExhausted": [
+        3,
+        3
+      ],
+      "statisticsSha256": "e40172a30411bab8248d4927a158467cd0b8b6f7496fae39fef8a30991f8c6ae"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01the-farm",
+      "outcome": "teamB",
+      "round": 2000,
+      "gems": [
+        0,
+        65
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        0,
+        1
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": 65,
+      "won": true,
+      "fuelExhausted": [
+        3,
+        3
+      ],
+      "statisticsSha256": "02117960d60bc92ad11d0424ec78714f3a46a6f351fcb76e4d9af2526d8b2a09"
+    },
+    {
+      "a": "_scandidate_10102",
+      "b": "_s_cambridge-v208_10202",
+      "map": "01yellow-brick-road",
+      "outcome": "teamA",
+      "round": 1113,
+      "gems": [
+        1012,
+        549
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        9,
+        8
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "A",
+      "margin": 463,
+      "won": true,
+      "fuelExhausted": [
+        5,
+        8
+      ],
+      "statisticsSha256": "0815101bfa716a581dda5acf5b932f739c33d4b7d636b0405567826129fc0e0c"
+    },
+    {
+      "a": "_s_cambridge-v208_10202",
+      "b": "_scandidate_10102",
+      "map": "01yellow-brick-road",
+      "outcome": "teamA",
+      "round": 1169,
+      "gems": [
+        1021,
+        642
+      ],
+      "faults": [
+        0,
+        0
+      ],
+      "kills": [
+        6,
+        5
+      ],
+      "loggedErrors": [
+        0,
+        0
+      ],
+      "printedOverruns": [
+        0,
+        0
+      ],
+      "testedSide": "B",
+      "margin": -379,
+      "won": false,
+      "fuelExhausted": [
+        5,
+        6
+      ],
+      "statisticsSha256": "73eabcfca2b7025718d826056ad984720c7af4bfb5f52354c62e9de778c8a1db"
+    }
+  ]
+}

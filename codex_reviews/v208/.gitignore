@@ -1,0 +1,13 @@
+sdk/
+cmake/
+.cambc/
+maps/
+bots/_*/
+bots/starter*/
+bots/*/.cambc/
+__pycache__/
+runs/
+*.zip
+
+compile_commands.json
+bots/*/.clangd
