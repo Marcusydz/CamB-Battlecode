@@ -134,3 +134,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 166 | v106 probe | 1a348c7 (branch exp/v106p) | v104b + treasure first on every map but broken_curve, probed on 30 maps vs Nyx and Fish. Nyx 9940 vs 10156, Fish 8478 vs 7929; won big_world 1024-876 vs Fish (first Fish win), elk 936 vs Nyx; per-map gains on islands, packs, rushbait_v2, CW, expanse, gold_rush; losses on corridors, ambush, fracture, interlock. |
 | 167 | v106 candidate | 6425c18 (branch exp/v106) | v104b + treasure first on big_world, elk_arena, islands, packs/gold_rush, rushbait_v2, CW, expanse. Exactly as probed: Nyx 5818 vs 5284, Fish 4535 vs 3895 on the 10 maps; big_world WIN vs Fish. Accepted. |
 | (167) | v106 | e15c8a2 | Accepted onto top-team-study. Live as official 167. |
+| 168 | v107 probe | a4664b4 (branch exp/v107p) | v106 + death avoid on every map but broken_curve, probed on 30 maps vs Nyx and Fish. |
