@@ -188,4 +188,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 208 | v123 (accepted) | d0a2110 (branch exp/v123) | v121 + Vendetta instead of Stellar on fracture, CW, islands. Verified: those 3 maps reproduced (+513), all other Nyx games identical (Fish set e timed out; it doesn't use the change). |
 | 209 | v124 probe | 588d8a6 (branch exp/v124p) | v123 drafting Prism (buffed in 1.0.2) instead of Heart of Ruin on HoR maps and instead of Varg on Vesper maps, vs Nyx and Fish. Lost about 8000 overall; won elk_arena +468 (beat Nyx 1044-252), packs +179, shortcut +113, collision +56. |
 | 210 | elk probe 1 | 04886c5 (branch exp/elk1) | v123 with fight threshold 1.5 on elk_arena only, vs Nyx and Fish on elk. No result (runner stopped before its games were saved). |
-| 211 | v125 candidate | 28e7d3d (branch exp/v125) | v123 + Prism first (list 20) on elk_arena, packs/gold_rush, shortcut, collision. Verifying on all 30 maps. |
+| 211 | v125 (accepted) | 28e7d3d (branch exp/v125) | v123 + Prism first (list 20) on elk_arena, packs/gold_rush, shortcut, collision. Verified: identical to the probe there (+816, elk_arena beats Nyx 1044-252), all other maps unchanged. |
+| 212 | elk probe 1 | ca9220a (branch exp/elk1) | v125 with fight threshold 1.5 on elk_arena only. |
