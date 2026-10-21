@@ -211,3 +211,7 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 240 | v132 probe | 8d1e84c (exp/v132p) | v127 placing a ward every 16 tiles instead of 8 (Codex: fuel). About -6700 (elk -900, split -733, lanes -546). Wards matter; rejected. |
 | 241 | restore v127 | (top-team-study) | |
 | 242-243 | contest probes c1, c2 | 8e6c9bc, ... (exp/c1, exp/c2) | v127 carrying up to 200 gems before banking on contest (c2 also no banking on the way). |
+| 244 | restore v127 | (top-team-study) | Contest probes: still 0 gems vs both (c2 held Nyx to 600 at round 2000). |
+| 245 | v134 probe | 4c835f3 (exp/v134p) | v127 banking at 90 gems. About -3500; won shortcut +228, broken_curve +186, the_farm +172 (Fish game missing). |
+| 246 | v135 probe | aabc125 (exp/v135p) | v127 with a ward every 5 tiles. About -4500; won concentrated_wealth +214, yellow_brick_road +135, corridors +117, fracture +78. |
+| 247 | v133 candidate | 9d7a6b2 (exp/v133) | v127 + yellow_brick_road retreat 55%, broken_curve fight 1.3 and bank 90, boss_battle treasure flip, bank 30 on shortcut/reverse_spiral/hooks, ward every 5 on CW/yellow_brick_road/corridors/fracture. Verifying on 35 maps. |
