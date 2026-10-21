@@ -64,4 +64,4 @@ Later probes (v43–v138) are recorded in the comments of `bot.cpp` and `draft.c
 - `python3 scripts/farmspeed.py BOT...`: rounds to 1000 gems against `bots/passive`.
 - `scripts/cvariant.sh NAME 'PARAM=value'`: copy of `bots/main` with switches changed.
 - `scripts/league.sh BOT`: arena against `passive` and `aggro`.
-- `results/ladder-versions.txt`: when each version was uploaded to the ladder.
+- `results/ladder-versions.txt` (local only, not in git): when each version was uploaded to the ladder.

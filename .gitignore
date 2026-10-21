@@ -12,3 +12,5 @@ bots/*/target/
 sdk/
 cmake/
 compile_commands.json
+maps/
+results/
