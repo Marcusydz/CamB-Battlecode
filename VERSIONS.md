@@ -200,4 +200,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 220 | map probe 3 | 32d093e (exp/mv3) | broken_curve post-patch draft only; elkring treasure first. broken_curve 378/620; elkring 187/352. |
 | 221 | map probe 4 | 98c2f86 (exp/mv4) | broken_curve Prism draft + normal play; elkring death avoidance. broken_curve 525/760; elkring 429/396. |
 | 222 | map probe 5 | 2a45960 (exp/mv5) | broken_curve Prism draft, old play; elkring squad 5. broken_curve 355/501; elkring 502/165. |
-| 223 | v126 probe | 1c5bbbc (exp/v126p) | v125 + stay on spawn while enemies within 6 would win the fight (max 40 turns), all maps; vs ladder spawn camping (66 deaths at our spawn on contest). Testing on 30 maps. |
+| 223 | v126 probe | 1c5bbbc (exp/v126p) | v125 + stay on spawn while enemies within 6 would win the fight (max 40 turns), all maps; vs ladder spawn camping (66 deaths at our spawn on contest). Lost 1254 overall vs Nyx + Fish (pilgrimage -448, rushbait -394, quadrants -224, elk -180); won big_world +194, lanes +115, collision +70, CW +61, packs +54, corridors +52, reverse_spiral +45. |
+| 224 | v128 probe | 8095d17 (exp/v128p) | v125 drafting the top teams' order (Cassi & Issac, Stellar, Ren, Ryth, Tavi, Varg) on every map but broken_curve. |
