@@ -158,4 +158,5 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 184 | v112 contest probe | 0868a36 (branch exp/v112c) | v111 + pre-v90 contested-camp rule on every map but broken_curve, re-probed vs the new Nyx. Worse overall; won split +230 (994-1004 vs Fish, nearly a win), corridors +124, expanse +107. |
 | 185 | v112 candidate | 4d4828f (branch exp/v112) | v111 + old contest rule on split, corridors, expanse + one squad of 5 on rows. Reproduced exactly (+521 Nyx+Fish; split 994-1004 vs Fish), gold_rush control identical. Accepted. |
 | (185) | v112 | 5116784 | Accepted onto top-team-study. Live as official 185. |
-| 186 | v113 probe | 1e9a00a (branch exp/v113p) | v112 with the treasure opening flipped on every map but broken_curve (on where off, off where on), vs the new Nyx and Fish. |
+| 186 | v113 probe | 1e9a00a (branch exp/v113p) | v112 with the treasure opening flipped on every map but broken_curve (on where off, off where on), vs the new Nyx and Fish. Worse overall (Nyx 9462 vs 10087, Fish 7967 vs 10589) but won elk +576 (treasure off: 576 vs Nyx, was 0), pilgrimage +175, collision +140, expanse +113, the_farm +97, shortcut +62, hooks +44. |
+| 187 | v113 candidate | 9c6a881 (branch exp/v113) | v112 + treasure opening off on elk, pilgrimage, collision, expanse, hooks and on for the_farm, shortcut. Verifying. |
