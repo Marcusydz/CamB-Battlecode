@@ -10,7 +10,7 @@ using List = std::array<D, 11>;
 
 // Candidate lists. 0 is v16's order (Ren, Tavi, Ryth, Stellar, Marcella), chosen by local tests against
 // itself. 1 is what teams rated 1700+ pick on almost every map (690 ladder games, October 2026).
-static constexpr std::array<List, 18> LISTS{{
+static constexpr std::array<List, 20> LISTS{{
     {D::ren, D::tavi, D::ryth, D::stellar, D::marcella, D::varg, D::vendetta, D::vesper_vale, D::prism, D::cassi_and_issac, D::willow},
     {D::cassi_and_issac, D::stellar, D::varg, D::ren, D::ryth, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
     {D::stellar, D::cassi_and_issac, D::ren, D::ryth, D::varg, D::tavi, D::prism, D::vendetta, D::marcella, D::vesper_vale, D::willow},
@@ -34,6 +34,9 @@ static constexpr std::array<List, 18> LISTS{{
     {D::heart_of_ruin, D::varg, D::stellar, D::ryth, D::willow, D::ren, D::marcella, D::cassi_and_issac, D::prism, D::tavi, D::vendetta},
     // 17: patch 1.0.2 nerfed Heart of Ruin (strength 40 -> 30) and buffed Vesper Vale (health 1000, strength 55).
     {D::vesper_vale, D::varg, D::stellar, D::ryth, D::willow, D::ren, D::marcella, D::cassi_and_issac, D::prism, D::tavi, D::vendetta},
+    // 18/19: lists 16/17 with Vendetta (buffed in 1.0.2) in Stellar's place (Stellar nerfed).
+    {D::heart_of_ruin, D::varg, D::vendetta, D::ryth, D::willow, D::ren, D::marcella, D::cassi_and_issac, D::prism, D::tavi, D::stellar},
+    {D::vesper_vale, D::varg, D::vendetta, D::ryth, D::willow, D::ren, D::marcella, D::cassi_and_issac, D::prism, D::tavi, D::stellar},
 }};
 
 constexpr int DRAFT = -1;  // >=0: use this list on every map (testing). -1: per-map table below.
@@ -84,11 +87,17 @@ static int choose_list() {
     // Vesper Vale instead of Heart of Ruin won here after patch 1.0.2 (v121 probe, Nyx + Fish): pilgrimage +365
     // (beat Nyx 791-543), expanse +287, ambush +238, rushbait_v2 +231, islands +206, stampede +160, starfish +141,
     // monolith +130, eight +97, CW +82, rows +78 (beat Nyx 1017-991), the_farm +72.
+    // Vendetta instead of Stellar won clearly only here (v122 probe 207, Nyx + Fish): fracture +209, CW +186,
+    // islands +118. Everywhere else it lost (-3300 overall).
+    static constexpr int VENDETTA[][3] = {{61, 71, 374}, {61, 61, 210}, {60, 60, 0}};
+    bool vendetta = false;
+    for (const auto& m : VENDETTA)
+        if (w == m[0] && h == m[1] && walls == m[2]) vendetta = true;
     static constexpr int VESPER[][3] = {{50, 65, 0},  {80, 80, 224}, {100, 100, 540}, {30, 80, 80},
                                         {60, 60, 0},  {60, 50, 0},   {50, 50, 32},    {50, 50, 98},
                                         {41, 30, 36}, {61, 61, 210}, {50, 50, 214},   {50, 40, 148}};
     for (const auto& m : VESPER)
-        if (w == m[0] && h == m[1] && walls == m[2]) return 17;
+        if (w == m[0] && h == m[1] && walls == m[2]) return vendetta ? 19 : 17;
     if (FISH_DRAFT) {
         for (const auto& m : FISH_MAP)
             if (m.w == w && m.h == h && m.walls == walls) return m.list;
@@ -101,7 +110,7 @@ static int choose_list() {
             if (m.w == w && m.h == h && m.walls == walls) return m.list;
         return DEFAULT_LIST;
     }
-    return POST_PATCH_LIST;
+    return vendetta ? 18 : POST_PATCH_LIST;
 }
 
 void play_draft() {
