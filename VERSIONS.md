@@ -230,3 +230,6 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | 260 | split probe e | 87ba28d (exp/v139e) | v138 + wards every 5 tiles on split: +256. |
 | 261 | restore v138 | (top-team-study) | |
 | 262 | v139a (accepted) | 20e8651 (exp/v139a) | v138 + treasure flip on split. Verified on all 35 maps vs Nyx and Fish: only split moved, +543 (Nyx 17389->17485, Fish 15363->15810). |
+| 263 | kit probe k10 | 43438fb (exp/v140k10) | v139a + kit-aware fight estimate (probe 249's model). Lost about 8300 (Nyx 17485->14504, Fish 15810->10524). Rejected. |
+| 264 | kit probe k08 | e307afa (exp/v140k08) | same with engage thresholds x0.8. Stopped before results (Marcus paused all work 15:24 UTC). |
+| 265 | v139a (accepted, restored) | a164d25 (top-team-study) | Best validated version put back live; work paused at Marcus's request. |
