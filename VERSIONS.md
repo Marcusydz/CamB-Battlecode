@@ -155,3 +155,4 @@ Official ladder version numbers and the commit that holds the exact submitted so
 | (181) | v111 | 6e9540e | Accepted onto top-team-study. Live as official 181. |
 | 182 | v112 probe | b73413d (branch exp/v112p) | v111 + one squad of 5 on every map but broken_curve, re-probed vs the new Nyx. Worse (Nyx 8748 vs 9790, Fish 9018 vs 10365); only rows won (+60). Rejected for now. |
 | 183 | v111 | ecccf32 | v111 restored after the v112 probe. |
+| 184 | v112 contest probe | 0868a36 (branch exp/v112c) | v111 + pre-v90 contested-camp rule on every map but broken_curve, re-probed vs the new Nyx. |
