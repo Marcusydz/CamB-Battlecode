@@ -1,0 +1,36 @@
+{
+  "cambridgeVersion": 208,
+  "internalVersion": 123,
+  "submissionId": "4764f0d5-5b7a-4eca-80a8-e7bfadced078",
+  "originalCommit": "d0a2110652b8a6bc1f0c16a334825b394b684284",
+  "verification": "All six browser source files matched Git after stripping trailing whitespace per line and normalizing final newline; archive-byte identity not established. Official build log inspected 2026-10-21.",
+  "files": {
+    "bot.cpp": {
+      "originalSha256": "6f9ceb258a35f3ba182b22a2130f1a7af4416b9176974f3cbcb45bfe5932b561",
+      "candidateSha256": "e2b1791fb1b0ca630e186fdb26e5325b6684154db0b30a7463b5fb90f0ed7082"
+    },
+    "bot.h": {
+      "originalSha256": "8556cf75796a2c3a922ce015b75c008fcfae19adaba13e79fcc57751f4ca77e2",
+      "candidateSha256": "8556cf75796a2c3a922ce015b75c008fcfae19adaba13e79fcc57751f4ca77e2"
+    },
+    "camp_waiting_area.h": {
+      "originalSha256": "e46282bfd9ad8126a6b3f02b3fcf9697407ac8b416099988c17c6231f82e9c6f",
+      "candidateSha256": "e46282bfd9ad8126a6b3f02b3fcf9697407ac8b416099988c17c6231f82e9c6f"
+    },
+    "draft.cpp": {
+      "originalSha256": "ce894fae164320e5cd6e699a364abf962e2f1a963832dd67bf69df6bf7924401",
+      "candidateSha256": "ce894fae164320e5cd6e699a364abf962e2f1a963832dd67bf69df6bf7924401"
+    },
+    "draft.h": {
+      "originalSha256": "e098c67ab9defc4a205e8223ea75bc2cbc7eb6787fe7770e85e6c3ac230f8071",
+      "candidateSha256": "e098c67ab9defc4a205e8223ea75bc2cbc7eb6787fe7770e85e6c3ac230f8071"
+    },
+    "main.cpp": {
+      "originalSha256": "db90b6bcbcb7e0af94993304a06130f77c7d5e303a36384732f0285cf5be6a65",
+      "candidateSha256": "db90b6bcbcb7e0af94993304a06130f77c7d5e303a36384732f0285cf5be6a65"
+    }
+  },
+  "sdkVersion": "3.0.4",
+  "engineVersion": "1.0.2",
+  "engineBuildHash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114"
+}
