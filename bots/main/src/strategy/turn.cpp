@@ -44,6 +44,7 @@ void Bot::play_turn() {
                     static_cast<unsigned long long>(used), act.c_str());
     turns += 1;
     acts[act] += 1;
+    prev_act = act;
     const auto now = cambc::round_number();
     if (ACT_LOG_EVERY && now % ACT_LOG_EVERY == 0) {
         std::vector<std::pair<std::string, int>> tally(acts.begin(), acts.end());
@@ -72,6 +73,13 @@ void Bot::turn() {
     waited_on_spawn = false;
 
     if (!me.is_alive()) {
+        if (last_alive && DEATH_LOG) {
+            int enemies = 0;
+            for (const auto& [h, s] : seen)
+                if (now - s.round <= 3 && chebyshev(s.pos, last_pos) <= 8) enemies += 1;
+            std::printf("death r%d %s at %d,%d act=%s gems=%d enemies=%d allies=%d\n", now, kind_name(kind),
+                        last_pos.x, last_pos.y, prev_act.c_str(), last_gems, enemies, last_allies);
+        }
         if (last_alive && DEATH_AVOID && death_avoid && enemy_near(last_pos, 8, 6, now)) {
             // Killed by champions: stay away from camps there for a while (interlock vs Fish: died
             // 13 times walking back into their side for the same camp).
@@ -116,6 +124,13 @@ void Bot::turn() {
     const bool at_spawn = spawn.is_set(pos);
     if (at_spawn || kind == CT::tavi) shop();
     update_groups(now, pos);
+    if (SEEN_EVERY_TURN) {
+        // Enemy memory feeds retreat paths (threats()). It used to be refreshed only in pvp()/outnumbered(),
+        // which a low-health champion never reaches: it fled from where enemies were 3 rounds ago, then
+        // recalled beside them (ladder, v270: 23 of 29 deaths a game came while below LOW_HP).
+        for (auto& e : visible_enemies())
+            if (e.is_alive()) seen[handle_of(e)] = {e.position(), now};
+    }
     if (TEAM_PLAN) compute_group_fields();
 
     if (heal_slot) try_heal(me);
@@ -167,6 +182,12 @@ void Bot::turn() {
     last_hp = me.health();
     last_alive = true;
     last_pos = pos;
+    last_gems = gems;
+    if (DEATH_LOG) {
+        last_allies = 0;
+        for (const auto& a : cambc::vision::champions(team::ally))
+            if (a != me && a.is_alive() && chebyshev(a.position(), pos) <= 6) last_allies += 1;
+    }
     // Survival.
     if (!at_spawn && hp_frac < (low_hp + (gems >= 30 ? LOW_HP_GEMS : 0.0))) {
         if (me.health() < prev_hp) {
@@ -174,8 +195,10 @@ void Bot::turn() {
             // whatever is in range (a kill resets the chaser problem entirely).
             bool any = false;
             const auto tiles = me.attack_tiles();
+            const double b = LOWHP_FIGHT_KILL_ONLY ? burst(me) : 0.0;
             for (auto& e : visible_enemies())
-                if (e.is_alive() && tiles.is_set(e.position())) any = true;
+                if (e.is_alive() && tiles.is_set(e.position()) && (!LOWHP_FIGHT_KILL_ONLY || e.health() <= b))
+                    any = true;
             if (any) {
                 self_buff(me);
                 if (hit_in_range(me)) {

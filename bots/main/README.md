@@ -9,7 +9,7 @@ version downloaded from the competition site.
 | File | What it is |
 | --- | --- |
 | `src/main.cpp` | Entry point. The draft instance runs `play_draft()`, champions run `Bot`. A failed turn is logged and still yields. |
-| `src/draft/` | Draft preference lists plus map-fit, team-role, matchup, and enemy-synergy scoring for each legal pick. |
+| `src/draft/` | Draft: a duelist core list (Vesper Vale, Tavi, Marcella, Vendetta, Ryth), with v1.2.0's farming lineups on seven big open maps, recognised by size, walls and camp-group count. |
 | `src/core/bot.h` | The `Bot` class and `GroupInfo` (what we know about each camp group). |
 | `src/core/config.h` | Every tuning switch (`constexpr`, overridden by `scripts/cvariant.sh`) and the per-map settings' defaults. |
 | `src/core/util.h` | Small shared helpers: camp tables, distances, safe vision queries, the camp waiting ring. |
@@ -37,17 +37,21 @@ by relative path.
   (counted 3x), clear time, capture time and altar distance. Claims go in shared memory (one byte
   per draft slot) so allies spread out, or follow their squad leader's camp (squads of 2, 3 or 5
   depending on the map).
-- **Adaptive strategy:** the draft keeps its tested map rankings as a fallback, then scores map
-  geometry, missing team roles, ally synergies, revealed enemy matchups, and disruption of the
-  enemy's revealed composition. Since mirror picks are allowed, it cannot deny an opponent a
-  champion. In play, map geometry and submitted-gem leads shift camp choice, engagement thresholds,
+- **Draft:** champions that win on the ladder beyond their team's rating (41k ladder games, see
+  `docs/versions/v1.5.0.md`): Vesper Vale, Tavi, Marcella, Vendetta, Ryth, in that order, so 3-pick maps
+  get the first three. Big open maps (big_world, boss_battle, pilgrimage, rows, ambush, islands,
+  concentrated_wealth) keep v1.2.0's farming lineups. Mirror picks are allowed, so there is nothing to deny.
+- **Adaptive play:** map geometry and submitted-gem leads shift camp choice, engagement thresholds,
   carrier targeting and banking.
 - **Fights:** compares our power (health x damage) against the visible enemies, scaled up for
   enemies seen recently but now hidden. Engages and focus-fires when winning, backs off or recalls
   when losing, leaves early when outnumbered, joins nearby allies' winnable fights, interrupts
   enemy tributes with stuns and altar locks.
-- **Survival:** retreats below 40% health (55% on some maps), holds spawn against spawn campers on
+- **Survival:** retreats below 30% health (55% on some maps), fighting back on the way only for a kill;
+  enemy positions are refreshed every turn for the escape path. Holds spawn against spawn campers on
   some maps, avoids camps where it was recently killed.
+- **Death log:** one `death r... act=... enemies=... allies=...` line per death; ladder replays carry it
+  (`scripts/deaths.py`).
 - **Items:** emblems in the order the ladder #1 team builds them, optionally opening with treasure,
   then power shards forever. Buys an altar lock whenever on spawn.
 - **Fuel:** thresholds are fractions of the 100k turn budget (`FUEL_RESERVE` 0.28, `LOW_FUEL` 0.64).

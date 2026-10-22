@@ -19,7 +19,7 @@ using Item = cambc::item_type;
 inline int camp_range(cambc::camp_type t) {
     if (t == cambc::camp_type::elk) return 4;
     if (t == cambc::camp_type::monolith) return 5;
-    if (static_cast<int>(t) == 5) return 4;  // golem
+    if (t == cambc::camp_type::golem) return 4;
     return 3;
 }
 
@@ -30,8 +30,8 @@ inline std::pair<double, double> camp_stats(cambc::camp_type t) {
     case cambc::camp_type::gem_cluster: return {120, 0};   // week-2 patch: 500 -> 120
     case cambc::camp_type::gold_cluster: return {120, 0};
     case cambc::camp_type::monolith: return {20000, 200};
+    case cambc::camp_type::golem: return {5000, 120};
     }
-    if (static_cast<int>(t) == 5) return {5000, 120};  // golem (week-2 patch; not in our SDK's enum yet)
     return {1500, 50};
 }
 

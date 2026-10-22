@@ -52,6 +52,8 @@ private:
     int overruns = 0;
     std::map<std::string, int> acts;
     std::string act = "?";
+    std::string prev_act = "?";  // last turn's act, for the death log
+    int last_allies = 0, last_gems = 0;
     bool waited_on_spawn = false;
     double last_hp = 0;
     int hit_round = -100;  // last round our health dropped

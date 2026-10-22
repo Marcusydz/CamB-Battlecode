@@ -15,7 +15,7 @@ test results are in `docs/versions/v1.1.0.md` and `docs/versions/v1.2.0.md`.
 | 2 | Heart of Ruin's dash deals damage and stuns on landing | Small | Heart of Ruin (first pick on many maps) | On in v1.1.0 |
 | 3 | A move blocked by a hidden unit costs nothing, so you can retry | Small | Everyone | On in v1.1.0 |
 | 4 | Prism gains 1.5 focus per carried gem | Small (tuning) | Prism | Tested 90: level |
-| 5 | Enemy picks are visible during the draft | Medium | Draft | Not tried |
+| 5 | Enemy picks are visible during the draft | Medium | Draft | v1.3.0/v1.4.0 rules, v1.5.0 fitted model: lost to a fixed list; off |
 | 6 | 1024 bytes of draft memory, computed with 10x fuel | Medium | Setup, team planning | Not tried |
 | 7 | `set_priority` sets turn order inside the team | Small | Stun chains, captures | Stunners first: lost |
 | 8 | Shared memory has free bytes | Medium | Focus fire, tribute alerts | Focus fire: lost (v1.2.0) |

@@ -27,8 +27,8 @@ void Bot::shop() {
             primary = Item::jungle_shard_of_health;
     } else {
         // Top ladder teams: casters stack focus, the rest strength, all through power shards.
-        const bool caster = kind == CT::cassi || kind == CT::stellar || kind == CT::ren || kind == CT::tavi
-                            || kind == CT::prism;
+        const bool caster = kind == CT::cassi || kind == CT::stellar || kind == CT::ren
+                            || (kind == CT::tavi && !TAVI_STRENGTH) || kind == CT::prism;
         const Item power = caster ? Item::power_shard_of_focus : Item::power_shard_of_strength;
         const Item power_emblem = caster ? Item::power_emblem_of_focus : Item::power_emblem_of_strength;
         primary = power;
@@ -47,8 +47,13 @@ void Bot::shop() {
             switch (kind) {
             case CT::ren: case CT::ryth: order = {brui, dura}; break;
             case CT::cassi: order = {pw, {Item::durability_shard_of_focus, Item::durability_emblem_of_focus}, brui}; break;
-            case CT::tavi: order = {{Item::treasure_shard_of_focus, Item::treasure_emblem_of_focus},
-                                    {Item::durability_shard_of_focus, Item::durability_emblem_of_focus}}; break;
+            case CT::tavi:
+                if (!TAVI_STRENGTH)
+                    order = {{Item::treasure_shard_of_focus, Item::treasure_emblem_of_focus},
+                             {Item::durability_shard_of_focus, Item::durability_emblem_of_focus}};
+                else
+                    order = {{Item::treasure_shard_of_strength, Item::treasure_emblem_of_strength}, pw, dura};
+                break;
             default: order = {pw, home, dura}; break;
             }
             // Fish, Sponge and Nyx open with a treasure emblem (20% more gold) in most games (2026-10-20 ladder).

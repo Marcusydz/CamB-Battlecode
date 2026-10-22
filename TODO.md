@@ -12,9 +12,22 @@ Fixed or tried in v1.1.0 (see `docs/versions/v1.1.0.md`): Heart of Ruin's draft 
 hidden blockers (move retry, on), squad membership (`SQUAD_FIX`, lost, off).
 Fixed in v1.2.0: a crash when sorting camps by danger (`sorted_by`, see `docs/versions/v1.2.0.md`).
 
-## Next, from the ladder (21 Oct, 260 ranked games)
+## Next, after v1.5.0 (22 Oct; see `docs/versions/v1.5.0.md`, `docs/v1.5.0_findings.md`)
 
-1. **Prism first loses: 8–29.** It's drafted first only on elk_arena, packs/gold_rush, shortcut and
+1. **Escapes fail.** Against 1680–1800 teams, 18.5 of 26 deaths a game happen while retreating below
+   `LOW_HP`. Ideas: retreat towards nearby allies rather than straight home; Vesper Vale/Vendetta dash
+   away earlier; Marcella (stun immune) turns and fights; recall only from bushes or behind walls.
+2. **Deaths alone (8.6 a game) and in pairs.** Try larger squads on core maps now that the lineup is
+   duelists; the "hunter" sparring bot (aggressive settings) did not reproduce the ladder, so test on
+   unranked groups (`scripts/groups.py`).
+3. **broken_curve** is the one map with a negative local margin (4/12, −24).
+4. **Counter-drafting** was tried as a fitted model (synergy and counter terms) and lost to the fixed
+   list; the ladder model's counters are small (±0.04). Only revisit with a specific, large effect.
+5. **Read the death log** on new ladder games: `cambc matches download`, then `scripts/deaths.py`.
+
+## Earlier, from the ladder (21 Oct, 260 ranked games; v1.2.0 era)
+
+1. (Done in v1.5.0: Prism is no longer drafted first.) **Prism first loses: 8–29.** It's drafted first only on elk_arena, packs/gold_rush, shortcut and
    collision, among our worst maps. Try `PRISM_MAPS_LIST` = 17 (Vesper Vale first, 52–28) or 16 on the
    ladder; the local test of it was stopped before it finished.
 2. **Other weak maps:** hooks 0–7, starfish 2–8, fragment 4–9.
@@ -64,3 +77,4 @@ Later probes (v43–v138) are recorded in the comments of `bot.cpp` and `draft.c
 - `scripts/cvariant.sh NAME 'PARAM=value'`: copy of `bots/main` with switches changed.
 - `scripts/league.sh BOT`: arena against `passive` and `aggro`.
 - `results/ladder-versions.txt` (local only, not in git): when each version was uploaded to the ladder.
+- v1.5.0 tools (ladder sampling, draft model, unranked batches, death log): see `docs/versions/v1.5.0.md`.

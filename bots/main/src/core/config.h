@@ -46,14 +46,14 @@ constexpr bool INTERRUPT = true;        // stun / lock enemies who are tributing
 constexpr int CONTEST_MARGIN = 4;
 constexpr double CONTEST_FACTOR = 0.3;   // <1: score factor for camps nearer the enemy spawn while early or while enemies were seen near them (collision: we fed the middle)
 constexpr int CONTEST_EARLY = 300;        // rounds counted as early       // tiles: a camp is "ours" if this much closer to our spawn
-constexpr int THREAT_RANGE = 5;         // enemies this close stop a recall (attack range 4 + a step)
+constexpr int THREAT_RANGE = 6;         // enemies this close stop a recall (attack range 4 + two steps; 5 until v1.5.0)
 constexpr bool SOLO_CAPTURE = true;     // only one champion holds a capture; others move on
 // Fuel thresholds are fractions of the turn budget. C++ gets 100k fuel per turn (Python 2.5M), so
 // my-bot's absolute values (700k reserve, low fuel below 1.6M) are scaled: 0.28 and 0.64 of a turn.
 constexpr double FUEL_RESERVE = 0.28;   // skip optional work when less than this fraction of the turn remains
 constexpr double LOW_FUEL = 0.64;       // below this fraction, keep the current target instead of replanning
 constexpr std::uint64_t TURN_FUEL = 100000;
-constexpr double LOW_HP = 0.4;          // retreat below this health fraction (+LOW_HP_GEMS when carrying 30+ gems)
+constexpr double LOW_HP = 0.3;          // (0.4 until v1.5.0) retreat below this health fraction (+LOW_HP_GEMS when carrying 30+ gems)
 constexpr double LOW_HP_GEMS = 0.15;
 constexpr double SPAWN_HEAL_TO = 0.95;  // stay on spawn until this healthy
 constexpr double CAMP_RISK = 1.5;      // a team may take a camp group whose damage over the clear is up to this many times its total health
@@ -81,6 +81,10 @@ constexpr int MONOLITH_MEMORY = 20;     // ... in this many rounds before (and w
 constexpr int SEED = 0;                 // >0 adds small deterministic noise to camp choice (testing only)
 constexpr bool IGNORE_SPAWN_CAMPERS = true;  // enemies inside their own spawn are not chased or fled from
 constexpr int ACT_LOG_EVERY = 0;      // print how many turns each champion spent on each activity (0 disables)
+constexpr int TAVI_STRENGTH = 0;     // 1: Tavi builds strength (basic attacks every turn) instead of focus (a spell every 8)
+constexpr int SEEN_EVERY_TURN = 1;  // 1: refresh enemy memory at the start of every turn (was only in pvp, after the low-health retreat)
+constexpr int LOWHP_FIGHT_KILL_ONLY = 1;  // 1: below LOW_HP and being hit, fight back only for a kill (else keep retreating)
+constexpr int DEATH_LOG = 1;          // one line per death (ladder replays carry our stdout): where, doing what, odds
 constexpr double SOFT_BACK_HP = 0.6;     // disengage without recalling when at least this healthy
 constexpr int SOFT_BACK_GEMS = 20;       // ... and carrying fewer gems than this (was 10)
 
