@@ -12,7 +12,11 @@ Fixed or tried in v1.1.0 (see `docs/versions/v1.1.0.md`): Heart of Ruin's draft 
 hidden blockers (move retry, on), squad membership (`SQUAD_FIX`, lost, off).
 Fixed in v1.2.0: a crash when sorting camps by danger (`sorted_by`, see `docs/versions/v1.2.0.md`).
 
-## Next, after v1.5.0 (22 Oct; see `docs/versions/v1.5.0.md`, `docs/v1.5.0_findings.md`)
+## Next, after v1.6.0
+
+See "Next steps" in `docs/versions/v1.6.0.md` (monolith strategy, retreat pathing, farming speed, caster lineups).
+
+## Earlier, after v1.5.0 (22 Oct; see `docs/versions/v1.5.0.md`, `docs/v1.5.0_findings.md`)
 
 1. **Escapes fail.** Against 1680–1800 teams, 18.5 of 26 deaths a game happen while retreating below
    `LOW_HP`. Ideas: retreat towards nearby allies rather than straight home; Vesper Vale/Vendetta dash

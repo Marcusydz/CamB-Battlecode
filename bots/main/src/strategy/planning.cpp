@@ -84,7 +84,7 @@ int Bot::team_plan(int now) {
     Ally allies[MAXA];
     int A = 0;
     allies[A++] = {handle_of(me), me.position(), camp_dps(me), me.max_health()};
-    for (const auto& a : cambc::vision::champions(team::ally)) {
+    for (const auto& a : visible_allies()) {
         if (A >= MAXA) break;
         if (a == me || !a.is_alive()) continue;
         allies[A++] = {handle_of(a), a.position(), std::max(static_cast<double>(a.strength()), 20.0) + 15.0, a.max_health()};

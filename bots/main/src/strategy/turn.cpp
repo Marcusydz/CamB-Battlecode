@@ -31,8 +31,16 @@ void Bot::play_turn() {
     const auto start = cambc::fuel_remaining();
     const auto r0 = cambc::round_number();
     turn();
-    if (WARDS) place_ward();
-    if (MAP_FIELDS && ready) precompute_fields();
+    // End-of-turn extras: one failing lookup (a unit leaving vision) must not cost the others.
+    auto guarded = [this](const char* what, auto&& f) {
+        try {
+            f();
+        } catch (const std::exception& e) {
+            if (ERROR_LOG) std::printf("error r%u in %s (act=%s): %s\n", cambc::round_number(), what, act.c_str(), e.what());
+        }
+    };
+    if (WARDS) guarded("ward", [this] { place_ward(); });
+    if (MAP_FIELDS && ready) guarded("fields", [this] { precompute_fields(); });
     const auto used = start - cambc::fuel_remaining();
     if (cambc::round_number() != r0) {
         overruns += 1;
@@ -45,6 +53,7 @@ void Bot::play_turn() {
     turns += 1;
     acts[act] += 1;
     prev_act = act;
+    if (DEATH_TRACE && ready) guarded("trace", [this] { record_trace(); });
     const auto now = cambc::round_number();
     if (ACT_LOG_EVERY && now % ACT_LOG_EVERY == 0) {
         std::vector<std::pair<std::string, int>> tally(acts.begin(), acts.end());
@@ -64,6 +73,55 @@ void Bot::play_turn() {
     }
 }
 
+// Death trace: one row per live turn in a ring of 8, printed after the death line.
+void Bot::record_trace() {
+    auto& me = cambc::self();
+    if (!me.is_alive()) return;
+    auto& r = trace[trace_n++ % trace.size()];
+    r.round = static_cast<int>(cambc::round_number());
+    r.pos = me.position();
+    r.hp = static_cast<int>(me.health());
+    r.max_hp = static_cast<int>(me.max_health());
+    r.gems = static_cast<int>(me.gem_count());
+    r.home = static_cast<int>(home_field.get(r.pos));
+    std::snprintf(r.act, sizeof(r.act), "%s", act.c_str());
+    // Units at the edge of vision can raise on any lookup, so each one is guarded on its own.
+    r.allies = 0;
+    try {
+        for (const auto& a : visible_allies()) {
+            try {
+                if (a != me && a.is_alive() && chebyshev(a.position(), r.pos) <= 6) r.allies += 1;
+            } catch (const cambc::error&) {
+            }
+        }
+    } catch (const cambc::error&) {
+    }
+    r.n = 0;
+    for (auto& e : visible_enemies()) {
+        if (r.n >= 3) break;
+        try {
+            if (!e.is_alive()) continue;
+            r.e[r.n] = {e.champion_name(), e.position(), static_cast<int>(e.health())};
+            r.n += 1;
+        } catch (const cambc::error&) {
+        }
+    }
+}
+
+void Bot::print_trace(int now) {
+    const int count = std::min<int>(trace_n, static_cast<int>(trace.size()));
+    for (int i = trace_n - count; i < trace_n; ++i) {
+        const auto& r = trace[i % trace.size()];
+        if (now - r.round > 12) continue;
+        std::printf("  t r%d %d,%d home%d hp%d/%d gems%d act=%s allies%d", r.round, r.pos.x, r.pos.y, r.home, r.hp,
+                    r.max_hp, r.gems, r.act, r.allies);
+        for (int k = 0; k < r.n; ++k)
+            std::printf(" | %s %d,%d hp%d d%d", kind_name(r.e[k].kind), r.e[k].pos.x, r.e[k].pos.y, r.e[k].hp,
+                        chebyshev(r.e[k].pos, r.pos));
+        std::printf("\n");
+    }
+}
+
 void Bot::turn() {
     auto& me = cambc::self();
     if (!ready) setup();
@@ -79,6 +137,7 @@ void Bot::turn() {
                 if (now - s.round <= 3 && chebyshev(s.pos, last_pos) <= 8) enemies += 1;
             std::printf("death r%d %s at %d,%d act=%s gems=%d enemies=%d allies=%d\n", now, kind_name(kind),
                         last_pos.x, last_pos.y, prev_act.c_str(), last_gems, enemies, last_allies);
+            if (DEATH_TRACE) print_trace(now);
         }
         if (last_alive && DEATH_AVOID && death_avoid && enemy_near(last_pos, 8, 6, now)) {
             // Killed by champions: stay away from camps there for a while (interlock vs Fish: died
@@ -163,7 +222,7 @@ void Bot::turn() {
             if (e.is_alive() && !enemy_spawn.is_set(e.position()) && chebyshev(e.position(), pos) <= SPAWN_HOLD)
                 theirs.push_back(e);
         if (!theirs.empty()) {
-            for (const auto& a : cambc::vision::champions(team::ally))
+            for (const auto& a : visible_allies())
                 if (a.is_alive() && a != me && chebyshev(a.position(), pos) <= 4) ours.push_back(a);
             if (power(ours) < engage_ratio * enemy_power(theirs)) {
                 hold_turns += 1;
@@ -185,11 +244,53 @@ void Bot::turn() {
     last_gems = gems;
     if (DEATH_LOG) {
         last_allies = 0;
-        for (const auto& a : cambc::vision::champions(team::ally))
+        for (const auto& a : visible_allies())
             if (a != me && a.is_alive() && chebyshev(a.position(), pos) <= 6) last_allies += 1;
     }
     // Survival.
-    if (!at_spawn && hp_frac < (low_hp + (gems >= 30 ? LOW_HP_GEMS : 0.0))) {
+    bool doomed = false;
+    if (DANGER_RETREAT && !at_spawn) {
+        // Retreat when our health will not last the walk out of reach: v1.5.0 champions began retreats at 20%
+        // health on average, often inside a monolith's range (200 a turn, range 5), and died on the way out.
+        // A camp hits the champion nearest to it, so it counts only if no other champion is closer.
+        std::vector<vec2> others;
+        for (const auto& a : visible_allies())
+            if (a != me && a.is_alive()) others.push_back(a.position());
+        for (auto& e : visible_enemies())
+            if (e.is_alive()) others.push_back(e.position());
+        double incoming = 0;
+        int escape = 0;
+        for (const auto& c : visible_camps()) {
+            const double st = camp_strength(c);
+            const int d = chebyshev(pos, c.position());
+            if (st <= 0 || d > camp_range(c.kind()) || camp_health(c) >= c.max_health()) continue;
+            if (DANGER_RETREAT == 2 && c.kind() != cambc::camp_type::monolith) continue;  // 2: monoliths only
+            bool nearest = true;
+            for (auto o : others)
+                if (chebyshev(o, c.position()) < d) nearest = false;
+            if (!nearest) continue;
+            incoming += st;
+            escape = std::max(escape, camp_range(c.kind()) - d + 1);
+        }
+        const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
+        for (auto& e : visible_enemies()) {
+            if (DANGER_RETREAT == 2) break;
+            if (!e.is_alive() || enemy_spawn.is_set(e.position()) || chebyshev(e.position(), pos) > 4) continue;
+            incoming += e.strength();
+            escape = std::max(escape, 2);
+        }
+        doomed = incoming > 0 && me.health() <= DANGER_TURNS * incoming * (escape + 1);
+    }
+    double retreat_at = low_hp;
+    if (LOW_HP_ENEMY > 0) {
+        // Ladder traces (v272): most deaths came in retreats begun at ~20% health with an enemy 2-4 tiles away.
+        // Against champions, leave earlier; against camps alone, the lower threshold farms more.
+        const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
+        for (auto& e : visible_enemies())
+            if (e.is_alive() && !enemy_spawn.is_set(e.position()) && chebyshev(e.position(), pos) <= 5)
+                retreat_at = std::max(retreat_at, LOW_HP_ENEMY);
+    }
+    if (!at_spawn && (doomed || hp_frac < (retreat_at + (gems >= 30 ? LOW_HP_GEMS : 0.0)))) {
         if (me.health() < prev_hp) {
             // Being hit right now: running rarely escapes a chaser, so first take
             // whatever is in range (a kill resets the chaser problem entirely).
@@ -232,7 +333,7 @@ void Bot::turn() {
                 std::vector<cambc::champion> theirs, ours{me};
                 for (auto& x : visible_enemies())
                     if (x.is_alive() && chebyshev(x.position(), e.position()) <= 6) theirs.push_back(x);
-                for (const auto& a : cambc::vision::champions(team::ally))
+                for (const auto& a : visible_allies())
                     if (a.is_alive() && a != me && chebyshev(a.position(), pos) <= 5) ours.push_back(a);
                 if (power(ours) < engage_ratio * enemy_power(theirs)) continue;
                 claim(-1);
@@ -253,7 +354,7 @@ void Bot::turn() {
         if (g.state == 2 && g.mask.is_set(pos)) {
             bool held = false;
             if (SOLO_CAPTURE) {
-                for (const auto& a : cambc::vision::champions(team::ally)) {
+                for (const auto& a : visible_allies()) {
                     if (a != me && a.is_alive() && g.mask.is_set(a.position()) && handle_of(a) < handle_of(me)) {
                         held = true;
                         break;
@@ -347,7 +448,10 @@ void Bot::turn() {
         const int altar_dist = altar_field.get(pos);
         const bool prism = kind == CT::prism;
         const int base_cap = prism ? PRISM_GEM_CAP : gem_cap;
-        const int cap = match_ahead ? std::min(base_cap, 40) : base_cap;
+        int cap = match_ahead ? std::min(base_cap, 40) : base_cap;
+        // The enemy is close to 1000: bank whatever we carry (v272 vs 1700+ teams lost 959-1008, 965-1022,
+        // 953-1005 holding 55-140 unbanked gems).
+        if (ENDGAME_THEIRS && static_cast<int>(cambc::global_submitted_gems(team::enemy)) >= ENDGAME_THEIRS) cap = 1;
         const bool on_the_way = altar_dist <= target_dist && (!prism || gems >= PRISM_EARLY_BANK);
         if (tgt < 0 || gems >= cap || on_the_way) {
             claim(-1);
@@ -390,7 +494,7 @@ void Bot::turn() {
         if (need > 1 && untouched) {
             // Untouched joint target: wait just outside camp range until helpers arrive.
             int near = 0;
-            for (const auto& a : cambc::vision::champions(team::ally))
+            for (const auto& a : visible_allies())
                 if (a.is_alive() && a != me && chebyshev(a.position(), pos) <= 4) near += 1;
             if (near < need - 1 && gems > 0) {
                 // Bank while helpers make their way here, instead of standing with gems.

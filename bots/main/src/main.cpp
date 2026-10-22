@@ -20,7 +20,7 @@ int main() {
         try {
             bot.play_turn();
         } catch (const std::exception& e) {
-            std::printf("error r%u: %s\n", cambc::round_number(), e.what());
+            std::printf("error r%u act=%s: %s\n", cambc::round_number(), bot.current_act(), e.what());
         } catch (...) {
             std::printf("error r%u: unknown exception\n", cambc::round_number());
         }

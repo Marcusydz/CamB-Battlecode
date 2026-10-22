@@ -47,7 +47,7 @@ bool Bot::try_heal(const cambc::champion& me) {
     std::vector<cambc::champion> candidates;
     if (ability.can_target_self()) candidates.push_back(me);
     if (ability.can_target_allies())
-        for (const auto& a : cambc::vision::champions(team::ally))
+        for (const auto& a : visible_allies())
             if (a != me && a.is_alive() && a.is_visible()) candidates.push_back(a);
     const cambc::champion* best = nullptr;
     double best_value = 0.0;
@@ -162,7 +162,7 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     }
     if (near.empty()) return false;
     std::vector<cambc::champion> allies{me};
-    for (const auto& a : cambc::vision::champions(team::ally))
+    for (const auto& a : visible_allies())
         if (a.is_alive() && a != me && chebyshev(a.position(), pos) <= 5) allies.push_back(a);
     // Enemies seen in the last few rounds but now hidden (bushes, out of vision) still fight:
     // scale the visible side up for them (power grows with count squared).
@@ -256,11 +256,13 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
             if (!retreat_and_recall(false)) return false;
             if (caster_power) hit_in_range(me);  // parting shot: a chaser keeps pace, so hit it while leaving
             act = "back-off";
+            avoid_target_after_backoff();
             return true;
         }
         retreat_and_recall();
         if (caster_power) hit_in_range(me);
         act = "disengage";
+        avoid_target_after_backoff();
         return true;
     }
     // 3. Losing fight while carrying gems (or hurt): get out.
@@ -290,6 +292,18 @@ bool Bot::pvp(const cambc::champion& me, vec2 pos, int gems, double hp_frac) {
     return false;
 }
 
+// After backing off, drop the camp we were heading for if it is near: otherwise the next turn walks straight
+// back into spell range (v272 traces on contest: approach / back-off alternating every turn beside the enemy).
+void Bot::avoid_target_after_backoff() {
+    if (!BACKOFF_AVOID || target < 0) return;
+    const auto pos = cambc::self().position();
+    if (chebyshev(groups[target].center, pos) > 8) return;
+    const int now = static_cast<int>(cambc::round_number());
+    groups[target].avoid_until = std::max(groups[target].avoid_until, now + BACKOFF_AVOID);
+    target = -1;
+    next_plan = 0;
+}
+
 // Ladder #1 hunts in packs of 3-4 and caught our lone champions ~20 times a game. Leave early when
 // clearly outnumbered, before the fight starts, unless a kill is on offer right now.
 bool Bot::outnumbered(const cambc::champion& me, vec2 pos, int now) {
@@ -301,7 +315,7 @@ bool Bot::outnumbered(const cambc::champion& me, vec2 pos, int now) {
         if (now - s.round <= 4 && chebyshev(s.pos, pos) <= 8 && !enemy_spawn.is_set(s.pos)) enemies += 1;
     if (enemies < 2) return false;
     int allies = 1;
-    for (const auto& a : cambc::vision::champions(team::ally))
+    for (const auto& a : visible_allies())
         if (a != me && a.is_alive() && chebyshev(a.position(), pos) <= 6) allies += 1;
     if (enemies < allies + OUTNUMBER) return false;
     if (spawn.is_set(pos)) return false;
@@ -316,10 +330,12 @@ bool Bot::outnumbered(const cambc::champion& me, vec2 pos, int now) {
         if (!retreat_and_recall(false)) return false;
         if (caster_power) hit_in_range(me);
         act = "back-off";
+        avoid_target_after_backoff();
         return true;
     } else retreat_and_recall();
     if (caster_power) hit_in_range(me);
     act = "outnumbered";
+    avoid_target_after_backoff();
     return true;
 }
 
@@ -333,7 +349,7 @@ bool Bot::join_fight(const cambc::champion& me, vec2 pos, int gems, double hp_fr
     for (auto& e : visible_enemies())
         if (e.is_alive() && !enemy_spawn.is_set(e.position())) enemies.push_back(e);
     if (enemies.empty()) return false;
-    const auto allies_all = cambc::vision::champions(team::ally);
+    const auto allies_all = visible_allies();
     const cambc::champion* best = nullptr;
     int best_d = 1 << 30;
     for (const auto& a : allies_all) {
@@ -421,7 +437,7 @@ bool Bot::retreat_and_recall(bool allow_recall) {
     auto score = [&](vec2 p) {
         int d = UNREACHED;
         for (auto t : danger) d = std::min(d, chebyshev(p, t));
-        return std::make_pair(std::min(d, 6), -static_cast<int>(home_field.get(p)));
+        return std::make_pair(std::min(d, RETREAT_SAFE), -static_cast<int>(home_field.get(p)));
     };
     auto pick = [&](const std::vector<vec2>& options) -> std::optional<vec2> {
         std::optional<vec2> best;

@@ -77,6 +77,16 @@ inline std::vector<cambc::champion> visible_enemies() {
     }
 }
 
+// vision::champions(team::ally), tolerating the same error (an ally unit leaving vision raised 98/97 and cost
+// the whole turn).
+inline std::vector<cambc::champion> visible_allies() {
+    try {
+        return cambc::vision::champions(team::ally);
+    } catch (const cambc::error&) {
+        return {};
+    }
+}
+
 inline double camp_strength(const cambc::camp& c) {
     try {
         return c.strength();

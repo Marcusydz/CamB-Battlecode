@@ -182,7 +182,7 @@ bool Bot::kite(const cambc::camp& target, const std::vector<cambc::camp>& others
         if (!mono) return false;  // only monolith fights are kited
     }
     if (KITE == 2) {
-        for (const auto& a : cambc::vision::champions(team::ally)) {
+        for (const auto& a : visible_allies()) {
             if (a == me || !a.is_alive() || a.attack_range() > 1) continue;
             for (auto h : hostile)
                 if (chebyshev(a.position(), h) <= 1) return false;

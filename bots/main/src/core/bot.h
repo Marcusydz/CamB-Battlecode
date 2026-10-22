@@ -31,6 +31,8 @@ struct GroupInfo {
     GroupInfo(int idx, const cambc::map::camp_group& group);
 };
 
+using CT = cambc::champion_type;
+
 struct Nuke {
     double modifier;
     std::uint32_t slot;
@@ -44,6 +46,7 @@ double enemy_power(const std::vector<cambc::champion>& units);
 class Bot {
 public:
     void play_turn();
+    const char* current_act() const { return act.c_str(); }
 
 private:
     bool ready = false;
@@ -54,6 +57,18 @@ private:
     std::string act = "?";
     std::string prev_act = "?";  // last turn's act, for the death log
     int last_allies = 0, last_gems = 0;
+    // Death trace (DEATH_TRACE): our last few turns, printed when we die.
+    struct TraceEnemy { CT kind; cambc::vec2 pos; int hp; };
+    struct TraceRow {
+        int round = 0, hp = 0, max_hp = 0, gems = 0, allies = 0, n = 0, home = 0;
+        cambc::vec2 pos{};
+        char act[16] = {};
+        TraceEnemy e[3];
+    };
+    std::array<TraceRow, 8> trace{};
+    int trace_n = 0;
+    void record_trace();
+    void print_trace(int now);
     bool waited_on_spawn = false;
     double last_hp = 0;
     int hit_round = -100;  // last round our health dropped
@@ -146,6 +161,7 @@ private:
     std::vector<cambc::vec2> threats(int now) const;
     bool enemy_near(cambc::vec2 p, int radius, int rounds, int now) const;
     bool retreat_and_recall(bool allow_recall = true);
+    void avoid_target_after_backoff();
 
     // camp choice
     int helpers_needed(const GroupInfo& g, double dps, double health) const;
