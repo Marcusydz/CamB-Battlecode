@@ -19,8 +19,9 @@ namespace {
 
 using List = std::array<D, 12>;
 
-// Duelists first. On 3 picks: Vesper Vale, Tavi, Marcella; 4 adds Vendetta; 5 adds Ryth.
-constexpr List CORE{D::vesper_vale, D::tavi, D::marcella, D::vendetta, D::ryth, D::heart_of_ruin,
+// v1.6.1: the five top teams' consensus (HoR, Vesper Vale, Marcella, Ryth, Vendetta in 80-100% of
+// their last 50 drafts; none pick Tavi). On 3 picks: Vesper Vale, HoR, Marcella; 4 adds Vendetta; 5 adds Ryth.
+constexpr List CORE{D::vesper_vale, D::heart_of_ruin, D::marcella, D::vendetta, D::ryth, D::tavi,
                     D::prism, D::varg, D::willow, D::stellar, D::ren, D::cassi_and_issac};
 // v1.2.0's lists for the maps below (its lists 16, 17, 19).
 constexpr List FARM_HOR{D::heart_of_ruin, D::varg, D::stellar, D::ryth, D::willow, D::vesper_vale,
