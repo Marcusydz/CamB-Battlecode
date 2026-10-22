@@ -5,7 +5,7 @@ Usage: arena.py BOT_A BOT_B [--maps a,b,c] [--jobs 2] [--quiet]
 Prints per-match results and a summary for BOT_A: wins, mean gem margin, mean win round.
 Gem margin = A's tributed gems - B's tributed gems at the end (range -1000..1000ish).
 """
-import argparse, json, os, subprocess, sys, tempfile, time
+import argparse, threading, json, os, subprocess, sys, tempfile, time
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,6 +43,16 @@ def run(a, b, mp, tmp):
             "round": d["round"], "gems": gems, "faults": faults, "kills": kills}
 
 
+def seed_file(src):
+    """The C++ source file that defines the SEED switch, or None."""
+    for d, _, files in os.walk(os.path.join(src, "src")):
+        for f in files:
+            p = os.path.join(d, f)
+            if f.endswith((".cpp", ".h")) and "\nconstexpr int SEED = " in open(p).read():
+                return p
+    return None
+
+
 def make_seeded(bot, seed):
     """Copy bots/BOT to bots/_sBOT_SEED with SEED set (only if the bot has a SEED param)."""
     import re, shutil
@@ -50,12 +60,12 @@ def make_seeded(bot, seed):
     name = f"_s{bot}_{seed}"
     dst = os.path.join(ROOT, "bots", name)
     path = os.path.join(src, "src", "bot.py")
-    cpp = os.path.join(src, "src", "bot.cpp")
-    if os.path.exists(cpp) and "\nconstexpr int SEED = " in open(cpp).read():
+    cpp = seed_file(src)
+    if cpp:
         if os.path.exists(dst):
             shutil.rmtree(dst)
         shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".cambc"))
-        p = os.path.join(dst, "src", "bot.cpp")
+        p = os.path.join(dst, os.path.relpath(cpp, src))
         text = re.sub(r"\nconstexpr int SEED = [^;]*;", f"\nconstexpr int SEED = {seed};", open(p).read())
         open(p, "w").write(text)
         return name
@@ -96,7 +106,7 @@ def main():
         pairs.append((make_seeded(o.A, k), make_seeded(o.B, 100 + k)))
     # Build C++ bots once up front: parallel matches building the same bot race and fail to link.
     for bot in sorted({x for p in pairs for x in p}):
-        if os.path.exists(os.path.join(ROOT, "bots", bot, "src", "bot.cpp")):
+        if os.path.exists(os.path.join(ROOT, "bots", bot, "src", "main.cpp")):
             subprocess.run(["cambc", "build", bot], cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     jobs = []
     for a, b in pairs:
@@ -106,8 +116,24 @@ def main():
             if not o.one_side or i % 2 == 1:
                 jobs.append((b, a, "maps/" + m, tmp))
     t0 = time.time()
+    done = [0]
+    lock = threading.Lock()
+
+    def run_and_report(j):
+        r = run(*j)
+        with lock:
+            done[0] += 1
+            if r:
+                won = r["outcome"] == ("teamA" if r["a"] in {p[0] for p in pairs} else "teamB")
+                mine = 0 if r["a"] in {p[0] for p in pairs} else 1
+                print(f"[{done[0]}/{len(jobs)}] {r['map']} {o.A} as {'AB'[mine]}: {'WIN ' if won else 'loss'} "
+                      f"{r['gems'][mine]}-{r['gems'][1 - mine]}", file=sys.stderr, flush=True)
+            else:
+                print(f"[{done[0]}/{len(jobs)}] {os.path.basename(j[2])}: no result", file=sys.stderr, flush=True)
+        return r
+
     with ThreadPoolExecutor(o.jobs) as ex:
-        results = list(ex.map(lambda j: run(*j), jobs))
+        results = list(ex.map(run_and_report, jobs))
     wins = 0; margin = 0; rounds = []; faults = 0
     names_A = {p[0] for p in pairs}
     results = [r for r in results if r]

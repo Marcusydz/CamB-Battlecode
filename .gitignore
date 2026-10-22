@@ -11,3 +11,8 @@ bots/*/build/
 bots/*/target/
 sdk/
 cmake/
+compile_commands.json
+maps/
+results/
+.venv/
+summary-analysis/

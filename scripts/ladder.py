@@ -10,7 +10,7 @@ import argparse, collections, glob, json, os, urllib.request
 BASE = "https://2026a.battlecode.co.uk"
 TEAM = "4620d7df-a9ac-4747-aa77-dce12395dc0c"  # Crimson Bush Campers
 DRAFT = ["Ryth", "Vesper", "Vendetta", "Cassi&Issac", "Stellar", "Prism", "Marcella", "Willow",
-         "Ren", "Varg", "Tavi"]
+         "Ren", "Varg", "Tavi", "HeartOfRuin"]
 
 
 def token():
