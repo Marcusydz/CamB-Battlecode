@@ -1,0 +1,88 @@
+diff --git a/bots/_cambridge-v44/src/bot.cpp b/bots/candidate/src/bot.cpp
+index 76a1adb..3f5e227 100644
+--- a/bots/_cambridge-v44/src/bot.cpp
++++ b/bots/candidate/src/bot.cpp
+@@ -5,6 +5,7 @@
+ // and the others avoid that group. Switches that were tested and rejected in Python (and were
+ // off in v16) are not ported; see TODO.md and bots/my-bot/README.md for their results.
+ #include "bot.h"
++#include "camp_waiting_area.h"
+ #include <algorithm>
+ #include <cstdio>
+ #include <tuple>
+@@ -39,7 +40,8 @@ static std::pair<double, double> camp_stats(cambc::camp_type t) {
+ 
+ // Tuning parameters (same names and values as my-bot v16).
+ constexpr int CAPTURE_TIME = 5;
+-constexpr int UNREACHED = 1000000;
++// Unreached uint16 distances are the SDK sentinel, not a large valid path cost.
++constexpr int UNREACHED = cambc::distance_field::unreachable;
+ constexpr int SHOP_RECALL_GOLD = 150;   // recall to shop with an empty bag and this much gold (default of shop_gold)
+ constexpr bool BUY_JUNGLE = true;
+ constexpr double SUPPORT_BONUS = 0.0;   // enemy power counts this much extra per enemy healer (Willow) or shielder (Varg) in the fight
+@@ -57,8 +59,9 @@ constexpr int PLAN_KEEP_CLAIMS = 1;   // allies with a claimed camp are fixed in
+ constexpr int FIELDS_PER_TURN = 1;
+ constexpr int PLAN_CHECK = 0;    // group distance fields computed per turn until all exist
+ constexpr int HIDDEN_ENEMIES = 1;  // count recently seen, now hidden enemies in fight odds
+-constexpr double GOLD_W = 0.0;   // camp value per gold, in gems (0 after the week-2 patch: 1538 -> 1370 rounds unopposed on the new engine)
+-constexpr double GOLD_RUSH_GOLD_W = 0.0;  // 0.5 was worse vs Fish (644 vs 828 gems)
++// Review experiment: restore v43 gold value; v44 lost 28/42 direct games to v43.
++constexpr double GOLD_W = 0.15;  // Validate against fresh opponents before adoption.
++constexpr double GOLD_RUSH_GOLD_W = 0.15;  // 0.5 was worse vs Fish (644 vs 828 gems)
+ constexpr int MID_AOE_ONLY = 0;  // mid squad: only Stellar/Prism (1) or any caster (0)
+ constexpr int DEATH_AVOID = 0;  // rounds to avoid camps near where enemies killed us  // turns next to a target group without fighting it before dropping it
+ constexpr int MONO_KITE = 0;            // 1: casters take monoliths on every map (ladder #1 takes rows' 448-gem middle with Stellar and Prism)
+@@ -402,7 +405,7 @@ bool Bot::step_static(int g) {
+     auto origin = me.position();
+     const auto blk = blocked();
+     int here = gdist(g, origin);
+-    if (here <= 0 || here >= 60000) return false;
++    if (here <= 0 || here >= UNREACHED) return false;
+     auto pick = [&](const bitboard& options) -> std::optional<vec2> {
+         std::optional<vec2> best;
+         int best_d = 0, best_in = 0;
+@@ -1315,7 +1318,7 @@ int Bot::team_plan(int now) {
+         for (int i = 0; i < A; ++i) {
+             const int d = f[allies[i].pos.y * width + allies[i].pos.x];
+             // MAX_WAIT 0: only camps alive when we would get there.
+-            c.dist[i] = (d >= 60000 || g.available_at > now + d) ? (1 << 20) : d;
++            c.dist[i] = (d >= UNREACHED || g.available_at > now + d) ? (1 << 20) : d;
+             c.order[i] = static_cast<std::int8_t>(i);
+         }
+         for (int i = 1; i < A; ++i)  // insertion sort: allies nearest first
+@@ -1724,7 +1727,7 @@ void Bot::turn() {
+                     if (g.monolith && g.gems >= 200 && (!mid || g.gems > mid->gems)) mid = &g;
+                 if (mid) {
+                     const int d = gdist(mid->idx, pos);
+-                    if (mid->state != 3 && now >= mid->avoid_until && mid->available_at <= now + d && d < 60000
++                    if (mid->state != 3 && now >= mid->avoid_until && mid->available_at <= now + d && d < UNREACHED
+                         && !enemy_near(mid->center, MONOLITH_CLEAR, 2, now)) {
+                         tgt = mid->idx;
+                         need = 1;
+@@ -1828,7 +1831,7 @@ void Bot::turn() {
+             }
+             if (near < need - 1) {
+                 bitboard ring;
+-                for (const auto& c : camps) ring |= around(c.position(), 5);
++                for (const auto& c : camps) ring |= camp_waiting_area(c.position(), camp_range(c.kind()));
+                 for (const auto& c : camps) ring &= ~around(c.position(), camp_range(c.kind()));
+                 claim(tgt);
+                 act = "gather";
+diff --git a/bots/candidate/src/camp_waiting_area.h b/bots/candidate/src/camp_waiting_area.h
+new file mode 100644
+index 0000000..dc1a249
+--- /dev/null
++++ b/bots/candidate/src/camp_waiting_area.h
+@@ -0,0 +1,12 @@
++#pragma once
++#include <cambc.h>
++#include <algorithm>
++
++// Leave a nonempty waiting band beyond the camp's attack range. A radius-five
++// outer boundary disappears completely when a monolith also attacks at range five.
++inline cambc::bitboard camp_waiting_area(cambc::vec2 center, int attack_range) {
++    cambc::bitboard outer, danger;
++    outer.draw_chebyshev(center, static_cast<float>(std::max(5, attack_range + 1)));
++    danger.draw_chebyshev(center, static_cast<float>(attack_range));
++    return outer & ~danger;
++}
