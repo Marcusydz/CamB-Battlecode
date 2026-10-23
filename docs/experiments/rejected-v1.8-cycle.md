@@ -22,6 +22,8 @@ not repeat them without new evidence.
 | starfish2 | Varg/Stellar/Prism/Ren/Ryth starfish draft | 39/80, −7 margin; weak maps 3/8 | Not submitted | Rejected |
 | starfish3 | Ren/Varg/Stellar/Tavi/Ryth starfish draft | Weak maps 4/8, −7 margin | Not submitted | Rejected |
 | squad2/3 | Smaller squads on weak maps | Weak maps 3/8, −112 margin | Not submitted | Rejected |
+| starfish30 | Starfish-only banking cap reduced to 30 gems | Weak maps 3/8, −136 margin; full 39/80, −14 margin | Not submitted | Rejected; earlier banking did not address the starfish loss pattern |
+| starfish5 | Starfish-only squad size increased to 5 | Weak maps 4/8, −46 margin; full 40/80, −5 margin | Not submitted | Rejected; only marginal full-suite improvement and still negative on the target weak maps |
 
 The successful release baseline remains v1.8.1: 48/80 near-ELO wins across
 two batches. A controlled local support-heavy lineup test subsequently scored
