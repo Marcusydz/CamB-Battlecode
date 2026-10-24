@@ -434,14 +434,25 @@ bool Bot::retreat_and_recall(bool allow_recall) {
     }
     const auto blk = blocked();
     const int here = home_field.get(pos);
+    const int current_danger = [&] {
+        int d = UNREACHED;
+        for (auto t : danger) d = std::min(d, chebyshev(pos, t));
+        return d;
+    }();
     auto score = [&](vec2 p) {
         int d = UNREACHED;
         for (auto t : danger) d = std::min(d, chebyshev(p, t));
-        return std::make_pair(std::min(d, RETREAT_SAFE), -static_cast<int>(home_field.get(p)));
+        const int home = static_cast<int>(home_field.get(p));
+        const int home_progress = here >= UNREACHED || home >= UNREACHED ? 0 : here - home;
+        // Once a step is no closer to a threat, make progress toward spawn the
+        // primary objective. This prevents two-sided chasers from making a
+        // retreat alternate between approach and back-off forever.
+        const int preserves_distance = d + 1 >= current_danger ? 1 : 0;
+        return std::make_tuple(preserves_distance, home_progress, std::min(d, RETREAT_SAFE), -home);
     };
     auto pick = [&](const std::vector<vec2>& options) -> std::optional<vec2> {
         std::optional<vec2> best;
-        std::pair<int, int> best_score;
+        decltype(score(options.front())) best_score{};
         for (auto p : options) {
             auto s = score(p);
             if (!best || s > best_score) {

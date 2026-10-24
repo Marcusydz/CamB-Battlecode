@@ -286,8 +286,12 @@ void Bot::turn() {
         // Ladder traces (v272): most deaths came in retreats begun at ~20% health with an enemy 2-4 tiles away.
         // Against champions, leave earlier; against camps alone, the lower threshold farms more.
         const auto& enemy_spawn = cambc::map::spawn_region(team::enemy);
+        int nearby_allies = 0;
+        for (const auto& a : visible_allies())
+            if (a != me && a.is_alive() && chebyshev(a.position(), pos) <= 5) nearby_allies += 1;
         for (auto& e : visible_enemies())
-            if (e.is_alive() && !enemy_spawn.is_set(e.position()) && chebyshev(e.position(), pos) <= 5)
+            if (e.is_alive() && !enemy_spawn.is_set(e.position()) && chebyshev(e.position(), pos) <= 5
+                && (gems > 0 || nearby_allies == 0))
                 retreat_at = std::max(retreat_at, LOW_HP_ENEMY);
     }
     if (!at_spawn && (doomed || hp_frac < (retreat_at + (gems >= 30 ? LOW_HP_GEMS : 0.0)))) {
